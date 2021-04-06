@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
    return (
@@ -24,18 +24,13 @@ const Navbar = () => {
       <nav className="hidden md:flex space-x-10">
         <div className="relative">
           {/* Item active: "text-gray-900", Item inactive: "text-gray-500" */}
-          <button type="button" className="text-gray-500 group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-expanded="false">
-            <span>Solutions</span>
-            {/*
-        Heroicon name: solid/chevron-down
-
-        Item active: "text-gray-600", Item inactive: "text-gray-400"
-      */}
-          </button>
+            <Link className="text-base font-medium text-gray-500 hover:text-gray-900" to="/">
+            Solutions
+            </Link>
         </div>
-        <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-          Pricing
-        </a>
+            <Link className="text-base font-medium text-gray-500 hover:text-gray-900" to="/pricing">
+            Pricing
+            </Link>
         <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
           Documentation
         </a>
