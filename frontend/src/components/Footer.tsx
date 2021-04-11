@@ -9,7 +9,7 @@ const Footer = () => {
       <span className="ml-3 text-xl">Shigoto
       </span>
     </a>
-    <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2020 Tailblocks —
+    <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2021 Shigoto Q —
       <a href="https://twitter.com/shigoto" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">@shigoto</a>
     </p>
     <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">

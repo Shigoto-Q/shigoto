@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
     "djoser",
     "corsheaders",
     "django_celery_results",
+    "djstripe",
 ]
 LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",

@@ -12,6 +12,8 @@ uvicorn[standard]==0.13.4  # https://github.com/encode/uvicorn
 django_celery_results
 sqlalchemy
 djoser
+stripe
+dj-stripe
 # Django
 # ------------------------------------------------------------------------------
 django==3.1.7  # pyup: < 3.2  # https://www.djangoproject.com/
