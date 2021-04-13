@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import PricingCard from "../components/PricingCard"
+import axios from 'axios'
 
 type MyProps = {
   message: string;
@@ -7,6 +7,13 @@ type MyProps = {
 
 
 class Pricing extends Component<MyProps> {
+    constructor(props: any) {
+        super(props)
+            this.state = {
+                pricing: []
+            }
+    }
+
     render() {
         return (
         <section className="text-gray-600 body-font overflow-hidden">

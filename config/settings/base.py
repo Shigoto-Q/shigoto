@@ -187,4 +187,5 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
-CORS_URLS_REGEX = r"^/api/.*$"
+# CORS_URLS_REGEX = r"^/api/v1/.*$"
+CORS_ALLOW_ALL_ORIGIN = True

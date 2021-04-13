@@ -3,6 +3,7 @@ import Layout from "../layout/Layout"
 import UserLayout from "../layout/UserLayout"
 import Pricing from "../views/PricingPage"
 import Dashboard from "../views/Dashboard"
+import Login from "../components/Login"
 import Home from "../views/HomePage"
 
 const Routes = () => {
@@ -22,6 +23,7 @@ const Routes = () => {
             <Layout>
                 <Switch>
                    <Route exact path='/' component={Home} /> 
+                   <Route exact path='/login' component={Login} /> 
                    <Route exact path='/pricing' component={Pricing} /> 
                 </Switch>
             </Layout>
