@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { SnackbarProvider } from 'notistack';
+import axios from 'axios'
+
+axios.defaults.baseURL = 'http://localhost:8000'
 
 ReactDOM.render(
   <React.StrictMode>
+  <SnackbarProvider maxSnack={2}>
     <App />
+    </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

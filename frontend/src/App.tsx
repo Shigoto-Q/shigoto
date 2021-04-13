@@ -1,13 +1,7 @@
-import './App.css';
-import Navbar from './components/Navbar'
-import Login from './components/Login'
-
-function App() {
+import Routes from './routes/Routes'
+const App = () => {
   return (
-    <div className="container mx-auto">
-    <Navbar/>
-    <Login />
-    </div>
+    <Routes/>
   );
 }
 
