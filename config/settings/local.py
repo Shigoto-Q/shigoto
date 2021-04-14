@@ -1,6 +1,15 @@
 from .base import *  # noqa
 from .base import env
 
+STRIPE_LIVE_SECRET_KEY = "pk_test_518h2jFItAhzYJ7dgwgnoYIDrufudKMsxdhAaa2YZt0YcbM5z1EfBvxYprkufs4KJO76zTkfaXSS3OSBtn6GMDmMm00C1wwlqJb"
+STRIPE_TEST_SECRET_KEY = "sk_test_518h2jFItAhzYJ7dgGweqmPd6Nvt8f9i2JxMdSxJZlh9j2fARaWnW03AQC9VsqCUhJB5iSxH3a7OS2KF1L29Y4gVO00DVPtLlf6"
+STRIPE_LIVE_MODE = False  # Change to True in production
+DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
+DJSTRIPE_USE_NATIVE_JSONFIELD = (
+    True  # We recommend setting to True for new installations
+)
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations
+
 DEBUG = True
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",

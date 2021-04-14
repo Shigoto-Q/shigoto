@@ -17,7 +17,7 @@ const Login = () => {
         const config = {}
         axios.post('/auth/jwt/create/', body)
             .then(res => {
-                history.push('/pricin') 
+                history.push('/dashboard') 
                 enqueueSnackbar("Login successful")
             })
             .catch(err => {
