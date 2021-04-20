@@ -1,12 +1,18 @@
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
 from djstripe.models import Product, Plan
+from djoser.serializers import UserSerializer as DjoserUserSerializer
+from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
+from django.contrib.auth.hashers import make_password
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
-        fields = ["amount", "interval", "trial_period_days"]
+        fields = ["amount", "interval", "trial_period_days", "id"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -14,17 +20,44 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["name", "plan_set", "metadata"]
+        ordering = [
+            "plan_set",
+        ]
+        fields = ["id", "name", "plan_set", "metadata"]
 
 
-User = get_user_model()
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
+class UserSerializer(DjoserUserSerializer):
+    class Meta(DjoserUserSerializer.Meta):
         model = User
-        fields = ["username", "name", "url"]
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "subscription",
+            "customer",
+            "total_tasks",
+        ]
 
-        extra_kwargs = {
-            "url": {"view_name": "api:user-detail", "lookup_field": "username"}
-        }
+
+class UserCreateSerializer(DjoserUserCreateSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={"input_type": "password", "placeholder": "Password"},
+    )
+
+    class Meta(DjoserUserCreateSerializer.Meta):
+        model = User
+        fields = [
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "company",
+            "password",
+        ]
+
+    def create(self, validated_data):
+        validated_data["password"] = make_password(validated_data.get("password"))
+        return super(UserCreateSerializer, self).create(validated_data)

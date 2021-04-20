@@ -123,7 +123,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "shigoto_q.utils.context_processors.settings_context",
             ],
         },
     }
@@ -186,6 +185,13 @@ REST_FRAMEWORK = {
 }
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+DJOSER = {
+    "SERIALIZERS": {
+        "current_user": "shigoto_q.users.api.serializers.UserSerializer",
+        "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
+    },
+    "PERMISSIONS": {"user_create": ["rest_framework.permissions.AllowAny"]},
 }
 # CORS_URLS_REGEX = r"^/api/v1/.*$"
 CORS_ALLOW_ALL_ORIGIN = True

@@ -14,7 +14,6 @@ const Login = () => {
             username: username,
             password: password
         }
-        const config = {}
         axios.post('/auth/jwt/create/', body)
             .then(res => {
                 history.push('/dashboard') 

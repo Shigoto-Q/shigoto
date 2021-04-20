@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { SnackbarProvider } from 'notistack';
 import axios from 'axios'
-
+import 'react-toastify/dist/ReactToastify.css'
 axios.defaults.baseURL = 'http://localhost:8000'
 
 ReactDOM.render(
