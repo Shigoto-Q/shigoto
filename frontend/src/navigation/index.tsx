@@ -12,6 +12,12 @@ const navigation = [
         title: 'My Tasks',
         icon: <CheckSquare/>,
         navLink: '/dashboard/tasks'
+    },
+    {
+        id: 'cron',
+        title: 'Crontab Editor',
+        icon: <CheckSquare/>,
+        navLink: '/dashboard/cron'
     }
 ]
 
