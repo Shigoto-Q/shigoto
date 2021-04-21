@@ -3,7 +3,6 @@ import { User, Settings } from 'react-feather'
 import { Link } from 'react-router-dom'
 
 const DashboardNav = () => {
-  const [menuOpen, setMenuOpen] = React.useState(true);
   return (
         <div className="w-full px-4">
           <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white-500 rounded shadow-md">
@@ -14,10 +13,8 @@ const DashboardNav = () => {
                         className=""/>
               </div>
               <div
-                className={
-                  "lg:flex flex-grow items-center" +
-                  (menuOpen ? " flex" : " hidden")
-                }
+                className=
+                  "lg:flex flex-grow items-center flex"
                 id="example-navbar-info"
               >
                 <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">

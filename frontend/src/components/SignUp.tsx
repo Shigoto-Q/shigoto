@@ -1,9 +1,9 @@
 import { Component } from 'react'
 import axios from 'axios'
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
-
-
+toast.configure()
 type Props = {
     username: string
     first_name: string,
@@ -19,21 +19,6 @@ type Props = {
     state?: string
 }
 
-
-const toasty = 
-    <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-    />
-    {/* Same as */}
-    <ToastContainer />
 class SignUp extends Component<Props, any> { 
     constructor(props: any) {
         super(props)
@@ -53,18 +38,6 @@ class SignUp extends Component<Props, any> {
             }
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
-        this.handleToast= this.handleToast.bind(this)
-    }
-    handleToast = () => {
-        toast('🦄 Wow so easy!', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
     }
     handleChange = (event: any) => {
         const value = event.target.value
@@ -88,14 +61,23 @@ class SignUp extends Component<Props, any> {
                 zip: this.state.zip,
                 state: this.state.state
             } 
-            console.log(body)
             axios.post("/auth/users/", body)
                 .then(res => {
                     console.log(res)
                         })
             .catch(err => {
-                this.handleToast()
-                    })
+                // TODO create custom notification component
+                toast("somethings wrong!", 
+                        {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                        progress: undefined,
+                        })
+            })
         }
     render () {
         return (

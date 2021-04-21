@@ -25,12 +25,9 @@ const Card = ({plan, price, id, metadata, isPopular}: Props) => {
         }
         axios.post("/api/v1/create-checkout-session/", body, config)
         .then(res => {
-            // @ts-ignore: Object is possibly 'null'.
-             stripe.redirectToCheckout({sessionId: res.data.sessionId})
+             stripe?.redirectToCheckout({sessionId: res.data.sessionId})
             })
-        .catch(err => {
-            console.log(err)
-            })
+            .catch(err => { })
     }
     return (
     <div className="p-4 xl:w-1/4 md:w-1/2 w-full">

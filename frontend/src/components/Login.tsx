@@ -1,12 +1,10 @@
-import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { useState } from 'react'
-import { useHistory } from "react-router-dom" 
+import { useHistory, Link } from "react-router-dom" 
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [ password, setPassowrd ] = useState('')
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const history = useHistory()
     const login = (event: any) => {
         event.preventDefault()
@@ -16,8 +14,9 @@ const Login = () => {
         }
         axios.post('/auth/jwt/create/', body)
             .then(res => {
+                localStorage.setItem("access", res.data.access)
+                localStorage.setItem("refresh", res.data.refresh)
                 history.push('/dashboard') 
-                enqueueSnackbar("Login successful")
             })
             .catch(err => {
                 console.log(err)
@@ -31,7 +30,7 @@ const Login = () => {
         Sign in to your account
       </h2>
       <p className="text-center text-sm text-gray-600">
-        Or <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">start your 14-day free trial</a>
+        Or <Link to="/pricing" className="font-medium text-indigo-600 hover:text-indigo-500">start your 14-day free trial</Link>
       </p>
     </div>
     <form className="mt-8 space-y-6" onSubmit={e => login(e)}>
@@ -54,9 +53,9 @@ const Login = () => {
           </label>
         </div>
         <div className="text-sm">
-          <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <Link to="/" className="font-medium text-indigo-600 hover:text-indigo-500">
             Forgot your password?
-          </a>
+          </Link>
         </div>
       </div>
       <div>
