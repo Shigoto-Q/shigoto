@@ -57,9 +57,3 @@ services:
     image: shigoto_q_production_celerybeat
     command: /start-celerybeat
 
-  flower:
-    <<: *django
-    image: shigoto_q_production_flower
-    command: /start-flower
-
-  

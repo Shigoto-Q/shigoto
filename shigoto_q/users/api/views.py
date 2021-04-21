@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.http import Http404
-from djstripe.models import Product
+from djstripe.models import Product, Plan
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -8,14 +8,20 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
 from .serializers import UserSerializer, ProductSerializer
+from django.db.models import Prefetch
 
 User = get_user_model()
 
 
 class ProductView(APIView):
+    permission_classes = []
+
     def get_objects(self, *args, **kwargs):
         try:
-            return Product.objects.all()
+            # TODO sort this by reverse FK (plan)
+            return Product.objects.prefetch_related(
+                Prefetch("plan_set", queryset=Plan.objects.all().order_by("amount"))
+            )
         except Product.DoesNotExist:
             return Http404
 

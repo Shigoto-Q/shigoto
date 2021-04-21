@@ -1,72 +1,81 @@
-const Card = () => {
+import axios from 'axios'
+import {loadStripe} from '@stripe/stripe-js'
+
+type Props = {
+    plan: string,
+    price: string,
+    id: string,
+    metadata?: Array<Object>
+    isPopular: boolean
+}
+
+const Card = ({plan, price, id, metadata, isPopular}: Props) => {
+
+
+
+    const handleCheckout = async () => {
+        const stripe = await loadStripe("pk_test_518h2jFItAhzYJ7dgwgnoYIDrufudKMsxdhAaa2YZt0YcbM5z1EfBvxYprkufs4KJO76zTkfaXSS3OSBtn6GMDmMm00C1wwlqJb")
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+                     }
+        }
+        const body = {
+            priceId: id
+        }
+        axios.post("/api/v1/create-checkout-session/", body, config)
+        .then(res => {
+            // @ts-ignore: Object is possibly 'null'.
+             stripe.redirectToCheckout({sessionId: res.data.sessionId})
+            })
+        .catch(err => {
+            console.log(err)
+            })
+    }
     return (
-        <div className="shadow-lg rounded-2xl w-64 bg-white dark:bg-gray-800 p-4">
-  <p className="text-gray-800 dark:text-gray-50 text-xl font-medium mb-4">
-    Entreprise
-  </p>
-  <p className="text-gray-900 dark:text-white text-3xl font-bold">
-    $0
-    <span className="text-gray-300 text-sm">
-      / month
-    </span>
-  </p>
-  <p className="text-gray-600 dark:text-gray-100  text-xs mt-4">
-    For most businesses that want to optimize web queries.
-  </p>
-  <ul className="text-sm text-gray-600 dark:text-gray-100 w-full mt-6 mb-6">
-    <li className="mb-3 flex items-center ">
-      <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width={6} height={6} stroke="currentColor" fill="#10b981" viewBox="0 0 1792 1792">
-        <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
+    <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
+  <div className="h-full p-6 rounded-lg border-2 border-indigo-500 flex flex-col relative overflow-hidden">
+    <span className="bg-indigo-500 text-white px-3 py-1 tracking-widest text-xs absolute right-0 top-0 rounded-bl">{isPopular ? 'POPULAR' : ''}</span>
+    <h2 className="text-sm tracking-widest title-font mb-1 font-medium">{plan}</h2>
+    <h1 className="text-5xl text-gray-900 leading-none flex items-center pb-4 mb-4 border-b border-gray-200">
+      <span>${price}</span>
+      <span className="text-lg ml-1 font-normal text-gray-500">/mo</span>
+    </h1>
+    <p className="flex items-center text-gray-600 mb-2">
+      <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-gray-400 text-white rounded-full flex-shrink-0">
+        <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" className="w-3 h-3" viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </span>Vexillologist pitchfork
+    </p>
+    <p className="flex items-center text-gray-600 mb-2">
+      <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-gray-400 text-white rounded-full flex-shrink-0">
+        <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" className="w-3 h-3" viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </span>Tumeric plaid portland
+    </p>
+    <p className="flex items-center text-gray-600 mb-2">
+      <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-gray-400 text-white rounded-full flex-shrink-0">
+        <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" className="w-3 h-3" viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </span>Hexagon neutra unicorn
+    </p>
+    <p className="flex items-center text-gray-600 mb-6">
+      <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-gray-400 text-white rounded-full flex-shrink-0">
+        <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" className="w-3 h-3" viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </span>Mixtape chillwave tumeric
+    </p>
+    <button onClick={handleCheckout} className="flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-indigo-600 rounded">Subscribe
+      <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-4 h-4 ml-auto" viewBox="0 0 24 24">
+        <path d="M5 12h14M12 5l7 7-7 7" />
       </svg>
-      All illimited components
-    </li>
-    <li className="mb-3 flex items-center ">
-      <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width={6} height={6} stroke="currentColor" fill="#10b981" viewBox="0 0 1792 1792">
-        <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      Own custom Tailwind styles
-    </li>
-    <li className="mb-3 flex items-center ">
-      <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width={6} height={6} stroke="currentColor" fill="#10b981" viewBox="0 0 1792 1792">
-        <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      Unlimited Templates
-    </li>
-    <li className="mb-3 flex items-center ">
-      <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width={6} height={6} stroke="currentColor" fill="#10b981" viewBox="0 0 1792 1792">
-        <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      Free premium dashboard
-    </li>
-    <li className="mb-3 flex items-center ">
-      <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width={6} height={6} stroke="currentColor" fill="#10b981" viewBox="0 0 1792 1792">
-        <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      Best ranking
-    </li>
-    <li className="mb-3 flex items-center opacity-50">
-      <svg xmlns="http://www.w3.org/2000/svg" width={6} height={6} className="h-6 w-6 mr-2" fill="red" viewBox="0 0 1792 1792">
-        <path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      Prenium svg
-    </li>
-    <li className="mb-3 flex items-center opacity-50">
-      <svg xmlns="http://www.w3.org/2000/svg" width={6} height={6} className="h-6 w-6 mr-2" fill="red" viewBox="0 0 1792 1792">
-        <path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z">
-        </path>
-      </svg>
-      My wife
-    </li>
-  </ul>
-  <button type="button" className="py-2 px-4  bg-purple-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-    Choose plan
-  </button>
+    </button>
+    <p className="text-xs text-gray-500 mt-3">You can cancel anytime.</p>
+  </div>
 </div>
 
     )

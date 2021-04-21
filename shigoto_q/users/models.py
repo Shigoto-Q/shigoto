@@ -6,8 +6,23 @@ from django_celery_beat.models import PeriodicTask
 
 
 class User(AbstractUser):
-    first_name = None  # type: ignore
-    last_name = None  # type: ignore
+    first_name = models.CharField(max_length=256, default="")
+    last_name = models.CharField(max_length=256, default="")
+    company = models.CharField(max_length=100, default="")
+    customer = models.ForeignKey(
+        "djstripe.Customer",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text=_("Stripe Customer Object"),
+    )
+    subscription = models.ForeignKey(
+        "djstripe.Subscription",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text=_("Stripe Subscripton Object"),
+    )
     total_tasks = models.IntegerField(default=0)
 
     def get_absolute_url(self):

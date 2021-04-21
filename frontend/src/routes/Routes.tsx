@@ -5,6 +5,7 @@ import Pricing from "../views/PricingPage"
 import Dashboard from "../views/Dashboard"
 import Login from "../components/Login"
 import Home from "../views/HomePage"
+import SignUp from "../components/SignUp"
 import Crontab from "../components/crontab/Crontab"
 
 const Routes = () => {
@@ -26,6 +27,7 @@ const Routes = () => {
                 <Switch>
                    <Route exact path='/' component={Home} /> 
                    <Route exact path='/login' component={Login} /> 
+                   <Route exact path='/signup' component={SignUp} /> 
                    <Route exact path='/pricing' component={Pricing} /> 
                 </Switch>
             </Layout>

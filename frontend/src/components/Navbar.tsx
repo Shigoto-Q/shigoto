@@ -36,9 +36,9 @@ const Navbar = () => {
         </a>
       </nav>
       <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-        <a href="#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+        <Link to="/signup" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
           Sign up
-        </a>
+        </Link>
       </div>
     </div>
   </div>
