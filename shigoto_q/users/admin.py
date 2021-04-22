@@ -31,6 +31,7 @@ class UserAdmin(auth_admin.UserAdmin):
                     "password",
                     "subscription",
                     "customer",
+                    "crontab",
                 )
             },
         ),

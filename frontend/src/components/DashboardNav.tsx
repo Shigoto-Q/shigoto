@@ -1,6 +1,6 @@
-import React from "react";
 import { User, Settings } from 'react-feather'
 import { Link } from 'react-router-dom'
+import UserDropDown from "./UserDropDown"
 
 const DashboardNav = () => {
   return (
@@ -10,7 +10,7 @@ const DashboardNav = () => {
               <div className="w-full relative flex justify-between lg:w-auto px-4 lg:static lg:block lg:justify-start">
                 <input type="text" 
                         placeholder="Search task" 
-                        className=""/>
+                        className="rounded-full border-opacity-0 shadow-xl"/>
               </div>
               <div
                 className=
@@ -19,13 +19,11 @@ const DashboardNav = () => {
               >
                 <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
                   <li className="nav-item">
-                    <Link to=""
+                    <div
                       className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-black hover:opacity-75"
                     >
-                      <i className="fas fa-globe text-lg leading-lg text-black opacity-75">
-                        <User/>
-                      </i>
-                    </Link>
+                        <UserDropDown/>
+                    </div>
                   </li>
                   <li className="nav-item">
                     <Link to=""

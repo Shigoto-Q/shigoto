@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.models import PeriodicTask
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
 
 class User(AbstractUser):
@@ -24,6 +24,7 @@ class User(AbstractUser):
         help_text=_("Stripe Subscripton Object"),
     )
     total_tasks = models.IntegerField(default=0)
+    crontab = models.ManyToManyField(CrontabSchedule)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
