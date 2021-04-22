@@ -1,4 +1,4 @@
-import { User, Settings } from 'react-feather'
+import { Settings } from 'react-feather'
 import { Link } from 'react-router-dom'
 import UserDropDown from "./UserDropDown"
 
@@ -17,6 +17,8 @@ const DashboardNav = () => {
                   "lg:flex flex-grow items-center flex"
                 id="example-navbar-info"
               >
+                <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-300 hover:opacity-75"> Total tasks: 0 </p>
+                <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-300 hover:opacity-75"> Active tasks: 0 </p>
                 <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
                   <li className="nav-item">
                     <div

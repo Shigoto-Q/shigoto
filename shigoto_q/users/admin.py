@@ -2,39 +2,41 @@ from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from .models import UserTasks
 from shigoto_q.users.forms import UserChangeForm, UserCreationForm
 
 User = get_user_model()
 
 
-@admin.register(UserTasks)
-class UserTasksAdmin(admin.ModelAdmin):
-    list_display = ("id", "task")
-    list_filter = ("task",)
-
-
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
-
     form = UserChangeForm
     add_form = UserCreationForm
+    filter_horizontal = [
+        "crontab",
+        "task",
+        "groups",
+        "user_permissions",
+    ]
+    raw_id_fields = ["customer", "subscription"]
     fieldsets = (
         (
-            None,
+            _("User info"),
             {
                 "fields": (
                     "username",
                     "first_name",
                     "last_name",
                     "company",
+                    "country",
+                    "zip_code",
+                    "state",
+                    "city",
                     "password",
-                    "subscription",
-                    "customer",
-                    "crontab",
                 )
             },
         ),
+        (_("Stripe/Payment info"), {"fields": ("subscription", "customer")}),
+        (_("Tasks"), {"fields": ("crontab", "task")}),
         (_("Personal info"), {"fields": ("email",)}),
         (
             _("Permissions"),

@@ -207,13 +207,14 @@ const Crontab = () => {
             </tbody>
 
             </table>
-
+        <div className="grid grid-cols-2 gap-4">
             <button className="attach-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
             Attach to task
             </button>
             <button onClick={handleCreate} className="attach-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
             Create crontab
             </button>
+            </div>
         </div>
     )
 }
