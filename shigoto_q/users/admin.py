@@ -32,6 +32,7 @@ class UserAdmin(auth_admin.UserAdmin):
                     "state",
                     "city",
                     "password",
+                    "total_tasks",
                 )
             },
         ),

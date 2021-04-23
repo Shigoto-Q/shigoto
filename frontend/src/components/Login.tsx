@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useHistory, Link } from "react-router-dom" 
+import { toast } from 'react-toastify'
+
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -14,12 +16,50 @@ const Login = () => {
         }
         axios.post('/auth/jwt/create/', body)
             .then(res => {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${res.data.access}`
+                    }
+                }
+                axios.get("/auth/users/me", config)
+                .then(response => {
+                    localStorage.setItem("userData", JSON.stringify(response.data))
+                    toast(`Welcome, ${response.data.first_name}!`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                })
+                .catch(err => {
+                    toast.error('🦄 Wow so easy!', {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            });
+                        })
                 localStorage.setItem("access", res.data.access)
                 localStorage.setItem("refresh", res.data.refresh)
                 history.push('/dashboard') 
             })
             .catch(err => {
-                console.log(err)
+                console.log(err.response)
+                    toast.error('🦄 Wow so easy!', {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            });
             })
     }
    return (

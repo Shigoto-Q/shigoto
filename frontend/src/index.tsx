@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 axios.defaults.baseURL = 'http://localhost:8000'
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("access")}`
+
 axios.interceptors.response.use((response: any) => {
             return response
             }, (err: any) => {
@@ -31,7 +32,6 @@ axios.interceptors.response.use((response: any) => {
                                     "refresh": localStorage.getItem("refresh")
                                         })
                                 }).then(res => res.json()).then(res => {
-                                    console.log(res)
                                     originalReq.headers["Authorization"] = `Bearer ${res.access}`
                                     localStorage.setItem("access", res.access)
                                     return axios(originalReq)

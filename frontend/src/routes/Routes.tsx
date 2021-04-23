@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+import {BrowserRouter as Router, Switch, Route, useLocation} from "react-router-dom"
 import Layout from "../layout/Layout"
 import UserLayout from "../layout/UserLayout"
 import Pricing from "../views/PricingPage"
@@ -7,14 +7,16 @@ import Login from "../components/Login"
 import Home from "../views/HomePage"
 import SignUp from "../components/SignUp"
 import CronDash from "../views/DashboardCron"
-const Routes = () => {
+import {AnimatePresence} from 'framer-motion'
 
+const Routes = () => {
     return (
         <Router>
-            <Switch>
+            <AnimatePresence exitBeforeEnter>
+            <Switch >
             <Route path='/dashboard/:path?'>
             <UserLayout>
-                <Switch>
+                <Switch> 
                    <Route exact path='/dashboard' component={Dashboard} /> 
                    <Route exact path='/dashboard/tasks' component={Dashboard} /> 
                    <Route exact path='/dashboard/cron' component = {CronDash} />
@@ -32,6 +34,7 @@ const Routes = () => {
             </Layout>
             </Route>
             </Switch>
+            </AnimatePresence>
         </Router>
     )
 }

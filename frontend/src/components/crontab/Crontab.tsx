@@ -148,6 +148,7 @@ const Crontab = () => {
                 onKeyDown = {handleKeyDown} 
                 onClick={handleFocus} 
                 className="text-purple-500 text-opacity-90 bg-opacity-75 bg-gray"/>
+
             <div className = "info-parts">
                 <p className = "cron-parts">
                     <span className = {!isValidMinute ? "part-wrong" : pos === 1 ? "cron-part-active" : "cron-part-inactive"}
