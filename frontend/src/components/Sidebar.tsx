@@ -11,7 +11,7 @@ type Props = {
 }
 const NavElement = ({title, navLink, icon, key}: Props) => {
     return ( 
-        <NavLink exact to={navLink} key={key}  activeClassName="bg-gradient-to-r from-white to-purple-100 border-r-4 border-purple-500 border-r-4 border-purple-500" className="w-full font-bold uppercase text-purple-500 flex items-center p-4 my-2 transition-colors duration-200 justify-start dark:from-gray-700 dark:to-gray-800">
+        <NavLink exact to={navLink} activeClassName="bg-gradient-to-r from-white to-purple-100 border-r-4 border-purple-500 border-r-4 border-purple-500" className="w-full font-bold uppercase text-purple-500 flex items-center p-4 my-2 transition-colors duration-200 justify-start dark:from-gray-700 dark:to-gray-800">
           <span className="text-left">
             {icon}
           </span>

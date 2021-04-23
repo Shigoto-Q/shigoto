@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import Card from "../components/PricingCard"
 import axios from 'axios'
-
+import { motion } from 'framer-motion'
 
 type PricingState = {
     price: Array<Object>
@@ -24,6 +24,7 @@ class Pricing extends Component<PricingState, any> {
     }
     render() {
         return (
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
         <section className="text-gray-600 body-font overflow-hidden">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">
@@ -46,7 +47,7 @@ class Pricing extends Component<PricingState, any> {
     </div>
   </div>
 </section>
-
+    </motion.div>
         )
     }
 }
