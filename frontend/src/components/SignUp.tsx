@@ -2,6 +2,8 @@ import { Component } from 'react'
 import axios from 'axios'
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+import { motion } from 'framer-motion'
+import pageTranstion from "../layout/transitions"
 
 toast.configure()
 type Props = {
@@ -81,7 +83,7 @@ class SignUp extends Component<Props, any> {
         }
     render () {
         return (
-        <div className="flex justify-center">
+        <motion.div initial="out" animate="in" exit="out" variants={pageTranstion} className="flex justify-center">
          <div className="hidden sm:block" aria-hidden="true">
             <div className="py-5">
               <div className="border-t border-gray-200" />
@@ -287,7 +289,7 @@ class SignUp extends Component<Props, any> {
               </div>
             </div>
           </div>
-          </div>
+          </motion.div>
      )
   }
 }

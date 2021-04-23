@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {loadStripe} from '@stripe/stripe-js'
+import { motion } from "framer-motion"
 
 type Props = {
     plan: string,
@@ -30,7 +31,7 @@ const Card = ({plan, price, id, metadata, isPopular}: Props) => {
             .catch(err => { })
     }
     return (
-    <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
+    <motion.div animate={{ rotate: 360 }} transition={{ ease: "easeOut", duration: 2}} className="p-4 xl:w-1/4 md:w-1/2 w-full">
   <div className="h-full p-6 rounded-lg border-2 border-indigo-500 flex flex-col relative overflow-hidden">
     <span className="bg-indigo-500 text-white px-3 py-1 tracking-widest text-xs absolute right-0 top-0 rounded-bl">{isPopular ? 'POPULAR' : ''}</span>
     <h2 className="text-sm tracking-widest title-font mb-1 font-medium">{plan}</h2>
@@ -73,7 +74,7 @@ const Card = ({plan, price, id, metadata, isPopular}: Props) => {
     </button>
     <p className="text-xs text-gray-500 mt-3">You can cancel anytime.</p>
   </div>
-</div>
+</motion.div>
 
     )
 }
