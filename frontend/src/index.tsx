@@ -3,16 +3,48 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { SnackbarProvider } from 'notistack';
 import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
-axios.defaults.baseURL = 'http://localhost:8000'
 
+axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("access")}`
+axios.interceptors.response.use((response: any) => {
+            return response
+            }, (err: any) => {
+            return new Promise((resolve: any, reject: any) => {
+                        const originalReq = err.config 
+                        if ( err.response.status === 401 && err.config && !err.config._isRetryRequest ) {
+                            originalReq._retry = true
+
+                            let res = fetch('http://localhost:8000/auth/jwt/refresh/', {
+                                method: 'POST',
+                                mode: 'cors',
+                                cache: 'no-cache',
+                                credentials: 'same-origin',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${localStorage.getItem("access")}`
+                                },
+                                redirect: 'follow',
+                                referrer: 'no-referrer',
+                                body: JSON.stringify({
+                                    "refresh": localStorage.getItem("refresh")
+                                        })
+                                }).then(res => res.json()).then(res => {
+                                    console.log(res)
+                                    originalReq.headers["Authorization"] = `Bearer ${res.access}`
+                                    localStorage.setItem("access", res.access)
+                                    return axios(originalReq)
+                                    })
+                                    resolve(res)
+                        }
+                        return Promise.reject(err)
+                    })
+
+            })
 ReactDOM.render(
   <React.StrictMode>
-  <SnackbarProvider maxSnack={2}>
     <App />
-    </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

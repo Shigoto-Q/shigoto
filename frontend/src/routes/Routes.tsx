@@ -6,8 +6,7 @@ import Dashboard from "../views/Dashboard"
 import Login from "../components/Login"
 import Home from "../views/HomePage"
 import SignUp from "../components/SignUp"
-import Crontab from "../components/crontab/Crontab"
-
+import CronDash from "../views/DashboardCron"
 const Routes = () => {
 
     return (
@@ -18,7 +17,7 @@ const Routes = () => {
                 <Switch>
                    <Route exact path='/dashboard' component={Dashboard} /> 
                    <Route exact path='/dashboard/tasks' component={Dashboard} /> 
-                   <Route exact path='/dashboard/cron' component = {Crontab} />
+                   <Route exact path='/dashboard/cron' component = {CronDash} />
                 </Switch>
             </UserLayout>
             </Route>

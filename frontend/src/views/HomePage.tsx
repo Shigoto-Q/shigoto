@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import Login from '../components/Login'
 import Promo from "../components/PromoCard"
 import ReadyCard from "../components/ReadyDive"
 

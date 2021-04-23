@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from ...tasks.api.serializers import CrontabSerializer
+
 
 User = get_user_model()
 
@@ -27,6 +29,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(DjoserUserSerializer):
+    crontab = CrontabSerializer(read_only=True, many=True)
+
     class Meta(DjoserUserSerializer.Meta):
         model = User
         fields = [
@@ -37,7 +41,9 @@ class UserSerializer(DjoserUserSerializer):
             "subscription",
             "customer",
             "total_tasks",
+            "crontab",
         ]
+        depth = 1
 
 
 class UserCreateSerializer(DjoserUserCreateSerializer):
