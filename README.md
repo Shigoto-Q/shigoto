@@ -45,7 +45,6 @@ A [Django](https://www.djangoproject.com/) project for easy cron job, task plann
 
 
 - [React](https://facebook.github.io/react/), for building interactive UIs
-- [Bootstrap 4](https://v4-alpha.getbootstrap.com/), for responsive styling
 - [Celery](http://www.celeryproject.org/), for background worker tasks
 - [WhiteNoise](http://whitenoise.evans.io/en/stable/) for serving static files in production.
 
