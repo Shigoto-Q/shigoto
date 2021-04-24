@@ -4,7 +4,7 @@
 
 <p align="center">
 
-[![Build Status](https://travis-ci.com/SimeonAleksov/shigoto.svg?token=BRFSrDpxsFuTrxmdtyPy&branch=master)](https://travis-ci.com/SimeonAleksov/scraping_system)
+[![Build Status](https://travis-ci.com/SimeonAleksov/shigoto.svg?token=BRFSrDpxsFuTrxmdtyPy&branch=master)](https://travis-ci.com/SimeonAleksov/shigoto_q)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
