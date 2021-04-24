@@ -26,7 +26,7 @@ const DashboardNav = () => {
                     </div>
                   </li>
                   <li className="nav-item">
-                    <Link to=""
+                    <Link to="/dashboard/profile-settings/"
                       className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-black hover:opacity-75"
                     >
                       <i className="fas fa-globe text-lg leading-lg text-black opacity-75">

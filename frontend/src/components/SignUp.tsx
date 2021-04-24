@@ -61,11 +61,10 @@ class SignUp extends Component<Props, any> {
                 company: this.state.company,
                 city: this.state.city,
                 zip: this.state.zip,
-                state: this.state.state
+                state: this.state.state,
             } 
             axios.post("/auth/users/", body)
                 .then(res => {
-                    console.log(res)
                         })
             .catch(err => {
                 // TODO create custom notification component

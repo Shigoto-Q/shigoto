@@ -1,4 +1,4 @@
-import {CheckSquare, Cloud} from "react-feather"
+import {CheckSquare, Cloud, Calendar} from "react-feather"
 
 const navigation = [
     {
@@ -16,7 +16,7 @@ const navigation = [
     {
         id: 'cron',
         title: 'Crontab Editor',
-        icon: <CheckSquare/>,
+        icon: <Calendar/>,
         navLink: '/dashboard/cron'
     }
 ]

@@ -5,6 +5,7 @@ import Pricing from "../views/PricingPage"
 import Dashboard from "../views/Dashboard"
 import Login from "../components/Login"
 import Home from "../views/HomePage"
+import UserSettings from "../views/UserProfile"
 import SignUp from "../components/SignUp"
 import CronDash from "../views/DashboardCron"
 import {AnimatePresence} from 'framer-motion'
@@ -20,6 +21,7 @@ const Routes = () => {
                    <Route exact path='/dashboard' component={Dashboard} /> 
                    <Route exact path='/dashboard/tasks' component={Dashboard} /> 
                    <Route exact path='/dashboard/cron' component = {CronDash} />
+                   <Route exact path='/dashboard/profile-settings' component = {UserSettings} />
                 </Switch>
             </UserLayout>
             </Route>
