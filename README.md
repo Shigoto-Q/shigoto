@@ -26,7 +26,7 @@ A [Django](https://www.djangoproject.com/) project for easy cron job, task plann
     
     
 - Frontend app with JavaScript (ES2015), React and Sass
-    - Latest JavaScript features from [ES2015](https://babeljs.io/docs/learn-es2015/) and beyond, transpiled with
+    - Latest TypeScript features from [ES2015](https://babeljs.io/docs/learn-es2015/) and beyond, transpiled with
     - [React](https://facebook.github.io/react/) for fast modular user interfaces
     - [Sass](http://sass-lang.com/), [PostCSS](http://postcss.org/)
     - [Tailwind CSS](https://tailwindcss.com/)
