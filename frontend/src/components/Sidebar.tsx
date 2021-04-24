@@ -28,16 +28,16 @@ const renderSidebar = navigation.map((navli, idx) => {
 const Sidebar = () => {
 
     return (
-  <div className="bg-white h-full rounded-2xl dark:bg-gray-700">
-    <div className="flex items-center justify-center pt-6">
-        <Logo/>
-    </div>
-    <nav className="mt-6">
-      <div>
-        {renderSidebar}
-      </div>
-    </nav>
-  </div>
+        <div className="h-screen bg-white rounded-2xl dark:bg-gray-700">
+            <div className="flex items-center justify-center pt-6">
+                <Logo/>
+            </div>
+            <nav className="mt-6">
+                <div>
+                    {renderSidebar}
+                </div>
+            </nav>
+        </div>
     )
 }
 
