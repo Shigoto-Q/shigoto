@@ -12,6 +12,11 @@
 <a href="https://shigoto.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
 </p>
 
+## Demo
+
+![Landing page](https://i.imgur.com/LVOjifO.png)
+![Dashboard page](https://i.imgur.com/TKM7zUD.png)
+
 ## About
 A [Django](https://www.djangoproject.com/) project for easy cron job, task planning and monitoring.
 
@@ -153,10 +158,3 @@ To run tests, run the following command
 ```bash
   docker-compose -f local.yml run django pytest
 ```
-
-## Demo
-
-![Landing page](https://i.imgur.com/LVOjifO.png)
-![Dashboard page](https://i.imgur.com/TKM7zUD.png)
-
-
