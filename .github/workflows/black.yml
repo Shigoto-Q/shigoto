@@ -10,4 +10,4 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: psf/black@stable
         with:
-          args: "--check --exclude . ^.*\b(migrations)\b.*$"
+          args: "--check --exclude ^.*\b(migrations)\b.*$ shigoto_q"
