@@ -15,9 +15,9 @@ const navigation = [
     },
     {
         id: 'cron',
-        title: 'Crontab Editor',
+        title: 'Scheduler',
         icon: <Calendar/>,
-        navLink: '/dashboard/cron'
+        navLink: '/dashboard/scheduler'
     }
 ]
 

@@ -20,7 +20,7 @@ const Routes = () => {
                 <Switch> 
                    <Route exact path='/dashboard' component={Dashboard} /> 
                    <Route exact path='/dashboard/tasks' component={Dashboard} /> 
-                   <Route exact path='/dashboard/cron' component = {CronDash} />
+                   <Route exact path='/dashboard/scheduler' component = {CronDash} />
                    <Route exact path='/dashboard/profile-settings' component = {UserSettings} />
                 </Switch>
             </UserLayout>
