@@ -14,8 +14,11 @@ class UserAdmin(auth_admin.UserAdmin):
     filter_horizontal = [
         "crontab",
         "task",
+        "interval",
         "groups",
         "user_permissions",
+        "clocked",
+        "solar",
     ]
     raw_id_fields = ["customer", "subscription"]
     fieldsets = (
@@ -37,7 +40,7 @@ class UserAdmin(auth_admin.UserAdmin):
             },
         ),
         (_("Stripe/Payment info"), {"fields": ("subscription", "customer")}),
-        (_("Tasks"), {"fields": ("crontab", "task")}),
+        (_("Tasks"), {"fields": ("crontab", "interval", "clocked", "solar", "task")}),
         (_("Personal info"), {"fields": ("email",)}),
         (
             _("Permissions"),

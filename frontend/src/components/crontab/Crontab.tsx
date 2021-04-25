@@ -5,11 +5,12 @@ import axios from 'axios'
 
 import './Crontab.css'
 
+type CronProps = {
+    userInput: string
+}
 
-const Crontab = () => {
-
-
-    const [input, setInput] = useState('10 * * * *')
+const Crontab = ({userInput}: CronProps) => {
+    const [input, setInput] = useState(userInput)
     const [selectionStart, setSelectionStart] = useState(-1)
     const [pos, setPos] = useState(-1)
     const isMount = useIsMount()
@@ -30,7 +31,7 @@ const Crontab = () => {
                 day_of_week: crons[4]
             }
         // TODO show message
-        axios.post('/api/v1/cron/', config)
+        axios.post('/api/v1/schedule/cron/', config)
             .then(res => {})
             .catch(err => {})
     }
@@ -43,6 +44,10 @@ const Crontab = () => {
     useEffect(() => {
         checkRegex()
     }, [input])
+
+    useEffect(() => {
+        setInput(userInput)
+        }, [userInput])
 
     const selection = (position:any) => {
 
@@ -208,11 +213,11 @@ const Crontab = () => {
             </tbody>
 
             </table>
-        <div className="grid grid-cols-2 gap-4">
-            <button className="attach-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
+        <div className="mt-5">
+            <button className="mr-2 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
             Attach to task
             </button>
-            <button onClick={handleCreate} className="attach-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
+            <button onClick={handleCreate} className="ml-2 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
             Create crontab
             </button>
             </div>

@@ -11,15 +11,6 @@ stripe.api_key = STRIPE_SECRET_KEY
 
 @csrf_exempt
 def create_customer_sub(request):
-    """
-    Create a Stripe Customer and Subscription object and map them onto the User object
-    Expects the inbound POST data to look something like this:
-    {
-        'email': 'cory@saaspegasus.com',
-        'payment_method': 'pm_1GGgzaIXTEadrB0y0tthO3UH',
-        'plan_id': 'plan_GqvXkzAvxlF0wR',
-    }
-    """
     body = json.loads(request.body)
     email = body.get("email")
     payment_method = body.get("payment_method")

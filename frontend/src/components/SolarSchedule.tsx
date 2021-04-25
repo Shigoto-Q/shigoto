@@ -1,79 +1,73 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState} from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { Check, Menu, Calendar } from 'react-feather'
-import Crontab from "../crontab/Crontab"
+import { Check, Menu, Sunrise } from 'react-feather'
 
 const people = [
   {
     id: 1,
-    name: 'At minute 10',
+    name: 'Astronomical dawn',
     value: '10 * * * *'
   },
   {
     id: 2,
-    name: 'Every minute',
+    name: 'Civil dawn',
     value: '* * * *'
   },
   {
     id: 3,
-    name: ' At every 2nd minute',
+    name: 'Nautical dawn',
     value: '*/2 * * * *'
   },
   {
     id: 4,
-    name: 'At every 2nd minute from 1 through 59',
+    name: 'Astronomical dusk',
     value: '1-59/2 * * * *'
   },
   {
     id: 5,
-    name: 'At every 10th minute',
+    name: 'Civil dusk',
     value: '*/10 * * * *'
   },
   {
     id: 6,
-    name: ' At every 6th minute',
+    name: 'Nautical dusk',
     value: '*/6 * * * *'
   },
   {
     id: 7,
-    name: 'At every 5th minute',
+    name: 'Solar noon',
     value: '*/5 * * * * '
   },
   {
     id: 8,
-    name: 'At 00:00 on Friday',
+    name: 'Sunrise',
     value: '0 0 * * FRI '
   },
   {
     id: 9,
-    name: 'At minute 0 past every hour from 9 through 17',
+    name: 'Sunset',
     value: '0 9-17 * * *'
-  },
-  {
-    id: 10,
-    name: 'At 00:00 every day-of-week from Monday through Friday',
-    value: '0 0 * * 1-5 '
-  },
+  }
 ]
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function CronDropdown() {
+export default function SolarSchedule() {
   const [selected, setSelected] = useState(people[0])
 
   return (
-  <> 
-    <div className="ml-10 mr-10 col-span-2">
+  <form> 
+    <div className="ml-10 mr-10 -mt-10 col-span-2">
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">Example crontabs: </Listbox.Label>
+          <Listbox.Label className="mt-10 mb-2 block text-sm font-medium text-gray-700">Select an event: </Listbox.Label>
           <div className="mt-1 relative">
             <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
-                <Calendar className="flex-shrink-0 h-5 w-5 rounded-full" />
+                <Sunrise className="flex-shrink-0 h-5 w-5 rounded-full" />
                 <span className="ml-3 block">{selected.name}</span>
               </span>
               <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -133,11 +127,38 @@ export default function CronDropdown() {
         </>
       )}
     </Listbox>
+
+    <div className="mt-10 sm:col-span-3">
+      <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
+        Latitude
+      </label>
+      <input
+        type="text"
+        name="first_name"
+        id="first_name"
+        autoComplete="given-name"
+        placeholder="46.1512° N"
+        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+      />
     </div>
-            <div className="col-span-2">
-                <Crontab userInput={selected.value}/>
-            </div>
-    </>
+    <div className="mt-5 sm:col-span-3">
+      <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+        Longtitude
+      </label>
+      <input
+        type="text"
+        name="last_name"
+        id="last_name"
+        autoComplete="family-name"
+        placeholder="14.9955° E"
+        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+      />
+    </div>
+    <button type="submit" className="mt-3 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
+    Create solar schedule
+    </button>
+    </div>
+    </form>
   )
 }
  
