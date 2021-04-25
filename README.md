@@ -15,7 +15,9 @@
 ## Demo
 
 ![Landing page](https://i.imgur.com/LVOjifO.png)
-![Dashboard page](https://i.imgur.com/TKM7zUD.png)
+![Dashboard page](https://i.imgur.com/pJOglAI.png)
+![Profile settings page](https://i.imgur.com/s7zQjbG.png)
+
 
 ## About
 A [Django](https://www.djangoproject.com/) project for easy cron job, task planning and monitoring.
