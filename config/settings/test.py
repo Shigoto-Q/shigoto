@@ -5,6 +5,7 @@ With these settings, tests run faster.
 from .base import *  # noqa
 from .base import env
 
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
