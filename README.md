@@ -4,12 +4,20 @@
 
 <p align="center">
 
-[![Build Status](https://travis-ci.com/SimeonAleksov/shigoto.svg?token=BRFSrDpxsFuTrxmdtyPy&branch=master)](https://travis-ci.com/SimeonAleksov/scraping_system)
+[![Build Status](https://travis-ci.com/SimeonAleksov/shigoto.svg?token=BRFSrDpxsFuTrxmdtyPy&branch=master)](https://travis-ci.com/SimeonAleksov/shigoto_q)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://report.mediabiz.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
+[![CodeFactor](https://www.codefactor.io/repository/github/simeonaleksov/shigoto_q/badge)](https://www.codefactor.io/repository/github/simeonaleksov/shigoto_q)
+<a href="https://shigoto.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
 </p>
+
+## Demo
+
+![Landing page](https://i.imgur.com/LVOjifO.png)
+![Dashboard page](https://i.imgur.com/pJOglAI.png)
+![Profile settings page](https://i.imgur.com/s7zQjbG.png)
+
 
 ## About
 A [Django](https://www.djangoproject.com/) project for easy cron job, task planning and monitoring.
@@ -26,7 +34,7 @@ A [Django](https://www.djangoproject.com/) project for easy cron job, task plann
     
     
 - Frontend app with JavaScript (ES2015), React and Sass
-    - Latest JavaScript features from [ES2015](https://babeljs.io/docs/learn-es2015/) and beyond, transpiled with
+    - Latest TypeScript features from [ES2015](https://babeljs.io/docs/learn-es2015/) and beyond, transpiled with
     - [React](https://facebook.github.io/react/) for fast modular user interfaces
     - [Sass](http://sass-lang.com/), [PostCSS](http://postcss.org/)
     - [Tailwind CSS](https://tailwindcss.com/)
@@ -45,7 +53,6 @@ A [Django](https://www.djangoproject.com/) project for easy cron job, task plann
 
 
 - [React](https://facebook.github.io/react/), for building interactive UIs
-- [Bootstrap 4](https://v4-alpha.getbootstrap.com/), for responsive styling
 - [Celery](http://www.celeryproject.org/), for background worker tasks
 - [WhiteNoise](http://whitenoise.evans.io/en/stable/) for serving static files in production.
 
@@ -153,10 +160,3 @@ To run tests, run the following command
 ```bash
   docker-compose -f local.yml run django pytest
 ```
-
-## Demo
-
-![Landing page](https://i.imgur.com/LVOjifO.png)
-![Dashboard page](https://i.imgur.com/TKM7zUD.png)
-
-
