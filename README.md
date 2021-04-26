@@ -1,4 +1,6 @@
 <p align="center">
+
+
 ![Shigoto Logo](https://i.imgur.com/MK7NlZI.png)
 
 <h2 align="center">Shigoto</h2>
