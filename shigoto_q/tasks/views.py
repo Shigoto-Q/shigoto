@@ -1,22 +1,42 @@
+from django.contrib.auth import get_user_model
+from django.http import Http404
 from django_celery_beat.models import (
+    ClockedSchedule,
     CrontabSchedule,
     IntervalSchedule,
-    ClockedSchedule,
+    PeriodicTask,
     SolarSchedule,
 )
-from django.http import Http404
-from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .api.serializers import (
+    ClockedSerializer,
     CrontabSerializer,
     IntervalSerializer,
-    ClockedSerializer,
     SolarSerializer,
+    TaskGetSerializer,
+    TaskPostSerializer,
 )
-from django.contrib.auth import get_user_model
-
 
 User = get_user_model()
+
+
+class TaskView(ListCreateAPIView):
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return TaskGetSerializer
+        elif self.request.method == "POST":
+            return TaskPostSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"crontab_id": 10})
+        return context
+
+    def get_queryset(self):
+        return self.request.user.task.all()
 
 
 class CrontabView(APIView):
