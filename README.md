@@ -1,8 +1,10 @@
-![Shigoto Logo](https://raw.githubusercontent.com/SimeonAleksov/shigoto/master/frontend/src/assets/images/logo/logo.png?token=AF4W4PHX6HVJYENAWBGM463AJYFGC)
+<p align="center">
+
+
+![Shigoto Logo](https://i.imgur.com/MK7NlZI.png)
 
 <h2 align="center">Shigoto</h2>
 
-<p align="center">
 
 [![Build Status](https://travis-ci.com/SimeonAleksov/shigoto.svg?token=BRFSrDpxsFuTrxmdtyPy&branch=master)](https://travis-ci.com/SimeonAleksov/shigoto_q)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
