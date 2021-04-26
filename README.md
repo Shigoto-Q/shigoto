@@ -1,4 +1,4 @@
-![Shigoto Logo](https://raw.githubusercontent.com/SimeonAleksov/shigoto/master/frontend/src/assets/images/logo/logo.png?token=AF4W4PHX6HVJYENAWBGM463AJYFGC)
+![Shigoto Logo](https://i.imgur.com/MK7NlZI.png)
 
 <h2 align="center">Shigoto</h2>
 
