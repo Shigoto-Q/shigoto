@@ -24,6 +24,14 @@ User = get_user_model()
 
 
 class TaskView(ListCreateAPIView):
+    """
+    get:
+        Returns a list for user created tasks.
+
+    post:
+        Creates a new task
+    """
+
     def get_serializer_class(self):
         if self.request.method == "GET":
             return TaskGetSerializer
@@ -32,7 +40,6 @@ class TaskView(ListCreateAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({"crontab_id": 10})
         return context
 
     def get_queryset(self):
@@ -41,8 +48,10 @@ class TaskView(ListCreateAPIView):
 
 class CrontabView(APIView):
     """
-    Lists all crontabs for the user
-    Creates a crontab for the user
+    get:
+        Lists all crontabs for the user
+    post:
+        Creates a crontab for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -68,8 +77,10 @@ class CrontabView(APIView):
 
 class IntervalView(APIView):
     """
-    Lists all intervalss for the user
-    Creates an interval for the user
+    get:
+        Lists all intervals for the user
+    post:
+        Creates an interval for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -95,8 +106,10 @@ class IntervalView(APIView):
 
 class ClockedView(APIView):
     """
-    Lists all clock schedules for the user
-    Creates a clock for the user
+    get:
+        Lists all clock schedules for the user
+    post:
+        Creates a clock for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -122,8 +135,10 @@ class ClockedView(APIView):
 
 class SolarView(APIView):
     """
-    Lists all solar schedules for the user
-    Creates a solar schedule for the user
+    get:
+        Lists all solar schedules for the user
+    post:
+        Creates a solar schedule for the user
     """
 
     def get_object(self, user, *args, **kwargs):

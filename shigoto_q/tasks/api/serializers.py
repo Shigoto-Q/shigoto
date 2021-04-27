@@ -89,15 +89,10 @@ class TaskGetSerializer(serializers.ModelSerializer):
 
 
 class TaskPostSerializer(serializers.ModelSerializer):
-    crontab = serializers.SerializerMethodField(method_name="get_crontab")
     task = serializers.SerializerMethodField(read_only=True)
 
     def get_task(self, obj):
         return getattr(obj, "task", "shigoto_q.tasks.tasks.custom_endpoint")
-
-    def get_crontab(self, obj):
-        print("the hell????")
-        return obj.crontab
 
     class Meta:
         model = PeriodicTask
@@ -117,3 +112,23 @@ class TaskPostSerializer(serializers.ModelSerializer):
             "one_off",
             "enabled",
         ]
+
+    def create(self, validated_data):
+        task_created = PeriodicTask.objects.create(
+            task="shigoto_q.tasks.tasks.custom_endpoint",
+            crontab=validated_data["crontab"],
+            interval=validated_data["interval"],
+            clocked=validated_data["clocked"],
+            solar=validated_data["solar"],
+            name=validated_data["name"],
+            kwargs=validated_data["kwargs"],
+            args=validated_data["args"],
+            queue=validated_data["queue"],
+            priority=validated_data["priority"],
+            expires=validated_data["expires"],
+            expire_seconds=validated_data["expire_seconds"],
+            one_off=validated_data["one_off"],
+            enabled=validated_data["enabled"],
+        )
+        self.context["request"].user.task.add(task_created)
+        return task_created
