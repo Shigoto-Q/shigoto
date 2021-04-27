@@ -7,25 +7,39 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_celery_beat', '0015_edit_solarschedule_events_choices'),
-        ('users', '0001_initial'),
+        ("django_celery_beat", "0015_edit_solarschedule_events_choices"),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='name',
+            model_name="user",
+            name="name",
         ),
         migrations.AddField(
-            model_name='user',
-            name='total_tasks',
+            model_name="user",
+            name="total_tasks",
             field=models.IntegerField(default=0),
         ),
         migrations.CreateModel(
-            name='UserTasks',
+            name="UserTasks",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.periodictask')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "task",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="django_celery_beat.periodictask",
+                    ),
+                ),
             ],
         ),
     ]

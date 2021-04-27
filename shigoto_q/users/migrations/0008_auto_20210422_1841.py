@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_celery_beat', '0015_edit_solarschedule_events_choices'),
-        ('users', '0007_auto_20210422_1723'),
+        ("django_celery_beat", "0015_edit_solarschedule_events_choices"),
+        ("users", "0007_auto_20210422_1723"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='task',
-            field=models.ManyToManyField(to='django_celery_beat.PeriodicTask'),
+            model_name="user",
+            name="task",
+            field=models.ManyToManyField(to="django_celery_beat.PeriodicTask"),
         ),
         migrations.DeleteModel(
-            name='UserTasks',
+            name="UserTasks",
         ),
     ]

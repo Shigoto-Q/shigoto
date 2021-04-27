@@ -1,28 +1,57 @@
+from django.contrib.auth import get_user_model
+from django.http import Http404
 from django_celery_beat.models import (
+    ClockedSchedule,
     CrontabSchedule,
     IntervalSchedule,
-    ClockedSchedule,
+    PeriodicTask,
     SolarSchedule,
 )
-from django.http import Http404
-from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .api.serializers import (
+    ClockedSerializer,
     CrontabSerializer,
     IntervalSerializer,
-    ClockedSerializer,
     SolarSerializer,
+    TaskGetSerializer,
+    TaskPostSerializer,
 )
-from django.contrib.auth import get_user_model
-
 
 User = get_user_model()
 
 
+class TaskView(ListCreateAPIView):
+    """
+    get:
+        Returns a list for user created tasks.
+
+    post:
+        Creates a new task
+    """
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return TaskGetSerializer
+        elif self.request.method == "POST":
+            return TaskPostSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        return context
+
+    def get_queryset(self):
+        return self.request.user.task.all()
+
+
 class CrontabView(APIView):
     """
-    Lists all crontabs for the user
-    Creates a crontab for the user
+    get:
+        Lists all crontabs for the user
+    post:
+        Creates a crontab for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -48,8 +77,10 @@ class CrontabView(APIView):
 
 class IntervalView(APIView):
     """
-    Lists all intervalss for the user
-    Creates an interval for the user
+    get:
+        Lists all intervals for the user
+    post:
+        Creates an interval for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -75,8 +106,10 @@ class IntervalView(APIView):
 
 class ClockedView(APIView):
     """
-    Lists all clock schedules for the user
-    Creates a clock for the user
+    get:
+        Lists all clock schedules for the user
+    post:
+        Creates a clock for the user
     """
 
     def get_object(self, user, *args, **kwargs):
@@ -102,8 +135,10 @@ class ClockedView(APIView):
 
 class SolarView(APIView):
     """
-    Lists all solar schedules for the user
-    Creates a solar schedule for the user
+    get:
+        Lists all solar schedules for the user
+    post:
+        Creates a solar schedule for the user
     """
 
     def get_object(self, user, *args, **kwargs):

@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_celery_beat', '0015_edit_solarschedule_events_choices'),
-        ('users', '0009_auto_20210422_1858'),
+        ("django_celery_beat", "0015_edit_solarschedule_events_choices"),
+        ("users", "0009_auto_20210422_1858"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='interval',
-            field=models.ManyToManyField(to='django_celery_beat.IntervalSchedule'),
+            model_name="user",
+            name="interval",
+            field=models.ManyToManyField(to="django_celery_beat.IntervalSchedule"),
         ),
     ]

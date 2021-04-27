@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = "tasks"
@@ -8,4 +9,5 @@ urlpatterns = [
     path("schedule/interval/", views.IntervalView.as_view()),
     path("schedule/clock/", views.ClockedView.as_view()),
     path("schedule/solar/", views.SolarView.as_view()),
+    path("task/", views.TaskView.as_view()),
 ]
