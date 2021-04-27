@@ -3,6 +3,7 @@ import Layout from "../layout/Layout"
 import UserLayout from "../layout/UserLayout"
 import Pricing from "../views/PricingPage"
 import Dashboard from "../views/Dashboard"
+import TaskDashboard from "../views/TaskDashboard"
 import Login from "../components/Login"
 import Home from "../views/HomePage"
 import UserSettings from "../views/UserProfile"
@@ -19,7 +20,7 @@ const Routes = () => {
             <UserLayout>
                 <Switch> 
                    <Route exact path='/dashboard' component={Dashboard} /> 
-                   <Route exact path='/dashboard/tasks' component={Dashboard} /> 
+                   <Route exact path='/dashboard/tasks' component={TaskDashboard} /> 
                    <Route exact path='/dashboard/scheduler' component = {CronDash} />
                    <Route exact path='/dashboard/profile-settings' component = {UserSettings} />
                 </Switch>
