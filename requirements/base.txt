@@ -9,6 +9,7 @@ celery  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
 django-celery-beat  # https://github.com/celery/django-celery-beat
 flower  # https://github.com/mher/flower
 uvicorn[standard]==0.13.4  # https://github.com/encode/uvicorn
+kubernetes
 django_celery_results
 sqlalchemy
 djoser

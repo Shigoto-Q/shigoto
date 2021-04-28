@@ -40,13 +40,13 @@ const CreateTask = () => {
       <div className="flex flex-nowrap">
         <form onSubmit={handleSubmit}>
           <div className="ml-2 mb-2">
-            <label htmlFor="endpoint" className="block text-sm font-medium text-gray-700">
-              Endpoint URL:
+            <label htmlFor="task" className="block text-sm font-medium text-gray-700">
+              Task name:
           </label>
             <input
               type="text"
-              name="endpoint"
-              id="endpoint"
+              name="task"
+              id="task"
               placeholder="https://www.google.com"
               className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setTaskName(e.target.value)}
