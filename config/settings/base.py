@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # shigoto_q/
 APPS_DIR = ROOT_DIR / "shigoto_q"
 env = environ.Env()
-NUXT_DIR = ROOT_DIR / "frontend"
+REACT_DIR = ROOT_DIR / "frontend"
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 
@@ -43,7 +43,6 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
-    "crispy_forms",
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
@@ -58,6 +57,7 @@ LOCAL_APPS = [
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -97,7 +97,7 @@ MIDDLEWARE = [
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [str(APPS_DIR / "static"), str(NUXT_DIR / "build" / "static")]
+STATICFILES_DIRS = [str(APPS_DIR / "static"), str(REACT_DIR / "build" / "static")]
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -109,7 +109,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR / "templates"), str(NUXT_DIR / "build")],
+        "DIRS": [str(APPS_DIR / "templates"), str(REACT_DIR / "build")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -131,7 +131,6 @@ TEMPLATES = [
 
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 SESSION_COOKIE_HTTPONLY = True

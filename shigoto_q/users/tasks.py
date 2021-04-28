@@ -1,5 +1,7 @@
-from django.contrib.auth import get_user_model
 import time
+
+from django.contrib.auth import get_user_model
+
 from config import celery_app
 
 User = get_user_model()
