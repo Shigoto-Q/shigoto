@@ -17,8 +17,8 @@
 ## Demo
 
 ![Landing page](https://i.imgur.com/LVOjifO.png)
-![Dashboard page](https://i.imgur.com/pJOglAI.png)
-![Profile settings page](https://i.imgur.com/s7zQjbG.png)
+![Dashboard page](https://i.imgur.com/NjAuzAr.png)
+![Profile settings page](https://i.imgur.com/1LFEvmc.png)
 
 
 ## About

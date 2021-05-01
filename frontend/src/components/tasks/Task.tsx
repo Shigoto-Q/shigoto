@@ -3,9 +3,15 @@ import { useState } from "react"
 import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
-import {checkAuthenticated, load_user} from "../../redux/actions/auth/"
+import { checkAuthenticated, load_user } from "../../redux/actions/auth/"
 
-const CreateTask = () => {
+
+type TaskProps = {
+  isAuthenticated: boolean,
+  user: any
+}
+const CreateTask = ({ isAuthenticated, user }: TaskProps) => {
+  console.log(user)
   const [enabled, setEnabled] = useState(true)
   const [oneoff, setOneoff] = useState(false)
   const [taskName, setTaskName] = useState("")
@@ -13,7 +19,7 @@ const CreateTask = () => {
   const [crontab, setCrontab] = useState("")
   const [args, setArgs] = useState("")
   const [kwargs, setKwargs] = useState("")
-  const userCrons = JSON.parse(localStorage.getItem("userData") || "{}").crontab
+  const userCrons = JSON.parse(user || "{}").crontab
   const actualCrons = userCrons.map((item: any) => {
     return {
       value: [item.minute, item.hour, item.day_of_month, item.month_of_year].join(" "),
@@ -129,5 +135,8 @@ const CreateTask = () => {
   )
 }
 
-export default connect(null, { checkAuthenticated, load_user })(CreateTask);
-// export default CreateTask
+const mapStateToProps = (state: any) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
+})
+export default connect(mapStateToProps, { checkAuthenticated, load_user })(CreateTask);

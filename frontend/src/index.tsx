@@ -5,6 +5,7 @@ import Spinner from "./components/Spinner"
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
+import {ToastContainer} from "react-toastify"
 import { store } from "./redux/storeConfig/store"
 import { Provider } from 'react-redux'
 
@@ -17,6 +18,7 @@ ReactDOM.render(
     <Suspense fallback={<Spinner />}>
       <React.StrictMode>
         <LazyApp />
+        <ToastContainer/>
       </React.StrictMode>
     </Suspense>
   </Provider>,

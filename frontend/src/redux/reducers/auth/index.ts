@@ -7,75 +7,94 @@ import {
   AUTHENTICATED_FAIL,
   AUTHENTICATED_SUCCESS,
   USER_LOADED_SUCCESS,
-  USER_LOADED_FAIL
-} from '../../types/auth/index'
+  USER_LOADED_FAIL,
+} from "../../types/auth/index";
+import { toast, Slide } from "react-toastify";
+
 
 const initialState = {
   access: "",
   refresh: "",
   isAuthenticated: false,
-  user: "" 
-}
+  user: "",
+};
 
 const reducers = (state = initialState, action: any) => {
-  const { type, payload } = action
+  const { type, payload } = action;
 
   switch (type) {
     case AUTHENTICATED_SUCCESS:
       return {
         ...state,
-        isAuthenticated: true
-      }
+        isAuthenticated: true,
+      };
     case LOGIN_SUCCESS:
-      localStorage.setItem('access', payload.access)
-      localStorage.setItem('refresh', payload.refresh)
+      localStorage.setItem("access", payload.access);
+      localStorage.setItem("refresh", payload.refresh);
+      toast("Logged in!", {
+        transition: Slide,
+        hideProgressBar: false,
+        autoClose: 2000,
+        closeOnClick: true,
+        progress: undefined,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        draggable: true,
+      });
       return {
         ...state,
         isAuthenticated: true,
         access: payload.access,
-        refresh: payload.refresh
-      }
+        refresh: payload.refresh,
+      };
     case USER_LOADED_SUCCESS:
-      localStorage.setItem('userData', JSON.stringify(payload))
+      localStorage.setItem("userData", JSON.stringify(payload));
       return {
         ...state,
-        user: payload
-      }
+        user: JSON.stringify(payload),
+      };
     case SIGNUP_SUCCESS:
       return {
         ...state,
-        isAuthenticated: false
-      }
+        isAuthenticated: false,
+      };
     case AUTHENTICATED_FAIL:
       return {
         ...state,
-        isAuthenticated: false
-      }
+        isAuthenticated: false,
+      };
     case USER_LOADED_FAIL:
       return {
         ...state,
-        user: null
-      }
+        user: null,
+      };
     case SIGNUP_FAIL:
     case LOGIN_FAIL:
       return {
         ...state,
-        loginFail: true
-      }
+        loginFail: true,
+      };
     case LOGOUT:
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
-      localStorage.removeItem('userData')
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("userData");
+      toast.info("You've been logged out!", {
+        transition: Slide,
+        hideProgressBar: false,
+        autoClose: 2000,
+        closeOnClick: true,
+        progress: undefined,
+      });
       return {
         ...state,
         access: null,
         refresh: null,
         isAuthenticated: false,
-        user: null
-      }
+        user: null,
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default reducers
+export default reducers;
