@@ -1,4 +1,5 @@
-import { Fragment, useState, useEffect } from 'react'
+// eslint-disable-next-line
+import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Menu, Calendar } from 'react-feather'
 

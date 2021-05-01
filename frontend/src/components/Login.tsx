@@ -1,6 +1,5 @@
-import axios from 'axios'
 import { useState } from 'react'
-import { useHistory, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from "../services/auth/auth"
@@ -14,7 +13,6 @@ type LoginProps = {
 const Login = ({ login, isAuthenticated }: LoginProps) => {
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
-  const history = useHistory()
   if (isAuthenticated)
     return <Redirect to="/dashboard"/>
       const handleSubmit = (e: any) => {

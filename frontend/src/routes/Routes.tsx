@@ -1,10 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import Layout from "../layout/Layout"
 import UserLayout from "../layout/UserLayout"
-import Pricing from "../views/PricingPage"
-import Login from "../components/Login"
 import Home from "../views/HomePage"
-import SignUp from "../components/SignUp"
 import { AnimatePresence } from 'framer-motion'
 import {lazy} from "react"
 const isUserLoggedIn = () => localStorage.getItem('userData')

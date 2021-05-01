@@ -31,4 +31,3 @@ const Layout = (props: any) => {
 }
 
 export default connect(null, { checkAuthenticated, load_user })(Layout);
-// export default Layout

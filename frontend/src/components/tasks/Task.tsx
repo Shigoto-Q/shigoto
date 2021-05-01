@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
@@ -9,6 +9,7 @@ const CreateTask = () => {
   const [enabled, setEnabled] = useState(true)
   const [oneoff, setOneoff] = useState(false)
   const [taskName, setTaskName] = useState("")
+  // eslint-disable-next-line
   const [crontab, setCrontab] = useState("")
   const [args, setArgs] = useState("")
   const [kwargs, setKwargs] = useState("")

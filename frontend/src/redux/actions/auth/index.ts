@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux'
-import { Redirect } from "react-router-dom"
 
 export const handleLogin = (data: any) => {
     return (dispatch: Dispatch) => {
