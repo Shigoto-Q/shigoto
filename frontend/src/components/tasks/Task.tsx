@@ -2,7 +2,8 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
-
+import { connect } from "react-redux"
+import {checkAuthenticated, load_user} from "../../services/auth/auth"
 
 const CreateTask = () => {
   const [enabled, setEnabled] = useState(true)
@@ -127,4 +128,5 @@ const CreateTask = () => {
   )
 }
 
-export default CreateTask
+export default connect(null, { checkAuthenticated, load_user })(CreateTask);
+// export default CreateTask

@@ -1,12 +1,16 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { User  } from 'react-feather'
 import { Link } from "react-router-dom"
+import {handleLogout} from "../redux/actions/auth"
+import { useDispatch } from 'react-redux'
+
+
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 export default function UserDropDown() {
+  const dispatch = useDispatch()
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
@@ -47,15 +51,16 @@ export default function UserDropDown() {
                 </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <button
-                        type="submit"
+                      <Link
+                        to="/login"
                         className={classNames(
                           active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block w-full text-left px-4 py-2 text-sm'
                         )}
+                        onClick={() => dispatch(handleLogout())}
                       >
                         Sign out
-                      </button>
+                      </Link>
                     )}
                   </Menu.Item>
               </div>

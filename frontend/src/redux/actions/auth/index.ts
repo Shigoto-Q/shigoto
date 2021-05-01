@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux'
+import { Redirect } from "react-router-dom"
 
 export const handleLogin = (data: any) => {
     return (dispatch: Dispatch) => {
@@ -11,5 +12,7 @@ export const handleLogout = () => {
     return (dispatch: Dispatch) => {
         localStorage.removeItem("access")
         localStorage.removeItem("refresh")
+        localStorage.removeItem("userData")
+
     }
 }
