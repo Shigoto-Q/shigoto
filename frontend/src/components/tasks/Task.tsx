@@ -3,7 +3,7 @@ import { useState } from "react"
 import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
-import {checkAuthenticated, load_user} from "../../services/auth/auth"
+import {checkAuthenticated, load_user} from "../../redux/actions/auth/"
 
 const CreateTask = () => {
   const [enabled, setEnabled] = useState(true)

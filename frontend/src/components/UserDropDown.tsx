@@ -1,16 +1,18 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { User  } from 'react-feather'
+import { User } from 'react-feather'
 import { Link } from "react-router-dom"
-import {handleLogout} from "../redux/actions/auth"
-import { useDispatch } from 'react-redux'
-
+import { logout } from "../redux/actions/auth"
+import { connect } from "react-redux"
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
-export default function UserDropDown() {
-  const dispatch = useDispatch()
+
+type DropDownProps = {
+  logout: any
+}
+const UserDropDown = ({ logout }: DropDownProps) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
@@ -49,20 +51,20 @@ export default function UserDropDown() {
                     </Link>
                   )}
                 </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        to="/login"
-                        className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block w-full text-left px-4 py-2 text-sm'
-                        )}
-                        onClick={() => dispatch(handleLogout())}
-                      >
-                        Sign out
-                      </Link>
-                    )}
-                  </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      to="/"
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-full text-left px-4 py-2 text-sm'
+                      )}
+                      onClick={logout}
+                    >
+                      Sign out
+                    </Link>
+                  )}
+                </Menu.Item>
               </div>
             </Menu.Items>
           </Transition>
@@ -71,3 +73,6 @@ export default function UserDropDown() {
     </Menu>
   )
 }
+
+
+export default connect(null, { logout })(UserDropDown);

@@ -2,7 +2,7 @@ import Sidebar from "../components/Sidebar"
 import DashboardNav from "../components/DashboardNav"
 import { useEffect } from "react"
 import { connect } from "react-redux"
-import {checkAuthenticated, load_user} from "../services/auth/auth"
+import {checkAuthenticated, load_user} from "../redux/actions/auth/"
 
 const Layout = (props: any) => {
   useEffect(() => {
