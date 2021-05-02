@@ -193,7 +193,10 @@ DJOSER = {
         "current_user": "shigoto_q.users.api.serializers.UserSerializer",
         "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
     },
-    "PERMISSIONS": {"user_create": ["rest_framework.permissions.AllowAny"]},
+    "PERMISSIONS": {
+        "user_create": ["rest_framework.permissions.AllowAny"],
+        "token_create": ["rest_framework.permissions.AllowAny"],
+    },
 }
 # CORS_URLS_REGEX = r"^/api/v1/.*$"
 CORS_ALLOW_ALL_ORIGIN = True

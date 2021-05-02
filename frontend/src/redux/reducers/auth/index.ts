@@ -11,12 +11,13 @@ import {
 } from "../../types/auth/index";
 import { toast, Slide } from "react-toastify";
 
+const isUserAuth = localStorage.getItem("userData")
 
 const initialState = {
-  access: "",
-  refresh: "",
-  isAuthenticated: false,
-  user: "",
+  access: localStorage.getItem("access"),
+  refresh: localStorage.getItem("refresh"),
+  isAuthenticated: isUserAuth ? true : false,
+  user: isUserAuth,
 };
 
 const reducers = (state = initialState, action: any) => {
@@ -54,6 +55,17 @@ const reducers = (state = initialState, action: any) => {
         user: JSON.stringify(payload),
       };
     case SIGNUP_SUCCESS:
+      toast("Account created successfully!", {
+        position: "bottom-center",
+        transition: Slide,
+        hideProgressBar: false,
+        autoClose: 2000,
+        closeOnClick: true,
+        progress: undefined,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        draggable: true,
+      });
       return {
         ...state,
         isAuthenticated: false,
@@ -69,6 +81,10 @@ const reducers = (state = initialState, action: any) => {
         user: null,
       };
     case SIGNUP_FAIL:
+      return {
+        ...state,
+        isAuthenticated: false,
+      }
     case LOGIN_FAIL:
       return {
         ...state,

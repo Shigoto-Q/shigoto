@@ -1,8 +1,7 @@
 import { createRef, useEffect, useState } from 'react'
 import { isValidCron } from 'cron-validator'
 import { useIsMount } from '../../custom_hooks/useIsMount'
-import axios from 'axios'
-
+import {api} from "../../api/"
 import './Crontab.css'
 
 type CronProps = {
@@ -31,7 +30,7 @@ const Crontab = ({ userInput }: CronProps) => {
       day_of_week: crons[4]
     }
     // TODO show message
-    axios.post('/api/v1/schedule/cron/', config)
+    api.post('/api/v1/schedule/cron/', config)
       .then(res => { })
       .catch(err => { })
   }
