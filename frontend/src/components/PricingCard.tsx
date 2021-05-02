@@ -1,7 +1,6 @@
-import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { motion } from "framer-motion"
-
+import {bareAPI} from "../api/"
 type Props = {
   plan: string,
   price: string,
@@ -21,7 +20,7 @@ const Card = ({ plan, price, id, metadata, isPopular }: Props) => {
     const body = {
       priceId: id
     }
-    axios.post("/api/v1/create-checkout-session/", body, config)
+    bareAPI.post("/api/v1/create-checkout-session/", body, config)
       .then(res => {
         stripe?.redirectToCheckout({ sessionId: res.data.sessionId })
       })
