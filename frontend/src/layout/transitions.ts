@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 export default {
     in: {
         opacity: 1,

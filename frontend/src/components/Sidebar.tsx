@@ -1,5 +1,5 @@
-import { Logo } from "../assets/images/ShigotoLogo"
 import { NavLink } from "react-router-dom"
+import logo from "../assets/images/logo.png"
 
 import navigation from "../navigation"
 
@@ -30,7 +30,7 @@ const Sidebar = () => {
   return (
     <div className="h-screen bg-white rounded-2xl dark:bg-gray-700">
       <div className="flex items-center justify-center pt-6">
-        <Logo />
+        <img src={logo} alt="logo" className="h-1/2"/>
       </div>
       <nav className="mt-6">
         <div>

@@ -1,51 +1,27 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Spinner from "./components/Spinner"
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
+import {ToastContainer} from "react-toastify"
+import { store } from "./redux/storeConfig/store"
+import { Provider } from 'react-redux'
 
 axios.defaults.baseURL = 'http://localhost:8000'
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("access")}`
+const LazyApp = lazy(() => import('./App'))
 
-axios.interceptors.response.use((response: any) => {
-            return response
-            }, (err: any) => {
-            return new Promise((resolve: any, reject: any) => {
-                        const originalReq = err.config 
-                        if ( err.response.status === 401 && err.config && !err.config._isRetryRequest ) {
-                            originalReq._retry = true
-
-                            let res = fetch('http://localhost:8000/auth/jwt/refresh/', {
-                                method: 'POST',
-                                mode: 'cors',
-                                cache: 'no-cache',
-                                credentials: 'same-origin',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${localStorage.getItem("access")}`
-                                },
-                                redirect: 'follow',
-                                referrer: 'no-referrer',
-                                body: JSON.stringify({
-                                    "refresh": localStorage.getItem("refresh")
-                                        })
-                                }).then(res => res.json()).then(res => {
-                                    originalReq.headers["Authorization"] = `Bearer ${res.access}`
-                                    localStorage.setItem("access", res.access)
-                                    return axios(originalReq)
-                                    })
-                                    resolve(res)
-                        }
-                        return Promise.reject(err)
-                    })
-
-            })
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Suspense fallback={<Spinner />}>
+      <React.StrictMode>
+        <LazyApp />
+        <ToastContainer/>
+      </React.StrictMode>
+    </Suspense>
+  </Provider>,
   document.getElementById('root')
 );
 

@@ -1,8 +1,9 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
-const  UserSettings = () => {
-   const [isGhConnected, setGhConnected] = useState(false)
-   const userData = JSON.parse(localStorage.getItem("userData") || "{}")
+const UserSettings = () => {
+  // eslint-disable-next-line
+  const [isGhConnected, setGhConnected] = useState(false)
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}")
   return (
     <>
       <div className="mt-10 sm:mt-0">
@@ -158,12 +159,12 @@ const  UserSettings = () => {
               <p className="mt-1 text-sm text-gray-600">
                 Connect your github profile for easy access to your code.
               </p>
-                <button
-                    type="submit"
-                    className="mt-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                      {!isGhConnected ? 'Connect' : 'Connected'}
-                      </button>
+              <button
+                type="submit"
+                className="mt-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {!isGhConnected ? 'Connect' : 'Connected'}
+              </button>
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
@@ -303,11 +304,11 @@ const  UserSettings = () => {
             </form>
           </div>
         </div>
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
+        <div className="hidden sm:block" aria-hidden="true">
+          <div className="py-5">
+            <div className="border-t border-gray-200" />
+          </div>
         </div>
-      </div>
       </div>
     </>
   )

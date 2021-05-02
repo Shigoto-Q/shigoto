@@ -22,7 +22,8 @@ urlpatterns += [
     path("api/v1/", include("shigoto_q.users.urls")),
 ]
 urlpatterns += [re_path("^payments/", include("djstripe.urls", namespace="djstripe"))]
-# urlpatterns += [re_path(r"^.*$", TemplateView.as_view(template_name="index.html"))]
+
+urlpatterns += [re_path(r"^.*$", TemplateView.as_view(template_name="index.html"))]
 
 
 if settings.DEBUG:
