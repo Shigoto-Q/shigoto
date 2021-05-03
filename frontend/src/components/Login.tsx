@@ -14,11 +14,11 @@ const Login = ({ login, isAuthenticated }: LoginProps) => {
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
   if (isAuthenticated)
-    return <Redirect to="/dashboard"/>
-      const handleSubmit = (e: any) => {
-          e.preventDefault() 
-          login(username, password)
-      }
+    return <Redirect to="/dashboard" />
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    login(username, password)
+  }
   return (
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full space-y-8">

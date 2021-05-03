@@ -1,7 +1,10 @@
 import axios from 'axios'
 
-const axiosGh = axios.create({
-        baseURL: 'https://api.github.com'
+export const bareAPI = axios.create({
+  baseURL: "http://localhost:8000"
 })
 
-export default axiosGh
+export const api = axios.create({
+  baseURL: "http://localhost:8000",
+  headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}
+})

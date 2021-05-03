@@ -1,12 +1,12 @@
-from djstripe.models import Product, Plan
-from djoser.serializers import UserSerializer as DjoserUserSerializer
-from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
+from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
+from djoser.serializers import UserSerializer as DjoserUserSerializer
+from djstripe.models import Plan, Product
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from ...tasks.api.serializers import CrontabSerializer
 
+from ...tasks.api.serializers import CrontabSerializer
 
 User = get_user_model()
 
@@ -52,10 +52,13 @@ class UserSerializer(DjoserUserSerializer):
 
 class UserCreateSerializer(DjoserUserCreateSerializer):
     password = serializers.CharField(
-        write_only=True,
         required=True,
         style={"input_type": "password", "placeholder": "Password"},
     )
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
     class Meta(DjoserUserCreateSerializer.Meta):
         model = User
@@ -66,8 +69,7 @@ class UserCreateSerializer(DjoserUserCreateSerializer):
             "last_name",
             "company",
             "password",
+            "zip_code",
+            "city",
+            "country",
         ]
-
-    def create(self, validated_data):
-        validated_data["password"] = make_password(validated_data.get("password"))
-        return super(UserCreateSerializer, self).create(validated_data)

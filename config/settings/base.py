@@ -1,10 +1,13 @@
-"""
-Base settings to build other settings files upon.
-"""
+import logging
 from datetime import timedelta
 from pathlib import Path
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # shigoto_q/
@@ -193,7 +196,30 @@ DJOSER = {
         "current_user": "shigoto_q.users.api.serializers.UserSerializer",
         "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
     },
-    "PERMISSIONS": {"user_create": ["rest_framework.permissions.AllowAny"]},
+    "PERMISSIONS": {
+        "user_create": ["rest_framework.permissions.AllowAny"],
+        "token_create": ["rest_framework.permissions.AllowAny"],
+    },
 }
 # CORS_URLS_REGEX = r"^/api/v1/.*$"
 CORS_ALLOW_ALL_ORIGIN = True
+
+SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+
+sentry_logging = LoggingIntegration(
+    level=SENTRY_LOG_LEVEL,
+    event_level=logging.ERROR,
+)
+integrations = [
+    sentry_logging,
+    DjangoIntegration(),
+    CeleryIntegration(),
+    RedisIntegration(),
+]
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=integrations,
+    environment=env("SENTRY_ENVIRONMENT", default="local"),
+    traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
+)

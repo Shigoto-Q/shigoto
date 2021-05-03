@@ -1,12 +1,6 @@
-import {CheckSquare, Cloud, Calendar} from "react-feather"
+import {CheckSquare, Calendar} from "react-feather"
 
 const navigation = [
-    {
-        id: 'dashboard',
-        title: 'Dashboard',
-        icon: <Cloud />,
-        navLink: '/dashboard'
-    },
     {
         id: 'tasks',
         title: 'My Tasks',

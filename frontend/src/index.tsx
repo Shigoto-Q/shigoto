@@ -3,14 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Spinner from "./components/Spinner"
 import reportWebVitals from './reportWebVitals';
-import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
 import {ToastContainer} from "react-toastify"
 import { store } from "./redux/storeConfig/store"
 import { Provider } from 'react-redux'
 
-axios.defaults.baseURL = 'http://localhost:8000'
-axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("access")}`
 const LazyApp = lazy(() => import('./App'))
 
 ReactDOM.render(

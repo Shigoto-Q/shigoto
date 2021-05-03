@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import axios from 'axios'
+import {bareAPI, api} from "../../../api/"
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -7,7 +7,9 @@ import {
   USER_LOADED_SUCCESS,
   USER_LOADED_FAIL,
   AUTHENTICATED_FAIL,
-  AUTHENTICATED_SUCCESS
+  AUTHENTICATED_SUCCESS,
+  SIGNUP_FAIL,
+  SIGNUP_SUCCESS
 } from '../../types/auth/';
 
 
@@ -27,7 +29,7 @@ export const checkAuthenticated = () => async (dispatch: Dispatch) => {
 
     const body = JSON.stringify({ token: localStorage.getItem('access') });
     try {
-      const res = await axios.post(`/auth/jwt/verify/`, body, config);
+      const res = await api.post(`/auth/jwt/verify/`, body, config);
       if (res.data.code !== 'token_not_valid') {
         dispatch({
           type: AUTHENTICATED_SUCCESS
@@ -57,9 +59,8 @@ export const load_user = () => async (dispatch: Dispatch) => {
         'Accept': 'application/json'
       }
     };
-
     try {
-      const res = await axios.get(`http://localhost:8000/auth/users/me/`, config);
+      const res = await api.get(`http://localhost:8000/auth/users/me/`, config);
       dispatch({
         type: USER_LOADED_SUCCESS,
         payload: res.data
@@ -74,7 +75,6 @@ export const load_user = () => async (dispatch: Dispatch) => {
       type: USER_LOADED_FAIL
     });
   }
-
 };
 
 
@@ -88,8 +88,7 @@ export const login = (username: string, password: string) => async (dispatch: Di
     username: username,
     password: password
   }
-
-  await axios.post('/auth/jwt/create/', body, config)
+  await bareAPI.post('/auth/jwt/create/', body, config)
     .then(res => {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -106,12 +105,49 @@ export const login = (username: string, password: string) => async (dispatch: Di
 export const logout = () => (dispatch: Dispatch) => {
   dispatch({ type: LOGOUT });
 }
+type registerProps = {
+  first_name: string,
+  last_name: string,
+  email_address: string,
+  username: string,
+  password: string,
+  rePassword: string,
+  country: string,
+  company?: string,
+  address: string,
+  city: string,
+  state?: string,
+  postal_code: number
+}
 
-export const handleLogout = () => {
-  return (dispatch: Dispatch) => {
-    localStorage.removeItem("access")
-    localStorage.removeItem("refresh")
-    localStorage.removeItem("userData")
-
+export const register = (props: registerProps) => async (dispatch: Dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
   }
+  const body = {
+    first_name: props.first_name,
+    last_name: props.last_name,
+    email: props.email_address,
+    username: props.username,
+    password: props.password,
+    company: props.company,
+    zip_code: props.postal_code,
+    city: props.city,
+    country: props.country
+  }
+  await bareAPI.post('/auth/users/', body, config)
+    .then(res => {
+      dispatch({
+        type: SIGNUP_SUCCESS,
+        payload: res.data
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: SIGNUP_FAIL,
+        payload: err.response
+      })
+    })
 }

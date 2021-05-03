@@ -1,15 +1,13 @@
 from .base import *  # noqa
 from .base import env
 
-STRIPE_LIVE_SECRET_KEY = "pk_test_518h2jFItAhzYJ7dgwgnoYIDrufudKMsxdhAaa2YZt0YcbM5z1EfBvxYprkufs4KJO76zTkfaXSS3OSBtn6GMDmMm00C1wwlqJb"
-STRIPE_TEST_SECRET_KEY = "sk_test_518h2jFItAhzYJ7dgGweqmPd6Nvt8f9i2JxMdSxJZlh9j2fARaWnW03AQC9VsqCUhJB5iSxH3a7OS2KF1L29Y4gVO00DVPtLlf6"
-STRIPE_LIVE_MODE = False  # Change to True in production
-DJSTRIPE_WEBHOOK_SECRET = "whsec_8v7igqtCb4yNSNqQHsLD9KJiq7k4TK7F"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
-STRIPE_SIGNING_SECRET = "whsec_8v7igqtCb4yNSNqQHsLD9KJiq7k4TK7F"
-DJSTRIPE_USE_NATIVE_JSONFIELD = (
-    True  # We recommend setting to True for new installations
-)
-DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations
+STRIPE_LIVE_SECRET_KEY = env("LIVE_SECRET_KEY", default=None)
+STRIPE_TEST_SECRET_KEY = env("TEST_SECRET_KEY", default=None)
+STRIPE_LIVE_MODE = env("LIVE_MODE", default=False)
+DJSTRIPE_WEBHOOK_SECRET = env("WEBHOOK_SECRET", default=None)
+STRIPE_SIGNING_SECRET = env("WEBHOOK_SECRET", default=None)
+DJSTRIPE_USE_NATIVE_JSONFIELD = True
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
 DEBUG = True
 SECRET_KEY = env(
