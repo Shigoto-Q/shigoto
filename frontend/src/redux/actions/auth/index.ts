@@ -59,7 +59,6 @@ export const load_user = () => async (dispatch: Dispatch) => {
         'Accept': 'application/json'
       }
     };
-
     try {
       const res = await api.get(`http://localhost:8000/auth/users/me/`, config);
       dispatch({
@@ -76,7 +75,6 @@ export const load_user = () => async (dispatch: Dispatch) => {
       type: USER_LOADED_FAIL
     });
   }
-
 };
 
 
@@ -90,7 +88,6 @@ export const login = (username: string, password: string) => async (dispatch: Di
     username: username,
     password: password
   }
-
   await bareAPI.post('/auth/jwt/create/', body, config)
     .then(res => {
       dispatch({
@@ -108,8 +105,6 @@ export const login = (username: string, password: string) => async (dispatch: Di
 export const logout = () => (dispatch: Dispatch) => {
   dispatch({ type: LOGOUT });
 }
-
-
 type registerProps = {
   first_name: string,
   last_name: string,
@@ -155,5 +150,4 @@ export const register = (props: registerProps) => async (dispatch: Dispatch) => 
         payload: err.response
       })
     })
-
 }
