@@ -37,22 +37,26 @@ class Pricing extends Component<PricingState, any> {
                 Choose a subscription package.
               </p>
               <div className="flex mx-auto border-2 border-indigo-500 rounded overflow-hidden mt-6">
-                <button
-                  className="py-1 px-4 bg-indigo-500 text-white focus:outline-none"
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`${this.state.monthly ? "py-1 px-4 bg-indigo-500 text-white focus:outline-none" : "py-1 px-4 focus:outline-none"}`}
                   onClick={() =>
                     this.setState({ monthly: !this.state.monthly })
                   }
                 >
                   Monthly
-                </button>
-                <button
-                  className="py-1 px-4 focus:outline-none"
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`${!this.state.monthly ? "py-1 px-4 bg-indigo-500 text-white focus:outline-none" : "py-1 px-4 focus:outline-none"}`}
                   onClick={() =>
                     this.setState({ monthly: !this.state.monthly })
                   }
                 >
                   Annually
-                </button>
+                </motion.button>
               </div>
             </div>
             <div className="flex flex-wrap -m-4">
@@ -66,7 +70,8 @@ class Pricing extends Component<PricingState, any> {
                   }
                   id={product.plan_set[0].id}
                   metadata={product.metadata}
-                  isPopular={true}
+                  isPopular={product.name === "Professional Plan"}
+                  monthly={this.state.monthly}
                 />
               ))}
             </div>

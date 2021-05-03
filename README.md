@@ -15,10 +15,7 @@
 </p>
 
 ## Demo
-
-![Landing page](https://i.imgur.com/LVOjifO.png)
-![Dashboard page](https://i.imgur.com/NjAuzAr.png)
-![Profile settings page](https://i.imgur.com/1LFEvmc.png)
+![Demo gif](https://im3.ezgif.com/tmp/ezgif-3-35c8b607ccd6.gif)
 
 
 ## About
