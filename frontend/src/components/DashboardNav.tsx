@@ -1,4 +1,4 @@
-import { Settings} from "react-feather";
+import { Settings } from "react-feather";
 import { Link } from "react-router-dom";
 import UserDropDown from "./UserDropDown";
 
@@ -9,7 +9,7 @@ type TaskProps = {
   user: any;
 };
 const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
-  const total_tasks = JSON.parse(user || "{}");
+  const userData = JSON.parse(user || "{}");
   return (
     <div className="w-full px-4">
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white-500 rounded shadow-md">
@@ -20,7 +20,7 @@ const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
           >
             <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-400 hover:opacity-75">
               {" "}
-              Total tasks: {total_tasks.total_tasks}{" "}
+              Total tasks: {userData.task.length}{" "}
             </p>
             <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-400 hover:opacity-75">
               {" "}
@@ -37,8 +37,8 @@ const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
               <li className="nav-item">
                 <p className="mt-1 px-3 py-2 flex items-center text-sm font-bold leading-snug text-black hover:opacity-75">
-                  {total_tasks.first_name} {total_tasks.last_name}
-                  </p>
+                  {userData.first_name} {userData.last_name}
+                </p>
               </li>
               <li className="nav-item">
                 <div className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-black hover:opacity-75">

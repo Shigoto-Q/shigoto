@@ -1,14 +1,16 @@
 import { createRef, useEffect, useState } from 'react'
 import { isValidCron } from 'cron-validator'
 import { useIsMount } from '../../custom_hooks/useIsMount'
-import {api} from "../../api/"
 import './Crontab.css'
+import {createCrontab} from "../../redux/actions/schedule/"
+import {connect} from "react-redux"
 
 type CronProps = {
   userInput: string
+  createCrontab: any,
 }
 
-const Crontab = ({ userInput }: CronProps) => {
+const Crontab = ({ userInput, createCrontab }: CronProps) => {
   const [input, setInput] = useState(userInput)
   const [selectionStart, setSelectionStart] = useState(-1)
   const [pos, setPos] = useState(-1)
@@ -22,17 +24,7 @@ const Crontab = ({ userInput }: CronProps) => {
 
   const handleCreate = () => {
     let crons = input.split(" ")
-    const config = {
-      minute: crons[0],
-      hour: crons[1],
-      day_of_month: crons[2],
-      month_of_year: crons[3],
-      day_of_week: crons[4]
-    }
-    // TODO show message
-    api.post('/api/v1/schedule/cron/', config)
-      .then(res => { })
-      .catch(err => { })
+    createCrontab(crons)
   }
   useEffect(() => {
     if (!isMount) {
@@ -144,8 +136,7 @@ const Crontab = ({ userInput }: CronProps) => {
 
   return (
     <div className="cron-main bg-transparent">
-      <p className="title-info">An easy way to plan your cron jobs.</p>
-      <p className="title-sub-info">Plan your cron job here. Then, you can attach it to a task.</p>
+      <p className="title-info text-gray-500">An easy way to plan your cron jobs.</p>
       <input ref={inputRef}
         id="input"
         type="text"
@@ -215,9 +206,6 @@ const Crontab = ({ userInput }: CronProps) => {
 
       </table>
       <div className="mt-5">
-        <button className="mr-2 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
-          Attach to task
-            </button>
         <button onClick={handleCreate} className="ml-2 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
           Create crontab
             </button>
@@ -226,4 +214,4 @@ const Crontab = ({ userInput }: CronProps) => {
   )
 }
 
-export default Crontab
+export default connect(null, {createCrontab})(Crontab)

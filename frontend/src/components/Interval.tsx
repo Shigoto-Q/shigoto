@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import axios from 'axios'
+import {connect} from "react-redux"
+import {createInterval} from "../redux/actions/schedule/"
 
-const IntervalSchedule = () => {
+type IntervalProps = {
+  createInterval: any,
+}
+const IntervalSchedule = ({createInterval}: IntervalProps) => {
     const [option,setOption] = useState()
     const [input, setInput] = useState()
     const handleInput = (event: any) => {
@@ -12,14 +16,7 @@ const IntervalSchedule = () => {
     }
     const handleSubmit = (event: any) => {
         event.preventDefault()
-        const data = {
-            every: input,
-            period: option
-        }
-        console.log(data)
-        axios.post('/api/v1/schedule/interval/', data)
-            .then(res => {})
-            .catch(err => {})
+        createInterval(input, option)
     }
   return (
     <div className="ml-10 mb-5 mr-10 col-span-2">
@@ -34,9 +31,10 @@ const IntervalSchedule = () => {
         <input
           type="number"
           name="input"
-          id="price"
+          id="interval"
           className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
           placeholder="10"
+          autoComplete="interval"
           onChange={handleInput}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
@@ -65,4 +63,4 @@ const IntervalSchedule = () => {
   )
 }
 
-export default IntervalSchedule
+export default connect(null, {createInterval})(IntervalSchedule)

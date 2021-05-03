@@ -10,9 +10,9 @@ class Dashboard extends Component {
       <div className="relative flex flex-col flex-1">
         <main>
           <div className="grid grid-cols-3 gap-6">
-            <ActiveTasks />
             <CreateTask />
             <TaskLog />
+            <ActiveTasks />
           </div>
         </main>
       </div>

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo.png";
 import logoIcon from "../assets/images/logo_icon.png";
 import { motion } from "framer-motion";
 

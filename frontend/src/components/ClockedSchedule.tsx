@@ -6,7 +6,6 @@ const Clocked = () => {
   const [date, setDate] = useState(new Date().getDate());
   // eslint-disable-next-line
   const [time, setTime] = useState()
-  console.log(date)
   return (
     <div className="ml-10 mr-10 mt-5 mb-5 col-span-2">
       <form>

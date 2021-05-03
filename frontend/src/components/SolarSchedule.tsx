@@ -1,52 +1,57 @@
 import { Fragment, useState} from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Menu, Sunrise } from 'react-feather'
+import {connect} from "react-redux"
+import {createSolar} from "../redux/actions/schedule/"
 
+type SolarProps = {
+  createSolar: any,
+}
 const people = [
   {
     id: 1,
     name: 'Astronomical dawn',
-    value: '10 * * * *'
+    value: 'dawn_astronomical'
   },
   {
     id: 2,
     name: 'Civil dawn',
-    value: '* * * *'
+    value: 'dawn_civil'
   },
   {
     id: 3,
     name: 'Nautical dawn',
-    value: '*/2 * * * *'
+    value: 'dawn_nautical'
   },
   {
     id: 4,
     name: 'Astronomical dusk',
-    value: '1-59/2 * * * *'
+    value: 'dusk_astronomical'
   },
   {
     id: 5,
     name: 'Civil dusk',
-    value: '*/10 * * * *'
+    value: 'dusk_civil'
   },
   {
     id: 6,
     name: 'Nautical dusk',
-    value: '*/6 * * * *'
+    value: 'dusk_nautical'
   },
   {
     id: 7,
     name: 'Solar noon',
-    value: '*/5 * * * * '
+    value: 'solar_noon'
   },
   {
     id: 8,
     name: 'Sunrise',
-    value: '0 0 * * FRI '
+    value: 'sunrise'
   },
   {
     id: 9,
     name: 'Sunset',
-    value: '0 9-17 * * *'
+    value: 'sunset'
   }
 ]
 
@@ -54,11 +59,17 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SolarSchedule() {
+const SolarSchedule = ({createSolar}: SolarProps) => {
   const [selected, setSelected] = useState(people[0])
+  const [latitude, setLatitude] = useState('')
+  const [longtitude, setLongtitude] = useState('')
 
+    const handleCreate = (event: any) => {
+        event.preventDefault()
+        createSolar(selected.value, latitude, longtitude)
+    }
   return (
-  <form> 
+  <form onSubmit={e => handleCreate(e)}> 
     <div className="ml-10 mr-10 -mt-10 col-span-2">
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
@@ -129,29 +140,31 @@ export default function SolarSchedule() {
     </Listbox>
 
     <div className="mt-10 sm:col-span-3">
-      <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
+      <label htmlFor="latitude" className="block text-sm font-medium text-gray-700">
         Latitude
       </label>
       <input
         type="text"
-        name="first_name"
-        id="first_name"
-        autoComplete="given-name"
+        name="latitude"
+        id="latitude"
+        autoComplete="latitude"
         placeholder="46.1512° N"
         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        onChange={e => setLatitude(e.target.value)}
       />
     </div>
     <div className="mt-5 sm:col-span-3">
-      <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+      <label htmlFor="longtitude" className="block text-sm font-medium text-gray-700">
         Longtitude
       </label>
       <input
         type="text"
-        name="last_name"
-        id="last_name"
-        autoComplete="family-name"
+        name="longtitude"
+        id="longtitude"
+        autoComplete="longtitude"
         placeholder="14.9955° E"
         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        onChange={e => setLongtitude(e.target.value)}
       />
     </div>
     <button type="submit" className="mt-3 bg-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded">
@@ -161,4 +174,5 @@ export default function SolarSchedule() {
     </form>
   )
 }
- 
+
+export default connect(null, {createSolar})(SolarSchedule)

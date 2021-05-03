@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+
 from shigoto_q.users.forms import UserChangeForm, UserCreationForm
 
 User = get_user_model()
@@ -35,7 +36,6 @@ class UserAdmin(auth_admin.UserAdmin):
                     "state",
                     "city",
                     "password",
-                    "total_tasks",
                 )
             },
         ),
@@ -56,5 +56,5 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["username", "first_name", "total_tasks", "customer", "subscription"]
+    list_display = ["username", "first_name", "customer", "subscription"]
     search_fields = ["name"]

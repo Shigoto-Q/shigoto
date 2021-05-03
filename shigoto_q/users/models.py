@@ -33,7 +33,6 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
         help_text=_("Stripe Subscripton Object"),
     )
-    total_tasks = models.IntegerField(default=0)
     crontab = models.ManyToManyField(CrontabSchedule)
     interval = models.ManyToManyField(IntervalSchedule)
     task = models.ManyToManyField(PeriodicTask)

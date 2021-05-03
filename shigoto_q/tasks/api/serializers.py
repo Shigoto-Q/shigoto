@@ -24,8 +24,6 @@ class TimezoneField(Field):
 
 
 class CrontabSerializer(serializers.ModelSerializer):
-    timezone = TimezoneField()
-
     class Meta:
         model = CrontabSchedule
         fields = [
@@ -35,7 +33,6 @@ class CrontabSerializer(serializers.ModelSerializer):
             "day_of_month",
             "month_of_year",
             "day_of_week",
-            "timezone",
         ]
 
 
@@ -116,19 +113,19 @@ class TaskPostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         task_created = PeriodicTask.objects.create(
             task="shigoto_q.tasks.tasks.custom_endpoint",
-            crontab=validated_data["crontab"],
-            interval=validated_data["interval"],
-            clocked=validated_data["clocked"],
-            solar=validated_data["solar"],
-            name=validated_data["name"],
-            kwargs=validated_data["kwargs"],
-            args=validated_data["args"],
-            queue=validated_data["queue"],
-            priority=validated_data["priority"],
-            expires=validated_data["expires"],
-            expire_seconds=validated_data["expire_seconds"],
-            one_off=validated_data["one_off"],
-            enabled=validated_data["enabled"],
+            crontab=validated_data.get("crontab"),
+            interval=validated_data.get("interval"),
+            clocked=validated_data.get("clocked"),
+            solar=validated_data.get("solar"),
+            name=validated_data.get("name"),
+            kwargs=validated_data.get("kwargs"),
+            args=validated_data.get("args"),
+            queue=validated_data.get("queue"),
+            priority=validated_data.get("priority"),
+            expires=validated_data.get("expires"),
+            expire_seconds=validated_data.get("expire_seconds"),
+            one_off=validated_data.get("one_off"),
+            enabled=validated_data.get("enabled"),
         )
         self.context["request"].user.task.add(task_created)
         return task_created

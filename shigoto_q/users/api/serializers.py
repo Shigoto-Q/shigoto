@@ -6,7 +6,7 @@ from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djstripe.models import Plan, Product
 from rest_framework import serializers
 
-from ...tasks.api.serializers import CrontabSerializer
+from ...tasks.api.serializers import CrontabSerializer, TaskGetSerializer
 
 User = get_user_model()
 
@@ -30,6 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class UserSerializer(DjoserUserSerializer):
     crontab = CrontabSerializer(read_only=True, many=True)
+    task = TaskGetSerializer(read_only=True, many=True)
 
     class Meta(DjoserUserSerializer.Meta):
         model = User
@@ -44,10 +45,9 @@ class UserSerializer(DjoserUserSerializer):
             "state",
             "subscription",
             "customer",
-            "total_tasks",
             "crontab",
+            "task",
         ]
-        depth = 1
 
 
 class UserCreateSerializer(DjoserUserCreateSerializer):

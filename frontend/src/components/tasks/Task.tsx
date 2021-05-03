@@ -1,23 +1,21 @@
-import axios from "axios"
 import { useState } from "react"
 import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
 import { checkAuthenticated, load_user } from "../../redux/actions/auth/"
-
+import { createTask } from "../../redux/actions/task/"
 
 type TaskProps = {
   isAuthenticated: boolean,
-  user: any
+  user: any,
+  createTask: any,
 }
-const CreateTask = ({ isAuthenticated, user }: TaskProps) => {
-  console.log(user)
+const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true)
   const [oneoff, setOneoff] = useState(false)
   const [taskName, setTaskName] = useState("")
   // eslint-disable-next-line
-  const [crontab, setCrontab] = useState("")
-  const [args, setArgs] = useState("")
+  const [crontab, setCrontab] = useState(7)
   const [kwargs, setKwargs] = useState("")
   const userCrons = JSON.parse(user || "{}").crontab
   const actualCrons = userCrons.map((item: any) => {
@@ -26,18 +24,9 @@ const CreateTask = ({ isAuthenticated, user }: TaskProps) => {
       id: item.id
     }
   })
-  const handleSubmit = () => {
-    const body = {
-      name: taskName,
-      crontab: crontab,
-      args: args,
-      kwargs: kwargs,
-      one_off: oneoff,
-      enabled: enabled
-    }
-    axios.post("/api/v1/task/", body)
-      .then(res => { })
-      .catch(err => { })
+  const handleSubmit = (event: any) => {
+    event.preventDefault()
+    createTask(taskName, crontab, kwargs, oneoff, enabled)
   }
 
   return (
@@ -46,7 +35,7 @@ const CreateTask = ({ isAuthenticated, user }: TaskProps) => {
       </header>
       <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2">Create a task</h2>
       <div className="flex flex-nowrap">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={e => handleSubmit(e)}>
           <div className="ml-2 mb-2">
             <label htmlFor="task" className="block text-sm font-medium text-gray-700">
               Task name:
@@ -55,34 +44,32 @@ const CreateTask = ({ isAuthenticated, user }: TaskProps) => {
               type="text"
               name="task"
               id="task"
-              placeholder="https://www.google.com"
+              placeholder="My first task"
               className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setTaskName(e.target.value)}
               required
             />
-            <label htmlFor="args" className="block text-sm font-medium text-gray-700">
-              Args
-          </label>
-            <input
-              type="text"
-              name="args"
-              id="args"
-              placeholder="['arg1', 'arg2']"
-              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-              onChange={(e) => setArgs(e.target.value)}
-              required
-            />
             <label htmlFor="kwargs" className="block text-sm font-medium text-gray-700">
-              Kwargs
+              Request endpoint:
           </label>
             <input
               type="text"
               name="kwargs"
               id="kwargs"
-              placeholder='{"argument": "value"}'
+              placeholder="https://www.google.com"
               className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setKwargs(e.target.value)}
               required
+            />
+            <label htmlFor="exp" className="block text-sm font-medium text-gray-700">
+              Expire timedelta with seconds: 
+          </label>
+            <input
+              type="text"
+              name="exp"
+              id="exp"
+              placeholder='100'
+              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
             />
             <button
               type="submit"
@@ -139,4 +126,4 @@ const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user
 })
-export default connect(mapStateToProps, { checkAuthenticated, load_user })(CreateTask);
+export default connect(mapStateToProps, { checkAuthenticated, load_user, createTask })(CreateTask);
