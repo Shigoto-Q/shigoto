@@ -1,6 +1,7 @@
 import { createRef, useEffect, useState } from 'react'
 import { isValidCron } from 'cron-validator'
 import { useIsMount } from '../../custom_hooks/useIsMount'
+import {api} from "../../api/"
 import './Crontab.css'
 import {createCrontab} from "../../redux/actions/schedule/"
 import {connect} from "react-redux"
@@ -24,7 +25,7 @@ const Crontab = ({ userInput, createCrontab }: CronProps) => {
 
   const handleCreate = () => {
     let crons = input.split(" ")
-    createCrontab(crons)
+      createCrontab(crons)
   }
   useEffect(() => {
     if (!isMount) {

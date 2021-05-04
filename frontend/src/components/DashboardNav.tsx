@@ -1,3 +1,4 @@
+
 import { Settings } from "react-feather";
 import { Link } from "react-router-dom";
 import UserDropDown from "./UserDropDown";
@@ -66,6 +67,5 @@ const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
 });
-export default connect(mapStateToProps, { checkAuthenticated, load_user })(
-  DashboardNav
-);
+export default connect(mapStateToProps, { checkAuthenticated, load_user })(DashboardNav);
+
