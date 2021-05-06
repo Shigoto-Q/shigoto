@@ -78,6 +78,17 @@ def run_task(request, task_id):
     return JsonResponse({"message": "success"})
 
 
+def run_task(request, task_id):
+    """
+    Runs a task
+    """
+    app.loader.import_default_modules()
+    tasks = PeriodicTask.objects.filter(id=task_id)
+    celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
+    task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
+    return JsonResponse({"message": task_ids[0].state})
+
+
 class TaskView(ListCreateAPIView):
     """
     get:
