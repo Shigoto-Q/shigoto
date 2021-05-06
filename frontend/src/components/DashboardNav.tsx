@@ -1,4 +1,4 @@
-
+import { Redirect } from "react-router-dom"
 import { Settings } from "react-feather";
 import { Link } from "react-router-dom";
 import UserDropDown from "./UserDropDown";
@@ -10,6 +10,9 @@ type TaskProps = {
   user: any;
 };
 const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
+  if (!isAuthenticated) {
+    return <Redirect to="/" />
+  }
   const userData = JSON.parse(user || "{}");
   return (
     <div className="w-full px-4">
