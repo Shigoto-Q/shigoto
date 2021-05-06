@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 import { Fragment, useState } from 'react'
+
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Menu, Calendar } from 'react-feather'
 
@@ -10,7 +11,7 @@ function classNames(...classes: any) {
 type Crons = {
   crons: any
 }
-export default function CronDropdown({ crons }: Crons) {
+function CronDropdown({ crons }: Crons) {
   const [selected, setSelected] = useState(crons[0])
   return (
     <>

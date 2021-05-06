@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django_celery_beat.models import (
     ClockedSchedule,
     CrontabSchedule,
@@ -7,9 +7,12 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
+from kombu.utils.json import loads
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from config.celery_app import app
 
 from .api.serializers import (
     ClockedSerializer,
@@ -21,6 +24,17 @@ from .api.serializers import (
 )
 
 User = get_user_model()
+
+
+def run_task(request, task_id):
+    """
+    Runs a task
+    """
+    app.loader.import_default_modules()
+    tasks = PeriodicTask.objects.filter(id=task_id)
+    celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
+    task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
+    return JsonResponse({"message": task_ids[0].state})
 
 
 class TaskView(ListCreateAPIView):
