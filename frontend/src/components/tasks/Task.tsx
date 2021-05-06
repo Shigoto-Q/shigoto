@@ -1,21 +1,27 @@
-import { useState } from "react"
-import CronDropdown from "./CronSelect"
 import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
 import { checkAuthenticated, load_user } from "../../redux/actions/auth/"
 import { createTask } from "../../redux/actions/task/"
+import { Fragment, useState } from 'react'
+import { Listbox, Transition } from '@headlessui/react'
+import { Check, Menu, Calendar } from 'react-feather'
 
 type TaskProps = {
   isAuthenticated: boolean,
   user: any,
   createTask: any,
 }
+function classNames(...classes: any) {
+  return classes.filter(Boolean).join(' ')
+}
+
+
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true)
   const [oneoff, setOneoff] = useState(false)
   const [taskName, setTaskName] = useState("")
   // eslint-disable-next-line
-  const [crontab, setCrontab] = useState(7)
+  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1})
   const [kwargs, setKwargs] = useState("")
   const userCrons = JSON.parse(user || "{}").crontab
   const actualCrons = userCrons.map((item: any) => {
@@ -26,9 +32,8 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   })
   const handleSubmit = (event: any) => {
     event.preventDefault()
-    createTask(taskName, crontab, kwargs, oneoff, enabled)
+    createTask(taskName, crontab.id, kwargs, oneoff, enabled)
   }
-
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
       <header className="flex justify-between items-start mb-2">
@@ -62,7 +67,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               required
             />
             <label htmlFor="exp" className="block text-sm font-medium text-gray-700">
-              Expire timedelta with seconds: 
+              Expire timedelta with seconds:
           </label>
             <input
               type="text"
@@ -83,7 +88,74 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           <label htmlFor="kwargs" className="block text-sm font-medium text-gray-700">
             Select a crontab
           </label>
-          <CronDropdown crons={actualCrons} />
+          <div className="col-span-2">
+            <Listbox value={crontab} onChange={setCrontab}>
+              {({ open }) => (
+                <>
+                  <div className="mt-1 relative">
+                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span className="flex items-center">
+                        <Calendar className="flex-shrink-0 h-5 w-5 rounded-full" />
+                        <span className="ml-3 block">{crontab.value}</span>
+                      </span>
+                      <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <Menu className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      </span>
+                    </Listbox.Button>
+
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options
+                        static
+                        className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                      >
+                        {actualCrons.map((person: any) => (
+                          <Listbox.Option
+                            key={person.id}
+                            className={({ active }) =>
+                              classNames(
+                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                'cursor-default select-none relative py-2 pl-3 pr-9'
+                              )
+                            }
+                            value={person}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <div className="flex items-center">
+                                  <span
+                                    className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                                  >
+                                    {person.value}
+                                  </span>
+                                </div>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? 'text-white' : 'text-indigo-600',
+                                      'absolute inset-y-0 right-0 flex items-center pr-4'
+                                    )}
+                                  >
+                                    <Check className="h-5 w-5" aria-hidden="true" />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </>
+              )}
+            </Listbox>
+          </div>
           <div className="mt-8">
             <Switch.Group>
               <Switch.Label className="mr-4">Enabled</Switch.Label>
@@ -118,7 +190,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
