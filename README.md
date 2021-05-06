@@ -15,7 +15,7 @@
 </p>
 
 ## Demo
-![Demo gif](https://im3.ezgif.com/tmp/ezgif-3-35c8b607ccd6.gif)
+![Demo gif](https://i.imgur.com/11q5gky.gif)
 
 
 ## About
