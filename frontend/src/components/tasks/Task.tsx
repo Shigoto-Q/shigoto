@@ -17,12 +17,13 @@ function classNames(...classes: any) {
 }
 
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
-  const [enabled, setEnabled] = useState(true);
-  const [oneoff, setOneoff] = useState(false);
-  const [taskName, setTaskName] = useState("");
-  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 });
-  const [kwargs, setKwargs] = useState("");
-  const userCrons = JSON.parse(user || "{}").crontab;
+  const [enabled, setEnabled] = useState(true)
+  const [oneoff, setOneoff] = useState(false)
+  const [taskName, setTaskName] = useState("")
+  // eslint-disable-next-line
+  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 })
+  const [kwargs, setKwargs] = useState("")
+  const userCrons = JSON.parse(user || "{}").crontab
   const actualCrons = userCrons.map((item: any) => {
     return {
       value: [

@@ -50,6 +50,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def __str__(self):
+        return self.username
+
     def get_absolute_url(self):
         """Get url for user's detail view.
 
