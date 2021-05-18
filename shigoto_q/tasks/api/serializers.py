@@ -1,5 +1,8 @@
 import datetime
+import json
 
+from channels.layers import get_channel_layer
+from django.contrib.auth import get_user_model
 from django_celery_beat.models import (
     ClockedSchedule,
     CrontabSchedule,
@@ -9,6 +12,34 @@ from django_celery_beat.models import (
 )
 from rest_framework import serializers
 from rest_framework.fields import Field
+
+from ..models import TaskResult
+
+User = get_user_model()
+
+
+class TaskUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username"]
+
+
+class TaskResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskResult
+        fields = [
+            "task_id",
+            "task_name",
+            "status",
+            "result",
+            "traceback",
+            "date_done",
+            "date_created",
+            "user",
+        ]
+
+    def get_group_name(self):
+        return "result"
 
 
 class TimezoneField(Field):
@@ -60,6 +91,7 @@ class TaskGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeriodicTask
         fields = [
+            "id",
             "name",
             "task",
             "crontab",
@@ -111,6 +143,10 @@ class TaskPostSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        kwargs = json.loads(validated_data.get("kwargs"))
+        kwargs.update({"user": self.context["request"].user.id})
+        kwargs.update({"task_name": validated_data.get("name")})
+
         task_created = PeriodicTask.objects.create(
             task="shigoto_q.tasks.tasks.custom_endpoint",
             crontab=validated_data.get("crontab"),
@@ -118,7 +154,7 @@ class TaskPostSerializer(serializers.ModelSerializer):
             clocked=validated_data.get("clocked"),
             solar=validated_data.get("solar"),
             name=validated_data.get("name"),
-            kwargs=validated_data.get("kwargs"),
+            kwargs=json.dumps(kwargs),
             args=validated_data.get("args"),
             queue=validated_data.get("queue"),
             priority=validated_data.get("priority"),

@@ -12,7 +12,7 @@ type Props = {
 const NavElement = ({ title, navLink, icon, idx }: Props) => {
   return (
     <NavLink exact to={navLink} activeClassName="bg-gradient-to-r from-white to-purple-200 border-r-4 border-purple-500 border-r-4 border-purple-500" className="w-full font-bold uppercase text-gray-500 flex items-center p-4 my-2 transition-colors duration-200 justify-start dark:from-gray-700 dark:to-gray-800">
-      <span key={idx} className="text-left">
+      <span className="text-left">
         {icon}
       </span>
       <span className="mx-4 text-sm font-medium font-normal">
@@ -23,7 +23,7 @@ const NavElement = ({ title, navLink, icon, idx }: Props) => {
 }
 
 const renderSidebar = navigation.map((navli, idx) => {
-  return <NavElement title={navli.title} idx={'test?-' + idx} navLink={navli.navLink} icon={navli.icon} />
+  return <NavElement key={idx} title={navli.title} idx={'test?-' + idx} navLink={navli.navLink} icon={navli.icon} />
 })
 const Sidebar = () => {
 

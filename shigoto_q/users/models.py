@@ -39,6 +39,9 @@ class User(AbstractUser):
     clocked = models.ManyToManyField(ClockedSchedule)
     solar = models.ManyToManyField(SolarSchedule)
 
+    def __str__(self):
+        return self.username
+
     def get_absolute_url(self):
         """Get url for user's detail view.
 
