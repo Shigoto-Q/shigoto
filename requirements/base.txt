@@ -9,12 +9,15 @@ celery  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
 django-celery-beat  # https://github.com/celery/django-celery-beat
 flower  # https://github.com/mher/flower
 uvicorn[standard]==0.13.4  # https://github.com/encode/uvicorn
+Twisted==20.3.0
 kubernetes
 django_celery_results
 sqlalchemy
 djoser
 stripe
 dj-stripe
+channels
+djangochannelsrestframework
 # Django
 # ------------------------------------------------------------------------------
 django==3.1.7  # pyup: < 3.2  # https://www.djangoproject.com/

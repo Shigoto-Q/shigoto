@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { api } from "../../../api/";
-import { TASK_CREATION_FAILED, TASK_CREATION_SUCCESS } from "../../types/task/";
+import { TASK_CREATION_FAILED, TASK_CREATION_SUCCESS, TASK_RAN_SUCCESS } from "../../types/task/";
 
 export const createTask = (
   taskName: string,
@@ -15,8 +15,8 @@ export const createTask = (
     },
   };
   const kw = {
-      "request_endpoint": kwargs,
-    }
+    "request_endpoint": kwargs,
+  }
   const body = {
     name: taskName,
     crontab: crontab,
@@ -27,7 +27,7 @@ export const createTask = (
   };
 
   await api
-    .post("/api/v1/task/create/", body, config)
+    .post("/api/v1/task/", body, config)
     .then((res) => {
       dispatch({
         type: TASK_CREATION_SUCCESS,
@@ -41,3 +41,14 @@ export const createTask = (
       });
     });
 };
+
+export const runTask = (taskId: number) => async (dispatch: Dispatch) => {
+  await api
+    .get(`/api/v1/task/${taskId}/run/`)
+    .then(res => {
+      dispatch({
+        type: TASK_RAN_SUCCESS,
+        payload: res.data
+      })
+    })
+}

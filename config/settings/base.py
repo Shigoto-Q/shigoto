@@ -10,7 +10,6 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# shigoto_q/
 APPS_DIR = ROOT_DIR / "shigoto_q"
 env = environ.Env()
 REACT_DIR = ROOT_DIR / "frontend"
@@ -33,9 +32,10 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 ROOT_URLCONF = "config.urls"
-WSGI_APPLICATION = "config.wsgi.application"
-
+ASGI_APPLICATION = "config.asgi.application"
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 DJANGO_APPS = [
+    "channels",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -56,7 +56,7 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
-    "shigoto_q.tasks",
+    "shigoto_q.tasks.apps.TasksConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -185,6 +185,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DATETIME_FORMAT": "%Y-%m-%d - %H:%M:%S",
 }
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),

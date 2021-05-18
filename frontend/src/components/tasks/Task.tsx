@@ -2,10 +2,9 @@ import { Switch } from "@headlessui/react"
 import { connect } from "react-redux"
 import { checkAuthenticated, load_user } from "../../redux/actions/auth/"
 import { createTask } from "../../redux/actions/task/"
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Menu, Calendar } from 'react-feather'
-
 type TaskProps = {
   isAuthenticated: boolean,
   user: any,
@@ -21,7 +20,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [oneoff, setOneoff] = useState(false)
   const [taskName, setTaskName] = useState("")
   // eslint-disable-next-line
-  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1})
+  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 })
   const [kwargs, setKwargs] = useState("")
   const userCrons = JSON.parse(user || "{}").crontab
   const actualCrons = userCrons.map((item: any) => {

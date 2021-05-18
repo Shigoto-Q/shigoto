@@ -1,18 +1,14 @@
 import { Component } from 'react'
-import CreateTask from "../components/tasks/Task"
-import TaskLog from "../components/tasks/TaskLog"
-import ActiveTasks from "../components/tasks/ActiveTasks"
-
-
+import TaskTable from "../components/tasks/TasksTable"
+import Task from "../components/tasks/Task"
 class Dashboard extends Component {
   render() {
     return (
       <div className="relative flex flex-col flex-1">
         <main>
-          <div className="grid grid-cols-3 gap-6">
-            <CreateTask />
-            <TaskLog />
-            <ActiveTasks />
+          <div className="grid gap-4">
+            <Task />
+            <TaskTable />
           </div>
         </main>
       </div>

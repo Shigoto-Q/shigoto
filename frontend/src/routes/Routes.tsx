@@ -17,6 +17,7 @@ const Routes = () => {
                 <Route exact path='/dashboard' component={lazy(() => import("../views/Dashboard"))} />
                 <Route exact path='/dashboard/tasks' component={lazy(() => import("../views/TaskDashboard"))} />
                 <Route exact path='/dashboard/scheduler' component={lazy(() => import("../views/DashboardCron"))} />
+                <Route exact path='/dashboard/logs' component={lazy(() => import("../components/tasks/TaskLog"))} />
                 <Route exact path='/dashboard/profile-settings' component={lazy(() => import("../views/UserProfile"))}/>
               </Switch>
             </UserLayout>

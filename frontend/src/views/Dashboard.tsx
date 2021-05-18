@@ -1,9 +1,9 @@
 import { Component } from 'react'
 
 class Dashboard extends Component {
-    render() {
-        return (<></>)
-    }
+  render() {
+    return (<></>)
+  }
 }
 
 export default Dashboard

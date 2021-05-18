@@ -1,4 +1,9 @@
+import json
+import re
+
+from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
+from django.forms.models import model_to_dict
 from django.http import Http404, JsonResponse
 from django_celery_beat.models import (
     ClockedSchedule,
@@ -8,6 +13,7 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 from kombu.utils.json import loads
+from rest_framework import serializers
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,20 +27,23 @@ from .api.serializers import (
     SolarSerializer,
     TaskGetSerializer,
     TaskPostSerializer,
+    TaskResultSerializer,
 )
+from .models import TaskResult
 
 User = get_user_model()
 
 
 def run_task(request, task_id):
     """
-    Runs a task
+    get:
+        Runs a task with the given task id
     """
     app.loader.import_default_modules()
     tasks = PeriodicTask.objects.filter(id=task_id)
     celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
     task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
-    return JsonResponse({"message": task_ids[0].state})
+    return JsonResponse({"message": "success"})
 
 
 class TaskView(ListCreateAPIView):
