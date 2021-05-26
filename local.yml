@@ -21,6 +21,8 @@ services:
     ports:
       - "8000:8000"
     command: /start
+    links:
+      - redis
 
   postgres:
     build:

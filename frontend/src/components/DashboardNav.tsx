@@ -5,10 +5,12 @@ import UserDropDown from "./UserDropDown";
 
 import { connect } from "react-redux";
 import { checkAuthenticated, load_user } from "../redux/actions/auth/";
+
 type TaskProps = {
   isAuthenticated: boolean;
   user: any;
 };
+
 const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
   if (!isAuthenticated) {
     return <Redirect to="/" />
@@ -24,7 +26,7 @@ const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
           >
             <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-400 hover:opacity-75">
               {" "}
-              Total tasks: {userData.task.length}{" "}
+              Total tasks: {userData?.task?.length}{" "}
             </p>
             <p className="px-3 py-2 flex items-center font-mono text-sm uppercase font-bold leading-snug text-purple-400 hover:opacity-75">
               {" "}

@@ -23,11 +23,12 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
 import shigoto_q.tasks.routing
+from shigoto_q.tasks.middleware import TokentAuthMiddlewareStack
 
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": AuthMiddlewareStack(
+        "websocket": TokentAuthMiddlewareStack(
             URLRouter(shigoto_q.tasks.routing.websocket_urlpatterns)
         ),
     }

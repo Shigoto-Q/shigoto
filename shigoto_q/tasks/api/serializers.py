@@ -30,6 +30,7 @@ class TaskResultSerializer(serializers.ModelSerializer):
         fields = [
             "task_id",
             "task_name",
+            "task_kwargs",
             "status",
             "result",
             "traceback",

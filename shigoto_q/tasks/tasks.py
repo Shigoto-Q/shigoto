@@ -14,3 +14,8 @@ def custom_endpoint(request_endpoint, headers=None, user=None, task_name=None):
         return response.json()
     except json.decoder.JSONDecodeError:
         return response.text
+
+
+@celery_app.task()
+def run_k8s_job():
+    pass

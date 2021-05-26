@@ -17,6 +17,7 @@ djoser
 stripe
 dj-stripe
 channels
+channels_redis
 djangochannelsrestframework
 # Django
 # ------------------------------------------------------------------------------

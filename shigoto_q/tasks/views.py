@@ -14,7 +14,7 @@ from django_celery_beat.models import (
 )
 from kombu.utils.json import loads
 from rest_framework import serializers
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -32,6 +32,19 @@ from .api.serializers import (
 from .models import TaskResult
 
 User = get_user_model()
+
+
+class TaskResultView(APIView):
+    def get_object(self, task_id):
+        try:
+            return TaskResult.objects.filter(user=self.request.user, task_id=task_id)
+        except TaskResult.DoesNotExist:
+            return Http404
+
+    def get(self, request, task_id, *args, **kwargs):
+        task_result = self.get_object(task_id)
+        serializer = TaskResultSerializer(task_result, many=True)
+        return Response(serializer.data)
 
 
 def run_task(request, task_id):

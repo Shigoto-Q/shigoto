@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import { CheckCircle, XCircle } from "react-feather"
 import DataTable from 'react-data-table-component'
-
+import {Link} from "react-router-dom"
 const TaskLog = () => {
   const [tasks, setTasks] = useState<any[]>([])
-  const ws = new WebSocket('ws://localhost:8000/ws/task/')
+  const token = localStorage.getItem("access")
+  const ws = new WebSocket('ws://localhost:8000/ws/task/results/' + "?token=" + token)
   const handleWebocket = () => {
     let data = {
       test: "da"
@@ -14,7 +14,6 @@ const TaskLog = () => {
       ws.send(JSON.stringify(data))
     }
     ws.onmessage = (message) => {
-      //console.log(JSON.parse(message.data))
       setTasks(JSON.parse(message.data))
     }
 
@@ -30,6 +29,7 @@ const TaskLog = () => {
       name: 'Task ID',
       selector: 'task_id',
       sortable: true,
+      cell: (row: any) => <Link to={`${row.task_id}/result`}>{row.task_id}</Link>
     },
     {
       name: 'Task name',
