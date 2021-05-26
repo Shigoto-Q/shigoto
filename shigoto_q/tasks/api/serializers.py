@@ -1,7 +1,5 @@
 import datetime
 import json
-
-from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django_celery_beat.models import (
     ClockedSchedule,
@@ -25,6 +23,8 @@ class TaskUserSerializer(serializers.ModelSerializer):
 
 
 class TaskResultSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username", read_only=True)
+
     class Meta:
         model = TaskResult
         fields = [

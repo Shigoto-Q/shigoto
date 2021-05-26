@@ -1,10 +1,8 @@
 from asgiref.sync import async_to_sync
 from celery import states
-from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from model_utils import FieldTracker
 
 ALL_STATES = sorted(states.ALL_STATES)
 TASK_STATE_CHOICES = sorted(zip(ALL_STATES, ALL_STATES))

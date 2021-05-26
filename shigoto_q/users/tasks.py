@@ -16,3 +16,12 @@ def get_users_count():
 @celery_app.task(track_started=True)
 def tst_task():
     time.sleep(5)
+
+
+class Yea(object):
+
+    """Docstring for Yea. """
+
+    def __init__(self):
+        """TODO: to be defined. """
+        s

@@ -19,6 +19,7 @@ User = get_user_model()
 @celeryd_after_setup.connect
 def setup_direct_queue(sender, instance, **kwargs):
     queue_name = "{0}.dq".format(sender)
+    print(queue_name)
     instance.app.amqp.queues.select_add(queue_name)
 
 

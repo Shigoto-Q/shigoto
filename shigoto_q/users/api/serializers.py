@@ -5,7 +5,13 @@ from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djstripe.models import Plan, Product
 from rest_framework import serializers
 
-from ...tasks.api.serializers import CrontabSerializer, TaskGetSerializer
+from ...tasks.api.serializers import (
+    CrontabSerializer,
+    IntervalSerializer,
+    TaskGetSerializer,
+    ClockedSerializer,
+    SolarSerializer,
+)
 
 User = get_user_model()
 
@@ -30,6 +36,9 @@ class ProductSerializer(serializers.ModelSerializer):
 class UserSerializer(DjoserUserSerializer):
     crontab = CrontabSerializer(read_only=True, many=True)
     task = TaskGetSerializer(read_only=True, many=True)
+    interval = IntervalSerializer(read_only=True, many=True)
+    solar = SolarSerializer(read_only=True, many=True)
+    clocked = ClockedSerializer(read_only=True, many=True)
 
     class Meta(DjoserUserSerializer.Meta):
         model = User
@@ -45,6 +54,9 @@ class UserSerializer(DjoserUserSerializer):
             "subscription",
             "customer",
             "crontab",
+            "interval",
+            "clocked",
+            "solar",
             "task",
         ]
 

@@ -1,6 +1,5 @@
 from urllib.parse import parse_qs
 
-from asgiref.sync import async_to_sync
 from channels.auth import AuthMiddlewareStack
 from channels.db import database_sync_to_async
 from channels.middleware import BaseMiddleware
@@ -14,7 +13,7 @@ from rest_framework_simplejwt.tokens import UntypedToken
 
 class TokenAuthMiddleware(BaseMiddleware):
     """
-    Custom token auth middleware
+    Custom token auth middleware for channelz
     """
 
     def __init__(self, inner):
@@ -26,7 +25,6 @@ class TokenAuthMiddleware(BaseMiddleware):
         try:
             UntypedToken(token)
         except (InvalidToken, TokenError) as e:
-            print(e)
             return None
         else:
             decoded_data = jwt_decode(token, settings.SECRET_KEY, algorithms=["HS256"])
