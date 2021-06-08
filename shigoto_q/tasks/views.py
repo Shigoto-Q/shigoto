@@ -1,3 +1,7 @@
+import json
+import re
+
+from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django_celery_beat.models import (
     ClockedSchedule,
@@ -6,6 +10,7 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
+
 from django.http import JsonResponse
 from kombu.utils.json import loads
 from rest_framework.generics import ListCreateAPIView
@@ -39,7 +44,6 @@ class TaskResultView(APIView):
         task_result = self.get_object(task_id)
         serializer = TaskResultSerializer(task_result, many=True)
         return Response(serializer.data)
-
 
 def run_task(request, task_id):
     """

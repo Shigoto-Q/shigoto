@@ -33,7 +33,6 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 ROOT_URLCONF = "config.urls"
 ASGI_APPLICATION = "config.asgi.application"
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",

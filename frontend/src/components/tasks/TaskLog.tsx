@@ -53,6 +53,7 @@ const TaskLog = () => {
     {
       name: 'Date done',
       selector: 'Date_done',
+
       sortable: true,
     },
     {

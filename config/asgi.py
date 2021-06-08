@@ -27,7 +27,7 @@ from shigoto_q.tasks.middleware import TokentAuthMiddlewareStack
 
 application = ProtocolTypeRouter(
     {
-        "http": get_asgi_application(),
+        "http": get_asgi_application(), 
         "websocket": TokentAuthMiddlewareStack(
             URLRouter(shigoto_q.tasks.routing.websocket_urlpatterns)
         ),
