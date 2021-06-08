@@ -24,7 +24,6 @@ class TaskUserSerializer(serializers.ModelSerializer):
 
 class TaskResultSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username", read_only=True)
-
     class Meta:
         model = TaskResult
         fields = [
