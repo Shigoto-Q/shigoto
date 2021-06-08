@@ -1,6 +1,7 @@
 import { api } from "../../api/";
 import { useState, useEffect } from "react";
 import { CheckCircle, XCircle } from "react-feather";
+import { Redirect } from "react-router-dom"
 import { runTask } from "../../redux/actions/task/"
 import { connect } from "react-redux"
 import { checkAuthenticated } from "../../redux/actions/auth/"
@@ -25,8 +26,8 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
   useEffect(() => {
     getUserTasks();
   }, []);
-  if (isAuthenticated) {
-    console.log("is")
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />
   }
   return (
     <div className="flex flex-col">

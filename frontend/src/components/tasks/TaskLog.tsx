@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
-import { CheckCircle, XCircle } from "react-feather"
 import DataTable from 'react-data-table-component'
-
+import { Link } from "react-router-dom"
 const TaskLog = () => {
   const [tasks, setTasks] = useState<any[]>([])
-  const ws = new WebSocket('ws://localhost:8000/ws/task/')
-  const handleWebocket = () => {
+  const token = localStorage.getItem("access")
+  const [isSubscribed, setSubscribed] = useState(true)
+  const ws = new WebSocket(`ws://localhost:5000/ws/?token=${token}`)
+
+  const handleWebsocket = () => {
     let data = {
       test: "da"
     }
@@ -14,48 +16,54 @@ const TaskLog = () => {
       ws.send(JSON.stringify(data))
     }
     ws.onmessage = (message) => {
-      //console.log(JSON.parse(message.data))
       setTasks(JSON.parse(message.data))
     }
 
     ws.onclose = () => {
       console.log('disconnected')
+      setSubscribed(false)
     }
   }
+
   useEffect(() => {
-    handleWebocket()
-  }, [])
+    if (isSubscribed)
+      handleWebsocket()
+    // eslint-disable-next-line
+  }, ['a'])
+
   const columns = [
     {
       name: 'Task ID',
-      selector: 'task_id',
+      selector: 'Task_id',
       sortable: true,
+      cell: (row: any) => <Link className="text-blue-800" to={`${row.Task_id}/result`}>{row.Task_id}</Link>
     },
     {
       name: 'Task name',
-      selector: 'task_name',
+      selector: 'Task_name',
       sortable: true,
     },
     {
       name: 'Status',
-      selector: 'status',
+      selector: 'Status',
       sortable: true,
       width: "150px",
-      cell: (row: any) => <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${row.status === 'SUCCESS' ? 'green' : 'yellow'}-100 text-green-800`}>{row.status}</span >
+      cell: (row: any) => <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${row.Status === 'SUCCESS' ? 'green' : 'yellow'}-100 text-green-800`}>{row.Status}</span >
     },
     {
       name: 'Date done',
-      selector: 'date_done',
+      selector: 'Date_done',
+
       sortable: true,
     },
     {
       name: 'Date created',
-      selector: 'date_created',
+      selector: 'Date_created',
       sortable: true,
     },
     {
       name: 'Created by',
-      selector: 'user',
+      selector: 'User_id',
       sortable: true,
     },
   ];

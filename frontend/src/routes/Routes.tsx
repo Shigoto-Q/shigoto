@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import Layout from "../layout/Layout"
 import UserLayout from "../layout/UserLayout"
 import Home from "../views/HomePage"
 import { AnimatePresence } from 'framer-motion'
-import {lazy} from "react"
+import { lazy } from "react"
 const isUserLoggedIn = () => localStorage.getItem('userData')
 
 const Routes = () => {
@@ -18,7 +18,8 @@ const Routes = () => {
                 <Route exact path='/dashboard/tasks' component={lazy(() => import("../views/TaskDashboard"))} />
                 <Route exact path='/dashboard/scheduler' component={lazy(() => import("../views/DashboardCron"))} />
                 <Route exact path='/dashboard/logs' component={lazy(() => import("../components/tasks/TaskLog"))} />
-                <Route exact path='/dashboard/profile-settings' component={lazy(() => import("../views/UserProfile"))}/>
+                <Route exact path='/dashboard/profile-settings' component={lazy(() => import("../views/UserProfile"))} />
+                <Route path="/dashboard/:id/result/" component={lazy(() => import("../views/ResultView"))}/>
               </Switch>
             </UserLayout>
           </Route>

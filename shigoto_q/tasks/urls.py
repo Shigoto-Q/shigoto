@@ -11,4 +11,5 @@ urlpatterns = [
     path("schedule/solar/", views.SolarView.as_view()),
     path("task/", views.TaskView.as_view()),
     path("task/<int:task_id>/run/", views.run_task, name="run_task"),
+    path("task/<str:task_id>/result/", views.TaskResultView.as_view()),
 ]

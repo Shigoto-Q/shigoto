@@ -21,6 +21,8 @@ services:
     ports:
       - "8000:8000"
     command: /start
+    links:
+      - redis
 
   postgres:
     build:
@@ -31,6 +33,8 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
       - local_postgres_data_backups:/backups:z
+    ports:
+      - "5432:5432"
     env_file:
       - ./.envs/.local/.postgres
 

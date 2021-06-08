@@ -11,7 +11,6 @@ from celery.signals import (
 from django.contrib.auth import get_user_model
 from django_celery_beat.models import PeriodicTask
 
-from .consumers import update_result
 from .models import TaskResult
 
 User = get_user_model()
@@ -19,7 +18,7 @@ User = get_user_model()
 
 @celeryd_after_setup.connect
 def setup_direct_queue(sender, instance, **kwargs):
-    queue_name = "{0}.dq".format(sender)  # sender is the nodename of the worker
+    queue_name = "{0}.dq".format(sender)
     print(queue_name)
     instance.app.amqp.queues.select_add(queue_name)
 
@@ -32,7 +31,6 @@ def task_prerun_handler(sender=None, *args, **kwargs):
     task_result.task_args = kwargs.get("args", None)
     task_result.task_name = kwargs.get("kwargs").get("task_name")
     task_result.user = user
-    async_to_sync(update_result)(task_result)
     task_result.save()
 
 
@@ -41,7 +39,6 @@ def task_success_handler(sender=None, result=None, **kwargs):
     task_result = TaskResult.objects.get(task_id=sender.request.id)
     task_result.result = result
     task_result.status = "SUCCESS"
-    async_to_sync(update_result)(task_result)
     task_result.save()
 
 

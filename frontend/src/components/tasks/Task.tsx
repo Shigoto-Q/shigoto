@@ -1,49 +1,57 @@
-import { Switch } from "@headlessui/react"
-import { connect } from "react-redux"
-import { checkAuthenticated, load_user } from "../../redux/actions/auth/"
-import { createTask } from "../../redux/actions/task/"
-import { Fragment, useState, useEffect } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import { Check, Menu, Calendar } from 'react-feather'
-type TaskProps = {
-  isAuthenticated: boolean,
-  user: any,
-  createTask: any,
-}
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
-}
 
+import { Switch } from "@headlessui/react";
+import { connect } from "react-redux";
+import { checkAuthenticated, load_user } from "../../redux/actions/auth/";
+import { createTask } from "../../redux/actions/task/";
+import { Fragment, useState } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { Check, Menu, Calendar } from "react-feather";
+type TaskProps = {
+  isAuthenticated: boolean;
+  user: any;
+  createTask: any;
+};
+function classNames(...classes: any) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
-  const [enabled, setEnabled] = useState(true)
-  const [oneoff, setOneoff] = useState(false)
-  const [taskName, setTaskName] = useState("")
-  // eslint-disable-next-line
-  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 })
-  const [kwargs, setKwargs] = useState("")
-  const userCrons = JSON.parse(user || "{}").crontab
+  const [enabled, setEnabled] = useState(true);
+  const [oneoff, setOneoff] = useState(false);
+  const [taskName, setTaskName] = useState("");
+  const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 });
+  const [kwargs, setKwargs] = useState("");
+  const userCrons = JSON.parse(user || "{}").crontab;
   const actualCrons = userCrons.map((item: any) => {
     return {
-      value: [item.minute, item.hour, item.day_of_month, item.month_of_year].join(" "),
-      id: item.id
-    }
-  })
+      value: [
+        item.minute,
+        item.hour,
+        item.day_of_month,
+        item.month_of_year,
+      ].join(" "),
+      id: item.id,
+    };
+  });
   const handleSubmit = (event: any) => {
-    event.preventDefault()
-    createTask(taskName, crontab.id, kwargs, oneoff, enabled)
-  }
+    event.preventDefault();
+    createTask(taskName, crontab.id, kwargs, oneoff, enabled);
+  };
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
-      <header className="flex justify-between items-start mb-2">
-      </header>
-      <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2">Create a task</h2>
+      <header className="flex justify-between items-start mb-2"></header>
+      <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2">
+        Create a task
+      </h2>
       <div className="flex flex-nowrap">
-        <form onSubmit={e => handleSubmit(e)}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="ml-2 mb-2">
-            <label htmlFor="task" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="task"
+              className="block text-sm font-medium text-gray-700"
+            >
               Task name:
-          </label>
+            </label>
             <input
               type="text"
               name="task"
@@ -53,9 +61,12 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               onChange={(e) => setTaskName(e.target.value)}
               required
             />
-            <label htmlFor="kwargs" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="kwargs"
+              className="block text-sm font-medium text-gray-700"
+            >
               Request endpoint:
-          </label>
+            </label>
             <input
               type="text"
               name="kwargs"
@@ -65,14 +76,17 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               onChange={(e) => setKwargs(e.target.value)}
               required
             />
-            <label htmlFor="exp" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="exp"
+              className="block text-sm font-medium text-gray-700"
+            >
               Expire timedelta with seconds:
-          </label>
+            </label>
             <input
               type="text"
               name="exp"
               id="exp"
-              placeholder='100'
+              placeholder="100"
               className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
             />
             <button
@@ -84,7 +98,10 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           </div>
         </form>
         <div className="ml-2">
-          <label htmlFor="kwargs" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="kwargs"
+            className="block text-sm font-medium text-gray-700"
+          >
             Select a crontab
           </label>
           <div className="col-span-2">
@@ -98,7 +115,10 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                         <span className="ml-3 block">{crontab.value}</span>
                       </span>
                       <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                        <Menu className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <Menu
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
                       </span>
                     </Listbox.Button>
 
@@ -118,8 +138,10 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                             key={person.id}
                             className={({ active }) =>
                               classNames(
-                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                'cursor-default select-none relative py-2 pl-3 pr-9'
+                                active
+                                  ? "text-white bg-indigo-600"
+                                  : "text-gray-900",
+                                "cursor-default select-none relative py-2 pl-3 pr-9"
                               )
                             }
                             value={person}
@@ -128,7 +150,12 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                               <>
                                 <div className="flex items-center">
                                   <span
-                                    className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                                    className={classNames(
+                                      selected
+                                        ? "font-semibold"
+                                        : "font-normal",
+                                      "ml-3 block truncate"
+                                    )}
                                   >
                                     {person.value}
                                   </span>
@@ -137,11 +164,14 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                                 {selected ? (
                                   <span
                                     className={classNames(
-                                      active ? 'text-white' : 'text-indigo-600',
-                                      'absolute inset-y-0 right-0 flex items-center pr-4'
+                                      active ? "text-white" : "text-indigo-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
                                     )}
                                   >
-                                    <Check className="h-5 w-5" aria-hidden="true" />
+                                    <Check
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
                                   </span>
                                 ) : null}
                               </>
@@ -161,12 +191,14 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               <Switch
                 checked={enabled}
                 onChange={setEnabled}
-                className={`${enabled ? "bg-purple-400" : "bg-gray-500"
-                  } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
+                className={`${
+                  enabled ? "bg-purple-400" : "bg-gray-500"
+                }  inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
               >
                 <span
-                  className={`${enabled ? "translate-x-6" : "translate-x-1"
-                    } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                  className={`${
+                    enabled ? "translate-x-6" : "translate-x-1"
+                  } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
                 />
               </Switch>
             </Switch.Group>
@@ -177,24 +209,30 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               <Switch
                 checked={oneoff}
                 onChange={setOneoff}
-                className={`${oneoff ? "bg-purple-400" : "bg-gray-500"
-                  } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
+                className={`${
+                  oneoff ? "bg-purple-400" : "bg-gray-500"
+                }  inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
               >
                 <span
-                  className={`${oneoff ? "translate-x-6" : "translate-x-1"
-                    } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                  className={`${
+                    oneoff ? "translate-x-6" : "translate-x-1"
+                  } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
                 />
               </Switch>
             </Switch.Group>
           </div>
         </div>
       </div>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
-})
-export default connect(mapStateToProps, { checkAuthenticated, load_user, createTask })(CreateTask);
+  user: state.auth.user,
+});
+export default connect(mapStateToProps, {
+  checkAuthenticated,
+  load_user,
+  createTask,
+})(CreateTask);
