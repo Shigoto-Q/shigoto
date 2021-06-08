@@ -18,7 +18,7 @@
 ![Demo gif](https://i.imgur.com/11q5gky.gif)
 
 
-![Second demo](https://i.giphy.com/media/krN4w3lfvQJXRkNEY5/giphy.mp4)
+![Second demo](https://media1.giphy.com/media/krN4w3lfvQJXRkNEY5/giphy.gif?cid=790b7611774befb172aea95acbc17c78a453e1c3a1747428&rid=giphy.gif&ct=g)
 
 
 ## About
