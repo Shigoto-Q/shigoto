@@ -10,6 +10,8 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 
+from shigoto_q.github.models import GitHubProfile
+
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=256, default="")
@@ -38,6 +40,12 @@ class User(AbstractUser):
     task = models.ManyToManyField(PeriodicTask)
     clocked = models.ManyToManyField(ClockedSchedule)
     solar = models.ManyToManyField(SolarSchedule)
+    github = models.OneToOneField(
+        GitHubProfile,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.username

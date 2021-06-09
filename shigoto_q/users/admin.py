@@ -27,6 +27,7 @@ class UserAdmin(auth_admin.UserAdmin):
             _("User info"),
             {
                 "fields": (
+                    "github",
                     "username",
                     "first_name",
                     "last_name",
