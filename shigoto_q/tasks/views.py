@@ -3,6 +3,8 @@ import re
 
 from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
+from django.db.models import Count, Q
+from django.http import JsonResponse
 from django_celery_beat.models import (
     ClockedSchedule,
     CrontabSchedule,
@@ -10,8 +12,6 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
-
-from django.http import JsonResponse
 from kombu.utils.json import loads
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
@@ -33,6 +33,20 @@ from .models import TaskResult
 User = get_user_model()
 
 
+class TestView(APIView):
+    def get_object(self):
+        qs = TaskResult.objects.filter(user=self.request.user).aggregate(
+            success=Count("pk", filter=Q(status="SUCCESS")),
+            failure=Count("pk", filter=Q(status="FAILURE")),
+            pending=Count("pk", filter=Q(status="PENDING")),
+        )
+        return qs
+
+    def get(self, request):
+        obj = self.get_object()
+        return Response(obj)
+
+
 class TaskResultView(APIView):
     def get_object(self, task_id):
         try:
@@ -44,6 +58,7 @@ class TaskResultView(APIView):
         task_result = self.get_object(task_id)
         serializer = TaskResultSerializer(task_result, many=True)
         return Response(serializer.data)
+
 
 def run_task(request, task_id):
     """

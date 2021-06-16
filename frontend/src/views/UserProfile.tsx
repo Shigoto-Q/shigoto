@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ghapi } from "../api"
+import { ghapi, api } from "../api"
 import { GitHub } from "react-feather"
 
 const UserSettings = () => {
@@ -30,8 +30,8 @@ const UserSettings = () => {
             .then((res) => {
                 localStorage.setItem(
                     "githubAccess",
-                    res.data.access_token);
-                console.log(res.data.access_token)
+                    res.data.access_token)
+
             })
             .catch((err) => {
                 console.log(err);
@@ -41,6 +41,18 @@ const UserSettings = () => {
     const getUserInfo = () => {
         ghapi.get("/user")
             .then(res => {
+                const body = {
+                    login: res.data.login,
+                    avatar_url: res.data.avatar_url,
+                    repos_urls: res.data.repos_urls,
+                    public_repos: res.data.public_repos,
+                    public_gists: res.data.public_gists,
+                    token: localStorage.getItem("githubAccess")
+                }
+                api.post("api/v1/github/profile/", body)
+                    .then(resp => { })
+                    .catch(error => { })
+
                 console.log(res)
             })
             .catch(err => {
@@ -57,9 +69,12 @@ const UserSettings = () => {
             const code = newUrl[1];
             setGhConnected(true)
             authrizeGithub(code);
-            getUserInfo()
         }
     }, []);
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
 
     return (
         <>
@@ -249,7 +264,7 @@ const UserSettings = () => {
                             <a
                                 href={`https://github.com/login/oauth/authorize?client_id=${clientId}`}
                             >
-                                <GitHub/>
+                                <GitHub />
                             </a>
                         </div>
                     </div>
@@ -413,6 +428,7 @@ const UserSettings = () => {
                                         type="submit"
                                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
+                                        Save
                                         Save
                   </button>
                                 </div>

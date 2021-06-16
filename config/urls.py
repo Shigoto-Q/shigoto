@@ -20,6 +20,7 @@ urlpatterns += [
     re_path(r"^auth/", include("djoser.urls.jwt")),
     path("api/v1/", include("shigoto_q.tasks.urls")),
     path("api/v1/", include("shigoto_q.users.urls")),
+    path("api/v1/", include("shigoto_q.github.urls")),
 ]
 urlpatterns += [re_path("^payments/", include("djstripe.urls", namespace="djstripe"))]
 

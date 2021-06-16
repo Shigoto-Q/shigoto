@@ -1,11 +1,12 @@
-
 import { Switch } from "@headlessui/react";
 import { connect } from "react-redux";
 import { checkAuthenticated, load_user } from "../../redux/actions/auth/";
 import { createTask } from "../../redux/actions/task/";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { Check, Menu, Calendar } from "react-feather";
+import TaskCard from "./TaskCard";
+
 type TaskProps = {
   isAuthenticated: boolean;
   user: any;
@@ -14,6 +15,7 @@ type TaskProps = {
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
+
 
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true);
@@ -37,6 +39,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
     event.preventDefault();
     createTask(taskName, crontab.id, kwargs, oneoff, enabled);
   };
+
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
       <header className="flex justify-between items-start mb-2"></header>

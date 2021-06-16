@@ -5,12 +5,14 @@ from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djstripe.models import Plan, Product
 from rest_framework import serializers
 
+from shigoto_q.github.api.serializers import GitHubProfileSerializer
+
 from ...tasks.api.serializers import (
+    ClockedSerializer,
     CrontabSerializer,
     IntervalSerializer,
-    TaskGetSerializer,
-    ClockedSerializer,
     SolarSerializer,
+    TaskGetSerializer,
 )
 
 User = get_user_model()
@@ -39,11 +41,13 @@ class UserSerializer(DjoserUserSerializer):
     interval = IntervalSerializer(read_only=True, many=True)
     solar = SolarSerializer(read_only=True, many=True)
     clocked = ClockedSerializer(read_only=True, many=True)
+    github = GitHubProfileSerializer(read_only=True)
 
     class Meta(DjoserUserSerializer.Meta):
         model = User
         fields = [
             "username",
+            "github",
             "email",
             "first_name",
             "last_name",

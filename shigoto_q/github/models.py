@@ -7,6 +7,7 @@ class GitHubProfile(models.Model):
     repos_urls = models.URLField()
     public_repos = models.IntegerField()
     public_gists = models.IntegerField()
+    token = models.CharField(max_length=128, default="")
 
 
 class Repository(models.Model):
