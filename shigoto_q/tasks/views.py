@@ -73,6 +73,20 @@ def run_task(request, task_id):
     return JsonResponse({"message": "success"})
 
 
+class TestView(APIView):
+    def get_object(self):
+        qs = TaskResult.objects.filter(user=self.request.user).aggregate(
+            success=Count("pk", filter=Q(status="SUCCESS")),
+            failure=Count("pk", filter=Q(status="FAILURE")),
+            pending=Count("pk", filter=Q(status="PENDING")),
+        )
+        return qs
+
+    def get(self, request):
+        obj = self.get_object()
+        return Response(obj)
+
+
 class TaskResultView(APIView):
     def get_object(self, task_id):
         try:

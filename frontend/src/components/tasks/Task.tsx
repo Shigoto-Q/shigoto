@@ -16,6 +16,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
+
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true);
   const [oneoff, setOneoff] = useState(false);
@@ -38,6 +39,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
     event.preventDefault();
     createTask(taskName, crontab.id, kwargs, oneoff, enabled);
   };
+
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
       <header className="flex justify-between items-start mb-2"></header>
