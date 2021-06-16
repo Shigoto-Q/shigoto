@@ -23,7 +23,16 @@ services:
     command: /start
     links:
       - redis
-
+  react: &react
+    build:
+      context: .
+      dockerfile: ./compose/local/react/Dockerfile
+    image: shigoto_q_local_react
+    container_name: react
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - "3000:3000"
   postgres:
     build:
       context: .
