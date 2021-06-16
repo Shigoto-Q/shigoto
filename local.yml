@@ -23,7 +23,6 @@ services:
     command: /start
     links:
       - redis
-
   react: &react
     build:
       context: .
@@ -34,7 +33,6 @@ services:
       - ./frontend:/app/frontend
     ports:
       - "3000:3000"
-
   postgres:
     build:
       context: .
