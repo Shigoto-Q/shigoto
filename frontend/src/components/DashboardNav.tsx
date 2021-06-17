@@ -1,7 +1,6 @@
 import { Redirect } from "react-router-dom"
 import { Settings, Moon } from "react-feather";
 import { Link } from "react-router-dom";
-import UserDropDown from "./UserDropDown";
 
 import { connect } from "react-redux";
 import { checkAuthenticated, load_user } from "../redux/actions/auth/";
@@ -54,7 +53,6 @@ const DashboardNav = ({ isAuthenticated, user }: TaskProps) => {
               </li>
               <li className="nav-item">
                 <div className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-black hover:opacity-75">
-                  <UserDropDown />
                 </div>
               </li>
               <li className="nav-item">

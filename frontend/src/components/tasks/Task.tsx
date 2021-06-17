@@ -16,7 +16,6 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true);
   const [oneoff, setOneoff] = useState(false);
@@ -41,9 +40,9 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   };
 
   return (
-    <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
+    <div className="flex flex-col bg-white rounded-sm shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-700 w-full">
       <header className="flex justify-between items-start mb-2"></header>
-      <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2">
+      <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2 dark:text-white">
         Create a task
       </h2>
       <div className="flex flex-nowrap">
@@ -51,7 +50,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           <div className="ml-2 mb-2">
             <label
               htmlFor="task"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-white"
             >
               Task name:
             </label>
@@ -60,13 +59,13 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               name="task"
               id="task"
               placeholder="My first task"
-              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              className="bg-gray-100 dark:bg-gray-800 mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-700 rounded-md"
               onChange={(e) => setTaskName(e.target.value)}
               required
             />
             <label
               htmlFor="kwargs"
-              className="block text-sm font-medium text-gray-700"
+              className=" dark:text-white block text-sm font-medium text-gray-700"
             >
               Request endpoint:
             </label>
@@ -75,13 +74,13 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               name="kwargs"
               id="kwargs"
               placeholder="https://www.google.com"
-              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-700 bg-gray-100 dark:bg-gray-800  rounded-md"
               onChange={(e) => setKwargs(e.target.value)}
               required
             />
             <label
               htmlFor="exp"
-              className="block text-sm font-medium text-gray-700"
+              className=" dark:text-white block text-sm font-medium text-gray-700"
             >
               Expire timedelta with seconds:
             </label>
@@ -90,7 +89,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               name="exp"
               id="exp"
               placeholder="100"
-              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              className="mt-1 mb-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm bg-gray-100 dark:bg-gray-800 border-gray-700 rounded-md"
             />
             <button
               type="submit"
@@ -103,7 +102,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
         <div className="ml-2">
           <label
             htmlFor="kwargs"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-white"
           >
             Select a crontab
           </label>
@@ -112,10 +111,11 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
               {({ open }) => (
                 <>
                   <div className="mt-1 relative">
-                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      <span className="flex items-center">
-                        <Calendar className="flex-shrink-0 h-5 w-5 rounded-full" />
-                        <span className="ml-3 block">{crontab.value}</span>
+                    <Listbox.Button className="relative w-full bg-white dark:bg-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span className="flex justify-center">
+                        <span className="ml-3  dark:text-gray-200 ">
+                          {crontab.value}
+                        </span>
                       </span>
                       <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <Menu
@@ -134,7 +134,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                     >
                       <Listbox.Options
                         static
-                        className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        className="absolute mt-1 w-full bg-white dark:bg-gray-800 shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                       >
                         {actualCrons.map((person: any) => (
                           <Listbox.Option
@@ -144,7 +144,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                                 active
                                   ? "text-white bg-indigo-600"
                                   : "text-gray-900",
-                                "cursor-default select-none relative py-2 pl-3 pr-9"
+                                "cursor-default select-none dark:text-gray-200 elative py-2 pl-3 pr-9"
                               )
                             }
                             value={person}
@@ -190,7 +190,9 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           </div>
           <div className="mt-8">
             <Switch.Group>
-              <Switch.Label className="mr-4">Enabled</Switch.Label>
+              <Switch.Label className="mr-4 dark:text-white">
+                Enabled
+              </Switch.Label>
               <Switch
                 checked={enabled}
                 onChange={setEnabled}
@@ -208,7 +210,9 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
           </div>
           <div className="mt-10">
             <Switch.Group>
-              <Switch.Label className="mr-4">One-off</Switch.Label>
+              <Switch.Label className="mr-4 dark:text-white">
+                One-off
+              </Switch.Label>
               <Switch
                 checked={oneoff}
                 onChange={setOneoff}

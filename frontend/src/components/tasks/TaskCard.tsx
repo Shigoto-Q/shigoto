@@ -42,7 +42,7 @@ function TaskCard({ label, total, Icon, data, cats, oldTotal }: TaskCardProps) {
         },
         xaxis: {
             categories: []
-        }
+        },
     })
 
     const [series, setSeries] = useState([{}])
@@ -58,18 +58,14 @@ function TaskCard({ label, total, Icon, data, cats, oldTotal }: TaskCardProps) {
         setOptions(options => ({ ...options, xaxis: { categories: cats } }))
     }, [data, cats])
     return (
-        <div className="flex flex-col bg-white shadow-lg rounded-sm border border-gray-200">
+        <div className="flex flex-col bg-white shadow-lg rounded-sm  dark:text-gray-200 transition-colors duration-200 shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-700 w-full">
             <div className="px-5 pt-5">
-                <header className="flex justify-between items-start mb-2">
-                    {/* Icon */}
-                    <Icon width="32" height="32" />
-                    {/* Menu button */}
-                    <MoreHorizontal />
+                <header className="flex justify-between items-start">
                 </header>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">{label}</h2>
-                <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Total</div>
+                <h2 className="text-lg font-semibold text-gray-800 mb-2 dark:text-gray-200 transition-colors">{label}</h2>
+                <div className="text-xs font-semibold text-gray-400 uppercase mb-1 dark:text-gray-400 transition-colors">Total</div>
                 <div className="flex items-start">
-                    <div className="text-3xl font-bold text-gray-800 mr-2">{total}</div>
+                    <div className="text-3xl font-bold text-gray-800 mr-2 dark:text-gray-200 transition-colors">{total}</div>
                     <div className="text-sm font-semibold text-white px-1.5 bg-green-500 rounded-full">+{oldTotal}%</div>
                 </div>
             </div>
@@ -78,7 +74,8 @@ function TaskCard({ label, total, Icon, data, cats, oldTotal }: TaskCardProps) {
                     options={options}
                     series={series}
                     type="line"
-                    width={385} height={128}
+                    width={389} height={155}
+                    className="-ml-8"
                 />
             </div>
         </div>

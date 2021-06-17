@@ -30,40 +30,40 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
     return <Redirect to="/login" />
   }
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 ">
+    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="shadow overflow-hidden border-b border-gray-200 dark:border-gray-900">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider"
                   >
                     Task Name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider"
                   >
                     Crontab
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500  dark:text-gray-200 uppercase tracking-wider"
                   >
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-500 uppercase tracking-wider"
                   >
                     One-off
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500  dark:text-gray-200 uppercase tracking-wider"
                   >
                     Enabled
                   </th>
@@ -72,28 +72,28 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-500 dark:bg-gray-700">
                 {tasks.map((task) => (
                   <tr key={task.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <span className="h-10 w-10 rounded-full">
+                          <span className="h-10 w-10 rounded-full dark:text-gray-200">
                             {task.id}
                           </span>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                             {task.name}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
                             Total run count: {task.total_run_count}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className="text-sm text-gray-900 dark:text-gray-200">
                         {task.crontab
                           ? task.crontab.minute +
                           " " +
@@ -113,10 +113,10 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
                         Active
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200">
                       {task.one_off ? <CheckCircle /> : <XCircle />}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200">
                       {task.enabled ? <CheckCircle /> : <XCircle />}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

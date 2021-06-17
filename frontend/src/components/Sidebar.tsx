@@ -28,7 +28,7 @@ const renderSidebar = navigation.map((navli, idx) => {
 const Sidebar = () => {
 
   return (
-    <div className="h-screen bg-white dark:bg-gray-700">
+    <div className="bg-white h-full rounded-2xl dark:bg-gray-700">
       <div className="flex items-center justify-center pt-6">
         <img src={logo} alt="logo" className="h-1/2"/>
         <span className="ml-3 text-3xl font-semibold text-gray-700 dark:text-white">Shigoto</span>
