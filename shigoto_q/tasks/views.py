@@ -29,6 +29,7 @@ from .models import TaskResult
 
 User = get_user_model()
 
+
 class TestView(APIView):
     def get_object(self):
         qs = TaskResult.objects.filter(user=self.request.user).aggregate(
@@ -41,6 +42,7 @@ class TestView(APIView):
     def get(self, request):
         obj = self.get_object()
         return Response(obj)
+
 
 class TaskResultView(APIView):
     def get_object(self, task_id):

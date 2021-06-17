@@ -8,28 +8,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='GitHubProfile',
+            name="GitHubProfile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('login', models.CharField(default='', max_length=256)),
-                ('avatar_url', models.URLField()),
-                ('repos_urls', models.URLField()),
-                ('public_repos', models.IntegerField()),
-                ('public_gists', models.IntegerField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("login", models.CharField(default="", max_length=256)),
+                ("avatar_url", models.URLField()),
+                ("repos_urls", models.URLField()),
+                ("public_repos", models.IntegerField()),
+                ("public_gists", models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Repository',
+            name="Repository",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(default='', max_length=300)),
-                ('repo_url', models.URLField()),
-                ('repo_author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='github.githubprofile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("full_name", models.CharField(default="", max_length=300)),
+                ("repo_url", models.URLField()),
+                (
+                    "repo_author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="github.githubprofile",
+                    ),
+                ),
             ],
         ),
     ]
