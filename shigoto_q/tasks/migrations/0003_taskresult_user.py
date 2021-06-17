@@ -9,13 +9,20 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('tasks', '0002_taskresult_date_created'),
+        ("tasks", "0002_taskresult_date_created"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='taskresult',
-            name='user',
-            field=models.ForeignKey(default=None, help_text='User who ran the task', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User'),
+            model_name="taskresult",
+            name="user",
+            field=models.ForeignKey(
+                default=None,
+                help_text="User who ran the task",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="User",
+            ),
         ),
     ]

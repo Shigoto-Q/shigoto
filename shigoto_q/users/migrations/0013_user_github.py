@@ -7,14 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('github', '0001_initial'),
-        ('users', '0012_remove_user_total_tasks'),
+        ("github", "0001_initial"),
+        ("users", "0012_remove_user_total_tasks"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='github',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='github.githubprofile'),
+            model_name="user",
+            name="github",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="github.githubprofile",
+            ),
         ),
     ]
