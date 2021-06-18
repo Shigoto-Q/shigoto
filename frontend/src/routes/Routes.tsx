@@ -4,6 +4,7 @@ import UserLayout from "../layout/UserLayout"
 import Home from "../views/HomePage"
 import { AnimatePresence } from 'framer-motion'
 import { lazy } from "react"
+
 const isUserLoggedIn = () => localStorage.getItem('userData')
 
 const Routes = () => {
@@ -26,7 +27,7 @@ const Routes = () => {
           <Route>
             <Layout>
               <Switch>
-                <Route exact path='/' component={Home} render={() => { return isUserLoggedIn() ? <Redirect to='/home' /> : <Redirect to='/login' /> }} />
+                <Route exact path='/' component={Home} render={() => { return isUserLoggedIn() ? <Redirect to='/Dashboard/tasks' /> : <Redirect to='/login' /> }} />
                 <Route exact path='/login' component={lazy(() => import("../components/Login"))} />
                 <Route exact path='/signup' component={lazy(() => import("../components/SignUp"))} />
                 <Route exact path='/pricing' component={lazy(() => import("../views/PricingPage"))} />

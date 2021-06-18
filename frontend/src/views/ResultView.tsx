@@ -1,6 +1,6 @@
 import { Component } from "react"
 import { withRouter } from "react-router";
-import { api } from "../api"
+import  api  from "../api"
 import ReactJson from 'react-json-view'
 
 

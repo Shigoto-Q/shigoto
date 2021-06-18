@@ -1,7 +1,7 @@
 import json
 
-import stripe
 import djstripe
+import stripe
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from djstripe.settings import STRIPE_SECRET_KEY

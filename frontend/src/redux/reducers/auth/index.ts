@@ -10,7 +10,7 @@ import {
   USER_LOADED_FAIL,
 } from "../../types/auth/index";
 import { toast, Slide } from "react-toastify";
-
+import api from "../../../api/"
 const isUserAuth = localStorage.getItem("userData")
 
 const initialState = {
@@ -91,10 +91,11 @@ const reducers = (state = initialState, action: any) => {
         loginFail: true,
       };
     case LOGOUT:
-      localStorage.removeItem("access");
-      localStorage.removeItem("refresh");
-      localStorage.removeItem("userData");
-      toast.info("You've been logged out!", {
+      localStorage.removeItem("access")
+      localStorage.removeItem("refresh")
+      localStorage.removeItem("userData")
+      localStorage.removeItem("githubAccess")
+      toast("You've been logged out!", {
         transition: Slide,
         hideProgressBar: false,
         autoClose: 2000,

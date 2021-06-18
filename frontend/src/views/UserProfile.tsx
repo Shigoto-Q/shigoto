@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ghapi, api } from "../api"
+import { ghapi } from "../api"
+import api from "../api"
 import { GitHub } from "react-feather"
 
 const UserSettings = () => {
@@ -10,8 +11,8 @@ const UserSettings = () => {
     const ghAuthUrl =
         "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
     const [isGhConnected, setGhConnected] = useState(true ? localStorage.getItem("githubAccess") : false);
+    console.log(isGhConnected)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    const [data, setData] = useState({ errorMessage: "", isLoading: false });
     const authrizeGithub = (code: string) => {
         const body = {
             client_id: clientId,

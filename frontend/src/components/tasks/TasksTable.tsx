@@ -1,4 +1,4 @@
-import { api } from "../../api/";
+import  api from "../../api/";
 import { useState, useEffect } from "react";
 import { CheckCircle, XCircle } from "react-feather";
 import { Redirect } from "react-router-dom"

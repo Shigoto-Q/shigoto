@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { api } from "../../../api/";
+import api from "../../../api/";
 import {
   SOLAR_CREATED,
   CRONTAB_CREATED,

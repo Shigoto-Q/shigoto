@@ -86,4 +86,3 @@ function CronDropdown({ crons }: Crons) {
     </>
   )
 }
-

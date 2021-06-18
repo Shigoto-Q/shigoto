@@ -1,11 +1,7 @@
 from django.urls import path
 
 from .api import views
-from .views import (
-    my_webhook_view,
-    create_customer_sub,
-    create_checkout,
-)
+from .views import create_checkout, create_customer_sub, my_webhook_view
 
 app_name = "users"
 

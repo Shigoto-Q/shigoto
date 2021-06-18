@@ -8,7 +8,6 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
-from django.http import JsonResponse
 from kombu.utils.json import loads
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response

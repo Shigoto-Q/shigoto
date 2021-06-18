@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { api } from "../../../api/";
+import api from "../../../api/";
 import { TASK_CREATION_FAILED, TASK_CREATION_SUCCESS, TASK_RAN_SUCCESS } from "../../types/task/";
 
 export const createTask = (
