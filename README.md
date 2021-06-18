@@ -16,7 +16,7 @@
 
 ## Demo
 
-![Demo gif](https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif)
+![Third demo](https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif)
 
 ## About
 A [Django](https://www.djangoproject.com/) project for easy cron job, task planning and monitoring.
