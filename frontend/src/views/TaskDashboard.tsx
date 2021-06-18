@@ -3,8 +3,7 @@ import TaskTable from "../components/tasks/TasksTable"
 import Task from "../components/tasks/Task"
 import TaskCard from "../components/tasks/TaskCard"
 import { CheckCircle, XCircle, Loader } from "react-feather"
-import Chart from "react-apexcharts";
-
+import api from "../api/"
 const token = localStorage.getItem("access");
 const ws = new WebSocket(`ws://localhost:8080/status?token=${token}`);
 
@@ -25,6 +24,7 @@ function getDate() {
 }
 
 class Dashboard extends Component<TaskStatus, any> {
+    _isMounted = false;
     constructor(props: any) {
         super(props);
         this.state = {
@@ -40,57 +40,64 @@ class Dashboard extends Component<TaskStatus, any> {
     }
 
     componentWillMount() {
+        this._isMounted = true;
         ws.onopen = () => {
             console.log("connected")
         }
         ws.onmessage = (message) => {
-            this.setState({ taskStatus: JSON.parse(message.data)[0] })
-            this.setState({
-                successData: [...this.state.successData, JSON.parse(message.data)[0]["Success"]],
-            })
-            var frstLast = this.state.successData[this.state.successData.length - 1]
-            var scnLast = this.state.successData[this.state.successData.length - 2]
+            if (this._isMounted) {
+                this.setState({ taskStatus: JSON.parse(message.data)[0] })
+                this.setState({
+                    successData: [...this.state.successData, JSON.parse(message.data)[0]["Success"]],
+                })
+                var frstLast = this.state.successData[this.state.successData.length - 1]
+                var scnLast = this.state.successData[this.state.successData.length - 2]
 
-            this.setState({
-              oldSuccess: (frstLast - scnLast) / 100
-            })
+                this.setState({
+                    oldSuccess: (frstLast - scnLast) / 100
+                })
 
-            this.setState({
-                failData: [...this.state.failData, JSON.parse(message.data)[0]["Failure"]]
-            })
-            var fLast = this.state.failData[this.state.failData.length - 1]
-            var f1Last = this.state.failData[this.state.failData.length - 2]
+                this.setState({
+                    failData: [...this.state.failData, JSON.parse(message.data)[0]["Failure"]]
+                })
+                var fLast = this.state.failData[this.state.failData.length - 1]
+                var f1Last = this.state.failData[this.state.failData.length - 2]
 
-            this.setState({
-              oldFail: (fLast - f1Last) / 100
-            })
-            this.setState({
-                pendingData: [...this.state.pendingData, JSON.parse(message.data)[0]["Pending"]]
-            })
-            var pLast = this.state.pendingData[this.state.pendingData.length - 1]
-            var p1Last = this.state.pendingData[this.state.pendingData.length - 2]
+                this.setState({
+                    oldFail: (fLast - f1Last) / 100
+                })
+                this.setState({
+                    pendingData: [...this.state.pendingData, JSON.parse(message.data)[0]["Pending"]]
+                })
+                var pLast = this.state.pendingData[this.state.pendingData.length - 1]
+                var p1Last = this.state.pendingData[this.state.pendingData.length - 2]
 
-            this.setState({
-              oldPending: (pLast - p1Last) / 100
-            })
-            this.setState({
-                time: [...this.state.time, getDate()]
-            })
-            if (this.state.time.length > 5) {
-                this.state.time.shift()
+                this.setState({
+                    oldPending: (pLast - p1Last) / 100
+                })
+                this.setState({
+                    time: [...this.state.time, getDate()]
+                })
+                if (this.state.time.length > 5) {
+                    this.state.time.shift()
+                }
+                if (this.state.successData.length > 5) {
+                    this.state.successData.shift()
+                }
+                if (this.state.failData.length > 5) {
+                    this.state.failData.shift()
+                }
             }
-            if (this.state.successData.length > 5) {
-                this.state.successData.shift()
-            }
-            if (this.state.failData.length > 5) {
-                this.state.failData.shift()
-            }
-
         }
         ws.onclose = () => {
+            this._isMounted = false;
             console.log("disconnected")
         }
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     render() {
         return (
             <div className="relative flex flex-col flex-1">

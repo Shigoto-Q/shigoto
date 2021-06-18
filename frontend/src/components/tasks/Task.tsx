@@ -2,10 +2,9 @@ import { Switch } from "@headlessui/react";
 import { connect } from "react-redux";
 import { checkAuthenticated, load_user } from "../../redux/actions/auth/";
 import { createTask } from "../../redux/actions/task/";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { Check, Menu, Calendar } from "react-feather";
-import TaskCard from "./TaskCard";
+import { Check, Menu, } from "react-feather";
 
 type TaskProps = {
   isAuthenticated: boolean;

@@ -1,5 +1,4 @@
 import Sidebar from "../components/Sidebar"
-import DashboardNav from "../components/DashboardNav"
 import UserNav from "../components/NewNav"
 import { useEffect } from "react"
 import { connect } from "react-redux"

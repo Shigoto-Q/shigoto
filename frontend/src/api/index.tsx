@@ -1,15 +1,31 @@
 import axios from 'axios'
 
+const baseURL = "http://localhost:8000"
+
 export const bareAPI = axios.create({
-  baseURL: "http://localhost:8000"
+    baseURL: "http://localhost:8000"
 })
 
-export const api = axios.create({
-  baseURL: "http://localhost:8000",
-  headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}
+const api = axios.create({
+    baseURL: baseURL,
 })
+
 
 export const ghapi = axios.create({
-  baseURL: "https://api.github.com",
-  headers: { Authorization: `Token ${localStorage.getItem("githubAccess")}` }
-    })
+    baseURL: "https://api.github.com",
+    headers: { Authorization: `Token ${localStorage.getItem("githubAccess")}` }
+})
+
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem("access")
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+)
+
+
+export default api
