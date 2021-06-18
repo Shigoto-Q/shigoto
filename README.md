@@ -30,8 +30,8 @@ A [Django](https://www.djangoproject.com/) project for easy cron job, task plann
     - Python 3.6 or later
     - Accessible from port `8000` for local development
     - [DRF](https://www.django-rest-framework.org/) REST API
-    
-    
+
+
 - Frontend app with JavaScript (ES2015), React and Sass
     - Latest TypeScript features from [ES2015](https://babeljs.io/docs/learn-es2015/) and beyond, transpiled with
     - [React](https://facebook.github.io/react/) for fast modular user interfaces
@@ -145,9 +145,9 @@ $ npm run build
 ###### After you build the frontend go back to the root and build the containers
 ```shell script
 $ cd ..
-$ docker-compose -f local.yml build 
-``` 
-###### After the containers are built run 
+$ docker-compose -f local.yml build
+```
+###### After the containers are built run
 ```shell script
 $ docker-compose -f local.yml up
 ```

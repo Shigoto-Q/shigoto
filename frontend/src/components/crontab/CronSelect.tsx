@@ -64,7 +64,7 @@ export default function CronDropdown() {
   const [selected, setSelected] = useState(people[0])
 
   return (
-  <> 
+  <>
     <div className="ml-10 mr-10 col-span-2">
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
@@ -140,4 +140,3 @@ export default function CronDropdown() {
     </>
   )
 }
- 

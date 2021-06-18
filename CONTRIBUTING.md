@@ -20,7 +20,7 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 5. Make sure your code lints.
 6. Issue that pull request!
 
-## Any contributions you make will be under the GPL-3.0 License 
+## Any contributions you make will be under the GPL-3.0 License
 In short, when you submit code changes, your submissions are understood to be under the same [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html) that covers the project. Feel free to contact the maintainers if that's a concern.
 
 ## Report bugs using Github's [issues](https://github.com/SimeonAleksov/shigoto_q/issues)

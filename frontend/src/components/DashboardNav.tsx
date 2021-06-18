@@ -77,4 +77,3 @@ const mapStateToProps = (state: any) => ({
   user: state.auth.user,
 });
 export default connect(mapStateToProps, { checkAuthenticated, load_user })(DashboardNav);
-

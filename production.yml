@@ -56,4 +56,3 @@ services:
     <<: *django
     image: shigoto_q_production_celerybeat
     command: /start-celerybeat
-
