@@ -11,6 +11,7 @@ class GitHubProfile(models.Model):
 
 
 class Repository(models.Model):
-    repo_author = models.ForeignKey(GitHubProfile, on_delete=models.CASCADE)
+    repo_author = models.ForeignKey(GitHubProfile, on_delete=models.CASCADE, null=True)
     full_name = models.CharField(max_length=300, default="")
     repo_url = models.URLField()
+    language = models.CharField(max_length=120, default="", null=True)

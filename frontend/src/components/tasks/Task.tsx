@@ -39,7 +39,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-sm shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-700 w-full">
+    <div className="flex flex-col">
       <header className="flex justify-between items-start mb-2"></header>
       <h2 className="text-md font-semibold text-gray-800 mb-2 ml-2 dark:text-white">
         Create a task

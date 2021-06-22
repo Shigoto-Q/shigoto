@@ -16,7 +16,7 @@ const Layout = (props: any) => {
         fetchData();
     }, [props]);
     return (
-        <div className="flex bg-gray-100 dark:bg-gray-800 h-screen overflow-hidden ">
+        <div className="flex bg-gray-100 dark:bg-gray-800 h-screen ">
             <div className="h-screen hidden lg:block my-4 ml-4 shadow-lg relative w-80">
                 <Sidebar />
             </div>
