@@ -14,11 +14,11 @@
     text-align: center;
     font-size: 250%;
     width: 100%;
-    background-color: #8A2BE2;
-    border: 1px solid #cccccc;
+    /* background-color: #8A2BE2; */
+    /* border: 1px solid #cccccc; */
     border-radius: 0.6em;
-    color: #ffffff;
-    padding-top: 0.075rem;
+    /* color: #8A2BE2; */
+    padding-top: auto;
     margin-left: auto;
     margin-right: auto;
     outline: none;

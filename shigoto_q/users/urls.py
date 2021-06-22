@@ -1,14 +1,13 @@
 from django.urls import path
 
-from shigoto_q.users.views import (
-    user_detail_view,
-    user_redirect_view,
-    user_update_view,
-)
+from .api import views
+from .views import create_checkout, create_customer_sub, my_webhook_view
 
 app_name = "users"
+
 urlpatterns = [
-    path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<str:username>/", view=user_detail_view, name="detail"),
+    path("products/", views.ProductView.as_view()),
+    path("hooks/", my_webhook_view),
+    path("create_customer/", create_customer_sub, name="create_customer_sub"),
+    path("create-checkout-session/", create_checkout, name="create_checkout"),
 ]

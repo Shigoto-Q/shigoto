@@ -1,14 +1,90 @@
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
+from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
+from djoser.serializers import UserSerializer as DjoserUserSerializer
+from djstripe.models import Plan, Product
 from rest_framework import serializers
+
+from shigoto_q.github.api.serializers import GitHubProfileSerializer
+
+from ...tasks.api.serializers import (
+    ClockedSerializer,
+    CrontabSerializer,
+    IntervalSerializer,
+    SolarSerializer,
+    TaskGetSerializer,
+)
 
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class PlanSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ["username", "name", "url"]
+        model = Plan
+        fields = ["amount", "interval", "trial_period_days", "id"]
 
-        extra_kwargs = {
-            "url": {"view_name": "api:user-detail", "lookup_field": "username"}
-        }
+
+class ProductSerializer(serializers.ModelSerializer):
+    plan_set = PlanSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Product
+        ordering = [
+            "plan_set",
+        ]
+        fields = ["id", "name", "plan_set", "metadata"]
+
+
+class UserSerializer(DjoserUserSerializer):
+    crontab = CrontabSerializer(read_only=True, many=True)
+    task = TaskGetSerializer(read_only=True, many=True)
+    interval = IntervalSerializer(read_only=True, many=True)
+    solar = SolarSerializer(read_only=True, many=True)
+    clocked = ClockedSerializer(read_only=True, many=True)
+    github = GitHubProfileSerializer(read_only=True)
+
+    class Meta(DjoserUserSerializer.Meta):
+        model = User
+        fields = [
+            "username",
+            "github",
+            "email",
+            "first_name",
+            "last_name",
+            "country",
+            "city",
+            "zip_code",
+            "state",
+            "subscription",
+            "customer",
+            "crontab",
+            "interval",
+            "clocked",
+            "solar",
+            "task",
+        ]
+
+
+class UserCreateSerializer(DjoserUserCreateSerializer):
+    password = serializers.CharField(
+        required=True,
+        style={"input_type": "password", "placeholder": "Password"},
+    )
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+    class Meta(DjoserUserCreateSerializer.Meta):
+        model = User
+        fields = [
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "company",
+            "password",
+            "zip_code",
+            "city",
+            "country",
+        ]

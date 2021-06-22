@@ -13,7 +13,6 @@ services:
     container_name: django
     depends_on:
       - postgres
-      - mailhog
     volumes:
       - .:/app:z
     env_file:
@@ -22,7 +21,20 @@ services:
     ports:
       - "8000:8000"
     command: /start
-
+    links:
+      - redis
+  react: &react
+    build:
+      context: .
+      dockerfile: ./compose/local/react/Dockerfile
+    image: shigoto_q_local_react
+    container_name: react
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - "3000:3000"
   postgres:
     build:
       context: .
@@ -32,6 +44,8 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
       - local_postgres_data_backups:/backups:z
+    ports:
+      - "5432:5432"
     env_file:
       - ./.envs/.local/.postgres
 
@@ -51,12 +65,6 @@ services:
       - "7000:7000"
     command: /start-docs
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.0
-    container_name: mailhog
-    ports:
-      - "8025:8025"
-
   redis:
     image: redis:5.0
     container_name: redis
@@ -68,7 +76,6 @@ services:
     depends_on:
       - redis
       - postgres
-      - mailhog
     ports: []
     command: /start-celeryworker
 
@@ -79,7 +86,5 @@ services:
     depends_on:
       - redis
       - postgres
-      - mailhog
     ports: []
     command: /start-celerybeat
-

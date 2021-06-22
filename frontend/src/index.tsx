@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Spinner from "./components/Spinner"
 import reportWebVitals from './reportWebVitals';
-import { SnackbarProvider } from 'notistack';
-import axios from 'axios'
+import 'react-toastify/dist/ReactToastify.css'
+import {ToastContainer} from "react-toastify"
+import { store } from "./redux/storeConfig/store"
+import { Provider } from 'react-redux'
 
-axios.defaults.baseURL = 'http://localhost:8000'
+const LazyApp = lazy(() => import('./App'))
 
 ReactDOM.render(
-  <React.StrictMode>
-  <SnackbarProvider maxSnack={2}>
-    <App />
-    </SnackbarProvider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Suspense fallback={<Spinner />}>
+      <React.StrictMode>
+        <LazyApp />
+        <ToastContainer/>
+      </React.StrictMode>
+    </Suspense>
+  </Provider>,
   document.getElementById('root')
 );
 

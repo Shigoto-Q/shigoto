@@ -1,60 +1,49 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
+import logoIcon from "../assets/images/logo_icon.png";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
-   return (
-<>
-{/* This example requires Tailwind CSS v2.0+ */}
-<div className="relative bg-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6">
-    <div className="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
-      <div className="flex justify-start lg:w-0 lg:flex-1">
-        <a href="#">
-          <span className="sr-only">Workflow</span>
-        </a>
-      </div>
-      <div className="-mr-2 -my-2 md:hidden">
-        <button type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
-          <span className="sr-only">Open menu</span>
-          {/* Heroicon name: outline/menu */}
-          <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-      <nav className="hidden md:flex space-x-10">
-        <div className="relative">
-          {/* Item active: "text-gray-900", Item inactive: "text-gray-500" */}
-            <Link className="text-base font-medium text-gray-500 hover:text-gray-900" to="/">
-            Solutions
-            </Link>
-        </div>
-            <Link className="text-base font-medium text-gray-500 hover:text-gray-900" to="/pricing">
-            Pricing
-            </Link>
-        <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
+  return (
+    <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <Link
+        to="/"
+        className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+      >
+        <img src={logoIcon} alt="logo" className="h-16" />{" "}
+        <span className="ml-3 text-xl text-gray-700">Shigoto</span>
+      </Link>
+      <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+        <Link to="/pricing" className="mr-5 hover:text-gray-900">
+          Pricing
+        </Link>
+        <Link to="/features" className="mr-5 hover:text-gray-900">
+          Features
+        </Link>
+        <Link to="/docs" className="mr-5 hover:text-gray-900">
           Documentation
-        </a>
+        </Link>
       </nav>
-      <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-        <a href="#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-          Sign up
-        </a>
-      </div>
+      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+        <Link
+          to="/login"
+          className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+        >
+          Sign in
+          <svg
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            className="w-4 h-4 ml-1"
+            viewBox="0 0 24 24"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </Link>
+      </motion.button>
     </div>
-  </div>
-  {/*
-    Mobile menu, show/hide based on mobile menu state.
+  );
+};
 
-    Entering: "duration-200 ease-out"
-From: "opacity-0 scale-95"
-To: "opacity-100 scale-100"
-    Leaving: "duration-100 ease-in"
-From: "opacity-100 scale-100"
-To: "opacity-0 scale-95"
-  */}
-</div>
-</>
-   )
-}
-
-export default Navbar
+export default Navbar;

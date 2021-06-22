@@ -1,15 +1,18 @@
-"""
-Base settings to build other settings files upon.
-"""
+import logging
+from datetime import timedelta
 from pathlib import Path
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# shigoto_q/
 APPS_DIR = ROOT_DIR / "shigoto_q"
 env = environ.Env()
-NUXT_DIR = ROOT_DIR / "frontend"
+REACT_DIR = ROOT_DIR / "frontend"
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 
@@ -29,9 +32,18 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 ROOT_URLCONF = "config.urls"
-WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 DJANGO_APPS = [
+    "channels",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -42,7 +54,6 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
-    "crispy_forms",
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
@@ -53,10 +64,12 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
-    "shigoto_q.tasks",
+    "shigoto_q.tasks.apps.TasksConfig",
+    "shigoto_q.github.apps.GithubConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -96,7 +109,7 @@ MIDDLEWARE = [
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [str(APPS_DIR / "static"), str(NUXT_DIR / "build" / "static")]
+STATICFILES_DIRS = [str(APPS_DIR / "static"), str(REACT_DIR / "build" / "static")]
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -108,7 +121,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR / "templates"), str(NUXT_DIR / "build")],
+        "DIRS": [str(APPS_DIR / "templates"), str(REACT_DIR / "build")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -123,7 +136,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "shigoto_q.utils.context_processors.settings_context",
             ],
         },
     }
@@ -131,7 +143,6 @@ TEMPLATES = [
 
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 SESSION_COOKIE_HTTPONLY = True
@@ -183,8 +194,42 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DATETIME_FORMAT": "%Y-%m-%d - %H:%M:%S",
 }
 SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
-CORS_URLS_REGEX = r"^/api/.*$"
+DJOSER = {
+    "SERIALIZERS": {
+        "current_user": "shigoto_q.users.api.serializers.UserSerializer",
+        "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
+    },
+    "PERMISSIONS": {
+        "user_create": ["rest_framework.permissions.AllowAny"],
+        "token_create": ["rest_framework.permissions.AllowAny"],
+    },
+}
+# CORS_URLS_REGEX = r"^/api/v1/.*$"
+CORS_ALLOW_ALL_ORIGIN = True
+
+SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+
+sentry_logging = LoggingIntegration(
+    level=SENTRY_LOG_LEVEL,
+    event_level=logging.ERROR,
+)
+integrations = [
+    sentry_logging,
+    DjangoIntegration(),
+    CeleryIntegration(),
+    RedisIntegration(),
+]
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=integrations,
+    environment=env("SENTRY_ENVIRONMENT", default="local"),
+    traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
+)

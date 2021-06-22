@@ -1,7 +1,8 @@
 import Routes from './routes/Routes'
+
 const App = () => {
   return (
-    <Routes/>
+    <Routes />
   );
 }
 
