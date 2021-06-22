@@ -10,7 +10,7 @@ import {
   USER_LOADED_FAIL,
 } from "../../types/auth/index";
 import { toast, Slide } from "react-toastify";
-import api from "../../../api/"
+
 const isUserAuth = localStorage.getItem("userData")
 
 const initialState = {

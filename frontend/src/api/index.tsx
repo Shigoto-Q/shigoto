@@ -16,6 +16,19 @@ export const ghapi = axios.create({
     headers: { Authorization: `Token ${localStorage.getItem("githubAccess")}` }
 })
 
+ghapi.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem("githubAccess")
+    if (token) {
+      config.headers.Authorization = `Token ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+)
+
+
+
 api.interceptors.request.use(
   config => {
     const token = localStorage.getItem("access")
