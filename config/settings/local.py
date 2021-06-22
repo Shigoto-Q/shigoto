@@ -1,6 +1,16 @@
 from .base import *  # noqa
 from .base import env
 
+STRIPE_LIVE_SECRET_KEY = env("LIVE_SECRET_KEY", default=None)
+STRIPE_TEST_SECRET_KEY = env("TEST_SECRET_KEY", default=None)
+STRIPE_LIVE_MODE = env("LIVE_MODE", default=False)
+DJSTRIPE_WEBHOOK_SECRET = env("WEBHOOK_SECRET", default=None)
+STRIPE_SIGNING_SECRET = env("WEBHOOK_SECRET", default=None)
+DJSTRIPE_USE_NATIVE_JSONFIELD = True
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+
+
+
 DEBUG = True
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
