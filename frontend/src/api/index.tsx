@@ -26,9 +26,6 @@ ghapi.interceptors.request.use(
   },
   error => Promise.reject(error)
 )
-
-
-
 api.interceptors.request.use(
   config => {
     const token = localStorage.getItem("access")
