@@ -276,3 +276,5 @@ shigoto_q/media/
 .env
 .envs/*
 !.envs/.local/
+
+/keyfiles
