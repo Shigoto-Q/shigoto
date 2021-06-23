@@ -2,7 +2,6 @@ import UserDropDown from "./UserDropDown";
 import { connect } from "react-redux";
 import { checkAuthenticated, load_user } from "../redux/actions/auth/";
 import ThemeToggle from "./ThemeToggle"
-import CreateTask from "./tasks/CreateTask"
 type UserProps = {
     isAuthenticated: boolean;
     user: any;
@@ -16,7 +15,6 @@ const UserNav = ({ isAuthenticated, user }: UserProps) => {
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 -mb-px">
                     <div className="flex">
-                      <CreateTask/>
                     </div>
                     <div className="flex items-center">
                         <ThemeToggle />
