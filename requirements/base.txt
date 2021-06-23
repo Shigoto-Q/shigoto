@@ -34,3 +34,11 @@ djangorestframework_simplejwt
 djangorestframework==3.12.4  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.7.0 # https://github.com/adamchainz/django-cors-headers
 sentry-sdk==1.0.0
+google-cloud-container==2.4.1
+pip~=21.1.2
+setuptools~=57.0.0
+certifi~=2021.5.30
+urllib3~=1.26.5
+requests~=2.25.1
+chardet~=4.0.0
+idna~=2.10
