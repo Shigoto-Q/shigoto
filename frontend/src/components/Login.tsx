@@ -13,9 +13,8 @@ type LoginProps = {
 const Login = ({ login, isAuthenticated }: LoginProps) => {
   const [username, setUsername] = useState('')
   const [password, setPassowrd] = useState('')
-  localStorage.setItem("theme", "dark")
   if (isAuthenticated)
-    return <Redirect to="/dashboard" />
+    return <Redirect to="/dashboard/tasks" />
   const handleSubmit = (e: any) => {
     e.preventDefault()
     login(username, password)
