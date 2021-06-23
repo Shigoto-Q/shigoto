@@ -3,7 +3,7 @@
 Werkzeug==1.0.1 # https://github.com/pallets/werkzeug
 ipdb==0.13.7  # https://github.com/gotcha/ipdb
 psycopg2==2.8.6  # https://github.com/psycopg/psycopg2
-watchgod==0.6  # https://github.com/samuelcolvin/watchgod
+watchgod~=0.7
 
 # Testing
 # ------------------------------------------------------------------------------
@@ -35,3 +35,54 @@ django-debug-toolbar==3.2  # https://github.com/jazzband/django-debug-toolbar
 django-extensions==3.1.1  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin==1.8.0  # https://github.com/nedbat/django_coverage_plugin
 pytest-django==4.1.0  # https://github.com/pytest-dev/pytest-django
+
+colorama~=0.4.4
+h11~=0.12.0
+cryptography~=3.4.7
+cffi~=1.14.5
+tornado~=6.1
+rsa~=4.7.2
+pyasn1~=0.4.8
+vine~=5.0.0
+amqp~=5.0.6
+attrs~=21.2.0
+six~=1.16.0
+PyYAML~=5.4.1
+click~=7.1.2
+python-dateutil~=2.8.1
+kombu~=5.1.0
+billiard~=3.6.4.0
+txaio~=21.2.1
+greenlet~=1.1.0
+asgiref~=3.3.4
+daphne~=3.0.2
+autobahn~=21.3.1
+sqlparse~=0.4.1
+Jinja2~=3.0.1
+humanize~=3.9.0
+cachetools~=4.2.2
+packaging~=20.9
+MarkupSafe~=2.0.1
+libcst~=0.3.19
+wcwidth~=0.2.5
+PyJWT~=2.1.0
+Automat~=20.2.0
+itypes~=1.2.0
+coreapi~=2.3.3
+coreschema~=0.0.4
+uritemplate~=3.0.1
+incremental~=21.3.0
+constantly~=15.1.0
+hyperlink~=21.0.0
+websockets~=8.1
+aioredis~=1.3.1
+msgpack~=1.0.2
+websocket-client~=1.1.0
+jsonfield~=3.1.0
+oauthlib~=3.1.1
+pyparsing~=2.4.7
+pycparser~=2.20
+python-crontab~=2.5.1
+django-timezone-field~=4.1.2
+GitPython
+google-cloud-storage

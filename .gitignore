@@ -276,3 +276,6 @@ shigoto_q/media/
 .env
 .envs/*
 !.envs/.local/
+
+/keyfiles
+services/kubernetes/test_docker/Dockerfile
