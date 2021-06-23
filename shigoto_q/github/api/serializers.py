@@ -9,7 +9,15 @@ User = get_user_model()
 class RepositorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
-        fields = "__all__"
+        fields = ["repo_url", "full_name", "language"]
+
+    def create(self, validated_data):
+        repo = Repository.objects.create(**validated_data)
+        user = self.context.user
+        repo.repo_author = user.github
+        repo.save()
+
+        return repo
 
 
 class GitHubProfileSerializer(serializers.ModelSerializer):
