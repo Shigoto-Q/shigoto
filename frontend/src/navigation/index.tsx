@@ -8,6 +8,12 @@ const navigation = [
     navLink: '/dashboard/tasks'
   },
   {
+    id: 'createTasks',
+    title: 'Create Tasks',
+    icon: <CheckSquare />,
+    navLink: '/dashboard/task/create'
+  },
+  {
     id: 'taskLogs',
     title: 'Cron logs',
     icon: <Activity />,
