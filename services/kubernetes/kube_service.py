@@ -1,54 +1,62 @@
+from google.cloud.container_v1 import ClusterManagerClient
 from kubernetes import client, config
-import git
 from google.cloud import storage
 from google.oauth2 import service_account
 import glob
 import os
-from google.cloud.container_v1 import ClusterManagerClient
-from kubernetes import client
+from google.auth import compute_engine
 
 
-def upload_local_directory_to_gcs(local_path, bucket, gcs_path):
-    assert os.path.isdir(local_path)
-    for local_file in glob.glob(local_path + '/**'):
-        if not os.path.isfile(local_file):
-            upload_local_directory_to_gcs(local_file, bucket, gcs_path + "/" + os.path.basename(local_file))
-        else:
-            remote_path = os.path.join(gcs_path, local_file[1 + len(local_path):])
-            blob = bucket.blob(remote_path)
-            blob.upload_from_filename(local_file)
+
 
 
 def initialize_client():
-    project_id = "tough-canto-314909"
-    zone = "europe-west1-b"
-    cluster_id = "cluster-1"
-    credentials = service_account.Credentials.from_service_account_file(
-        "C:/Users/bogda/OneDrive/Desktop/shegoto/shigoto_q/keyfiles/gke_service_account.json")
-
-    cluster_manager_client = ClusterManagerClient(credentials=credentials)
-    cluster = cluster_manager_client.get_cluster(name=f'projects/{project_id}/locations/{zone}/clusters/{cluster_id}')
-
-    configuration = client.Configuration()
-    configuration.host =f"https://{cluster.endpoint}:443"
-    configuration.verify_ssl = False
-    configuration.api_key = {"authorization" : "Bearer " + credentials.token}
-    client.Configuration.set_default(configuration)
+    config.load_kube_config()
 
     v1 = client.CoreV1Api()
+    bv1 = client.BatchV1Api()
+
+    return v1, bv1
+
+
+
+def configure_job(name, image, command):
+    container = client.V1Container(
+        name=name,
+        image=image,
+        command=command)
+
+    template = client.V1PodTemplateSpec(
+        metadata=client.V1ObjectMeta(labels={"app": name}),
+        spec=client.V1PodSpec(restart_policy="Never", containers=[container]))
+
+    spec = client.V1JobSpec(
+        template=template,
+        backoff_limit=4)
+
+    job = client.V1Job(
+        api_version="batch/v1",
+        kind="Job",
+        metadata=client.V1ObjectMeta(name=name),
+        spec=spec)
+
+    return job
+
+def create_job(api_instance, job):
+    api_response = api_instance.create_namespaced_job(
+        body=job,
+        namespace="default")
+    print("Job created. status='%s'" % str(api_response.status))
+
+def run_job(name, image, command):
+    v1, bv1 = initialize_client()
+    job = configure_job()
+    create_job(bv1, job)
 
 
 
 
-def download_repo(repo_url, username):
-    git.Git("./").clone("https://github.com/b0gdanp3trovic/test_docker.git")
-    credentials = service_account.Credentials.from_service_account_file(
-        "C:/Users/bogda/OneDrive/Desktop/shegoto/shigoto_q/keyfiles/gke_service_account.json")
-    storage_client = storage.Client(credentials=credentials)
-    if username not in storage_client.list_buckets():
-        storage_client.create_bucket(username)
 
-    bucket = storage_client.bucket(username)
-    upload_local_directory_to_gcs('./test_docker', bucket, '.')
+
 
 
