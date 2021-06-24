@@ -16,6 +16,7 @@ def initialize_client():
     v1 = client.CoreV1Api()
     bv1 = client.BatchV1Api()
 
+
     return v1, bv1
 
 
