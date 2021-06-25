@@ -1,19 +1,13 @@
-from google.cloud.container_v1 import ClusterManagerClient
-from kubernetes import client, config
-from google.cloud import storage
-from google.oauth2 import service_account
-import glob
-import os
-from google.auth import compute_engine
+from kubernetes import client, config, watch
+import time
 
 
 def initialize_client():
     config.load_kube_config()
 
-    v1 = client.CoreV1Api()
     bv1 = client.BatchV1Api()
 
-    return v1, bv1
+    return bv1
 
 
 def configure_job(name, image, command):
@@ -41,7 +35,33 @@ def create_job(api_instance, job):
     print("Job created. status='%s'" % str(api_response.status))
 
 
+def watch_job(job, namespace):
+    label = job.spec.template.metadata.labels
+    print(label)
+    config.load_kube_config()
+    w = watch.Watch()
+    core_v1 = client.CoreV1Api()
+
+    job_started = False
+    for event in w.stream(
+        func=core_v1.list_namespaced_pod,
+        namespace=namespace,
+        label_selector="{}={}".format(list(label.keys())[0], list(label.values())[0]),
+        timeout_seconds=60,
+    ):
+        if event["object"].status.phase == "Running" and not job_started:
+            end_time = time.time()
+            print("Job started!")
+        # event.type: ADDED, MODIFIED, DELETED
+        if event["type"] == "DELETED":
+            # Pod was deleted while we were waiting for it to start.
+            print("Job was deleted before startup.")
+            w.stop()
+            return
+
+
 def run_job(name, image, command):
-    v1, bv1 = initialize_client()
-    job = configure_job()
+    bv1 = initialize_client()
+    job = configure_job(name, image, command)
     create_job(bv1, job)
+    watch_job(job, "default")
