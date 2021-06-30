@@ -37,27 +37,46 @@ def create_job(api_instance, job):
 
 def watch_job(job, namespace):
     label = job.spec.template.metadata.labels
-    print(label)
     config.load_kube_config()
     w = watch.Watch()
     core_v1 = client.CoreV1Api()
 
-    job_started = False
+    job_running = False
     for event in w.stream(
         func=core_v1.list_namespaced_pod,
         namespace=namespace,
         label_selector="{}={}".format(list(label.keys())[0], list(label.values())[0]),
         timeout_seconds=60,
     ):
-        if event["object"].status.phase == "Running" and not job_started:
-            end_time = time.time()
-            print("Job started!")
+        if event["object"].status.phase == "Running":
+            print("Job running!")
+            job_running = True
+            w.stop()
         # event.type: ADDED, MODIFIED, DELETED
         if event["type"] == "DELETED":
             # Pod was deleted while we were waiting for it to start.
             print("Job was deleted before startup.")
             w.stop()
-            return
+
+    if job_running:
+        pod_name = (
+            core_v1.list_namespaced_pod(
+                namespace=namespace,
+                label_selector="{}={}".format(
+                    list(label.keys())[0], list(label.values())[0]
+                ),
+            )
+            .items[0]
+            .metadata.name
+        )
+        w = watch.Watch()
+        for event in w.stream(
+            func=core_v1.read_namespaced_pod_log,
+            name=pod_name,
+            namespace=namespace,
+        ):
+            # send websocket
+            print(event)
 
 
 def run_job(name, image, command):
@@ -65,3 +84,6 @@ def run_job(name, image, command):
     job = configure_job(name, image, command)
     create_job(bv1, job)
     watch_job(job, "default")
+
+
+run_job("lol", "perl", ["perl", "-Mbignum=bpi", "-wle", "print bpi(2000)"])
