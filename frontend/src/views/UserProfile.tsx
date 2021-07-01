@@ -12,9 +12,8 @@ const UserSettings = () => {
   const ghAuthUrl =
     "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const [isGhConnected, setGhConnected] = useState(
-    userData.github.token ? true : false
-  );
+  const [isGhConnected, setGhConnected] = useState((userData.github === null) ? true : (userData.github.token) ? true : false)
+
   const [loading, setLoading] = useState(true)
   const [githubRepos, setGitHubRepos] = useState()
   const authrizeGithub = (code: string) => {
@@ -284,7 +283,7 @@ const UserSettings = () => {
                     type="text"
                     name="github_user"
                     id="github_user"
-                    value={userData.github.login}
+                    value={userData.github?.login}
                     readOnly
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -301,7 +300,7 @@ const UserSettings = () => {
                     type="text"
                     name="public_repos"
                     id="public_repos"
-                    value={userData.github.public_repos}
+                    value={userData.github?.public_repos}
                     readOnly
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -319,7 +318,7 @@ const UserSettings = () => {
                     name="public_gists"
                     id="public_gists"
                     autoComplete="postal-code"
-                    value={userData.github.public_gists}
+                    value={userData.github?.public_gists}
                     readOnly
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -336,7 +335,7 @@ const UserSettings = () => {
                     name="token"
                     id="token"
                     autoComplete="postal-code"
-                    value={userData.github.token}
+                    value={userData.github?.token}
                     readOnly
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -374,7 +373,7 @@ const UserSettings = () => {
                     type="text"
                     name="dpublic_repos"
                     id="dpublic_repos"
-                    value={userData.github.public_repos}
+                    value={userData.github?.public_repos}
                     readOnly
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
