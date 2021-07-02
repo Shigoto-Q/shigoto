@@ -1,4 +1,3 @@
-
 import { Component } from "react";
 import TaskTable from "../components/tasks/TasksTable";
 import TaskCard from "../components/tasks/TaskCard";
@@ -6,6 +5,7 @@ import { CheckCircle, XCircle, Loader } from "react-feather";
 import { Drawer, ButtonToolbar, Button } from 'rsuite';
 const token = localStorage.getItem("access");
 const ws = new WebSocket(`ws://localhost:8080/status?token=${token}`);
+
 
 type TaskStatus = {
     taskStatus: Object;
