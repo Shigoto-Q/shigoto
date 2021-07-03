@@ -86,3 +86,4 @@ python-crontab~=2.5.1
 django-timezone-field~=4.1.2
 GitPython
 google-cloud-storage
+google-api-python-client

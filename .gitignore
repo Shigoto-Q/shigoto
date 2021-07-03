@@ -278,4 +278,3 @@ shigoto_q/media/
 !.envs/.local/
 
 /keyfiles
-services/kubernetes/test_docker/Dockerfile

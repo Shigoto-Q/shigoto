@@ -10,10 +10,15 @@ RUN apt-get update \
   && apt-get install -y libpq-dev \
   # Translations dependencies
   && apt-get install -y gettext \
-  && apt-get install -y git \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+
+  && apt-get install gnupg2 -y \
+  && apt-get install curl -y \
   && rm -rf /var/lib/apt/lists/*
+
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
+RUN apt-get install kubectl
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements

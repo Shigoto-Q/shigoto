@@ -1,54 +1,89 @@
-from kubernetes import client, config
-import git
-from google.cloud import storage
-from google.oauth2 import service_account
-import glob
-import os
-from google.cloud.container_v1 import ClusterManagerClient
-from kubernetes import client
-
-
-def upload_local_directory_to_gcs(local_path, bucket, gcs_path):
-    assert os.path.isdir(local_path)
-    for local_file in glob.glob(local_path + '/**'):
-        if not os.path.isfile(local_file):
-            upload_local_directory_to_gcs(local_file, bucket, gcs_path + "/" + os.path.basename(local_file))
-        else:
-            remote_path = os.path.join(gcs_path, local_file[1 + len(local_path):])
-            blob = bucket.blob(remote_path)
-            blob.upload_from_filename(local_file)
+from kubernetes import client, config, watch
+import time
 
 
 def initialize_client():
-    project_id = "tough-canto-314909"
-    zone = "europe-west1-b"
-    cluster_id = "cluster-1"
-    credentials = service_account.Credentials.from_service_account_file(
-        "C:/Users/bogda/OneDrive/Desktop/shegoto/shigoto_q/keyfiles/gke_service_account.json")
+    config.load_kube_config()
 
-    cluster_manager_client = ClusterManagerClient(credentials=credentials)
-    cluster = cluster_manager_client.get_cluster(name=f'projects/{project_id}/locations/{zone}/clusters/{cluster_id}')
+    bv1 = client.BatchV1Api()
 
-    configuration = client.Configuration()
-    configuration.host =f"https://{cluster.endpoint}:443"
-    configuration.verify_ssl = False
-    configuration.api_key = {"authorization" : "Bearer " + credentials.token}
-    client.Configuration.set_default(configuration)
-
-    v1 = client.CoreV1Api()
+    return bv1
 
 
+def configure_job(name, image, command):
+    container = client.V1Container(name=name, image=image, command=command)
+
+    template = client.V1PodTemplateSpec(
+        metadata=client.V1ObjectMeta(labels={"app": name}),
+        spec=client.V1PodSpec(restart_policy="Never", containers=[container]),
+    )
+
+    spec = client.V1JobSpec(template=template, backoff_limit=4)
+
+    job = client.V1Job(
+        api_version="batch/v1",
+        kind="Job",
+        metadata=client.V1ObjectMeta(name=name),
+        spec=spec,
+    )
+
+    return job
 
 
-def download_repo(repo_url, username):
-    git.Git("./").clone("https://github.com/b0gdanp3trovic/test_docker.git")
-    credentials = service_account.Credentials.from_service_account_file(
-        "C:/Users/bogda/OneDrive/Desktop/shegoto/shigoto_q/keyfiles/gke_service_account.json")
-    storage_client = storage.Client(credentials=credentials)
-    if username not in storage_client.list_buckets():
-        storage_client.create_bucket(username)
-
-    bucket = storage_client.bucket(username)
-    upload_local_directory_to_gcs('./test_docker', bucket, '.')
+def create_job(api_instance, job):
+    api_response = api_instance.create_namespaced_job(body=job, namespace="default")
+    print("Job created. status='%s'" % str(api_response.status))
 
 
+def watch_job(job, namespace):
+    label = job.spec.template.metadata.labels
+    config.load_kube_config()
+    w = watch.Watch()
+    core_v1 = client.CoreV1Api()
+
+    job_running = False
+    for event in w.stream(
+        func=core_v1.list_namespaced_pod,
+        namespace=namespace,
+        label_selector="{}={}".format(list(label.keys())[0], list(label.values())[0]),
+        timeout_seconds=60,
+    ):
+        if event["object"].status.phase == "Running":
+            print("Job running!")
+            job_running = True
+            w.stop()
+        # event.type: ADDED, MODIFIED, DELETED
+        if event["type"] == "DELETED":
+            # Pod was deleted while we were waiting for it to start.
+            print("Job was deleted before startup.")
+            w.stop()
+
+    if job_running:
+        pod_name = (
+            core_v1.list_namespaced_pod(
+                namespace=namespace,
+                label_selector="{}={}".format(
+                    list(label.keys())[0], list(label.values())[0]
+                ),
+            )
+            .items[0]
+            .metadata.name
+        )
+        w = watch.Watch()
+        for event in w.stream(
+            func=core_v1.read_namespaced_pod_log,
+            name=pod_name,
+            namespace=namespace,
+        ):
+            # send websocket
+            print(event)
+
+
+def run_job(name, image, command):
+    bv1 = initialize_client()
+    job = configure_job(name, image, command)
+    create_job(bv1, job)
+    watch_job(job, "default")
+
+
+run_job("lol", "perl", ["perl", "-Mbignum=bpi", "-wle", "print bpi(2000)"])
