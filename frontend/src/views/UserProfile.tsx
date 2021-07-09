@@ -12,7 +12,6 @@ const UserSettings = () => {
   const ghAuthUrl =
     "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  console.log(userData)
   const [isGhConnected, setGhConnected] = useState((userData.github === null) ? false : (userData.github.token) ? true : false)
 
   const [loading, setLoading] = useState(true)
@@ -34,7 +33,6 @@ const UserSettings = () => {
       .post(ghAuthUrl, body, config)
       .then((res) => {
         localStorage.setItem("githubAccess", res.data.access_token);
-        console.log(res.data)
       })
       .catch((err) => {
         console.log(err);
