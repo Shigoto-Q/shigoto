@@ -12,7 +12,8 @@ const UserSettings = () => {
   const ghAuthUrl =
     "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const [isGhConnected, setGhConnected] = useState((userData.github === null) ? true : (userData.github.token) ? true : false)
+  console.log(userData)
+  const [isGhConnected, setGhConnected] = useState((userData.github === null) ? false : (userData.github.token) ? true : false)
 
   const [loading, setLoading] = useState(true)
   const [githubRepos, setGitHubRepos] = useState()
@@ -33,18 +34,14 @@ const UserSettings = () => {
       .post(ghAuthUrl, body, config)
       .then((res) => {
         localStorage.setItem("githubAccess", res.data.access_token);
+        console.log(res.data)
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const fetchRepos = () => {
-    ghapi.get(userData.github.repos_urls).then((res) => {
-      setGitHubRepos(res.data)
-      setLoading(false)
-    });
-  };
+
 
   const getUserInfo = () => {
     ghapi.get("/user").then((res) => {
@@ -61,21 +58,29 @@ const UserSettings = () => {
   };
 
   useEffect(() => {
-    fetchRepos()
-    if (isGhConnected) {
-      const url = window.location.href;
-      const hasCode = url.includes("?code=");
-      if (hasCode) {
-        const newUrl = url.split("?code=");
-        window.history.pushState({}, "", newUrl[0]);
-        const code = newUrl[1];
-        setGhConnected(true);
-        authrizeGithub(code);
-        getUserInfo();
-      }
+    const url = window.location.href;
+    const hasCode = url.includes("?code=");
+    if (hasCode) {
+      const newUrl = url.split("?code=");
+      window.history.pushState({}, "", newUrl[0]);
+      const code = newUrl[1];
+      authrizeGithub(code);
+      getUserInfo();
+      setGhConnected(true);
     }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect( () => {
+    const fetchRepos = () => {
+      ghapi.get(userData.github.repos_urls).then((res) => {
+        setGitHubRepos(res.data)
+        setLoading(false)
+      });
+    };
+    fetchRepos()
+  }, [isGhConnected])
 
   return (
     <>
