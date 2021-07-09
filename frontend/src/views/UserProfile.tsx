@@ -40,6 +40,13 @@ const UserSettings = () => {
   };
 
 
+  const fetchRepos = () => {
+    ghapi.get(userData.github.repos_urls).then((res) => {
+      setGitHubRepos(res.data)
+      setLoading(false)
+    });
+  };
+
 
   const getUserInfo = () => {
     ghapi.get("/user").then((res) => {
@@ -56,6 +63,9 @@ const UserSettings = () => {
   };
 
   useEffect(() => {
+    if(isGhConnected) {
+      fetchRepos();
+    }
     const url = window.location.href;
     const hasCode = url.includes("?code=");
     if (hasCode) {
@@ -65,20 +75,10 @@ const UserSettings = () => {
       authrizeGithub(code);
       getUserInfo();
       setGhConnected(true);
+      fetchRepos()
     }
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect( () => {
-    const fetchRepos = () => {
-      ghapi.get(userData.github.repos_urls).then((res) => {
-        setGitHubRepos(res.data)
-        setLoading(false)
-      });
-    };
-    fetchRepos()
-  }, [isGhConnected])
 
   return (
     <>
