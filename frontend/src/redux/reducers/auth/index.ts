@@ -49,8 +49,6 @@ const reducers = (state = initialState, action: any) => {
         refresh: payload.refresh,
       };
     case USER_LOADED_SUCCESS:
-      console.log('loaded')
-        console.log(JSON.stringify(payload))
       localStorage.setItem("userData", JSON.stringify(payload));
       return {
         ...state,

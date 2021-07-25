@@ -2,14 +2,15 @@ import  api from "../../api/";
 import { useState, useEffect } from "react";
 import { CheckCircle, XCircle } from "react-feather";
 import { Redirect } from "react-router-dom"
-import { runTask } from "../../redux/actions/task/"
+import {deleteTask, runTask} from "../../redux/actions/task/"
 import { connect } from "react-redux"
 import { checkAuthenticated } from "../../redux/actions/auth/"
 type TaskProps = {
   isAuthenticated?: boolean,
   runTask: any,
+  deleteTask: any
 }
-const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
+const TaskTable = ({ isAuthenticated, runTask, deleteTask }: TaskProps) => {
   const [tasks, setTasks] = useState<any[]>([]);
   const getUserTasks = () => {
     api
@@ -22,6 +23,11 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
   const handleRun = (id: number, event: any) => {
     event.preventDefault()
     runTask(id)
+  }
+
+  const handleDelete = (id:number, event:any) => {
+    event.preventDefault()
+    deleteTask(id)
   }
   useEffect(() => {
     getUserTasks();
@@ -128,6 +134,15 @@ const TaskTable = ({ isAuthenticated, runTask }: TaskProps) => {
                         Run
                       </button>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                          type="submit"
+                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                          onClick={(e) => handleDelete(task.id, e)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -143,4 +158,4 @@ const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated,
 })
 
-export default connect(mapStateToProps, { checkAuthenticated, runTask })(TaskTable);
+export default connect(mapStateToProps, { checkAuthenticated, runTask, deleteTask })(TaskTable);
