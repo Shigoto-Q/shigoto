@@ -1,4 +1,5 @@
-import datetime
+from __future__ import absolute_import
+
 import json
 
 from django.contrib.auth import get_user_model
@@ -12,8 +13,9 @@ from django_celery_beat.models import (
 from rest_framework import serializers
 from rest_framework.fields import Field
 
-from ..models import TaskResult, TaskImage, Task
-from ...github.models import Repository
+from shigoto_q.github.models import Repository
+from shigoto_q.tasks.models import TaskImage, TaskResult, UserTask
+
 
 User = get_user_model()
 
@@ -148,8 +150,9 @@ class TaskPostSerializer(serializers.ModelSerializer):
         kwargs.update({"user": self.context["request"].user.id})
         kwargs.update({"task_name": validated_data.get("name")})
 
-        task_created = Task.objects.create(
+        task_created = UserTask.objects.create(
             task=self.get_task(validated_data),
+            task_type=1,
             crontab=validated_data.get("crontab"),
             interval=validated_data.get("interval"),
             clocked=validated_data.get("clocked"),

@@ -1,6 +1,6 @@
-import enums
+import enum
 
 
-class TaskEnum:
+class TaskEnum(enum.Enum):
     CUSTOM_ENDPOINT = 1
     KUBERNETES_JOB = 2

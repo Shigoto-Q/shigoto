@@ -5,6 +5,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import PeriodicTask
 
+from utils import enums
+
 
 ALL_STATES = sorted(states.ALL_STATES)
 TASK_STATE_CHOICES = sorted(zip(ALL_STATES, ALL_STATES))
@@ -121,10 +123,16 @@ class TaskImage(models.Model):
         unique=True,
         verbose_name=_("Image name"),
         help_text=_("Name of the Docker image inside user namespace"),
+        max_length=255,
     )
 
 
-class Task(PeriodicTask):
-    TaskType = models.TextChoices("TaskType", "CUSTOM_ENDPOINT JOB")
-    type = models.CharField(choices=TaskType)
-    image = models.OneToOneField(TaskImage, null=True, on_delete=models.CASCADE)
+class UserTask(PeriodicTask):
+    task_type = models.PositiveSmallIntegerField(enums.TaskEnum)
+    image = models.OneToOneField(
+        TaskImage,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_related",
+        related_query_name="%(app_label)s_%(class)ss",
+    )
