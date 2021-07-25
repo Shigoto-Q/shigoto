@@ -1,6 +1,8 @@
+from __future__ import absolute_import
+
 from django.contrib import admin
 
-from .models import GitHubProfile, Repository
+from shigoto_q.github.models import GitHubProfile, Repository
 
 
 @admin.register(GitHubProfile)

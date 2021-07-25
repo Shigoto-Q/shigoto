@@ -13,8 +13,7 @@ from django_celery_beat.models import (
 from rest_framework import serializers
 from rest_framework.fields import Field
 
-from shigoto_q.github.models import Repository
-from shigoto_q.tasks.models import TaskImage, TaskResult, UserTask
+from shigoto_q.tasks.models import TaskResult, UserTask
 
 User = get_user_model()
 
