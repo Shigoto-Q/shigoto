@@ -7,6 +7,7 @@ from django_celery_beat.models import PeriodicTask
 
 from utils import enums
 
+
 ALL_STATES = sorted(states.ALL_STATES)
 TASK_STATE_CHOICES = sorted(zip(ALL_STATES, ALL_STATES))
 User = get_user_model()
