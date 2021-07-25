@@ -1,10 +1,14 @@
-from django.contrib.auth import get_user_model
+from __future__ import absolute_import
+
 from rest_framework import generics, mixins, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .api.serializers import GitHubProfileSerializer, RepositorySerializer
-from .models import GitHubProfile, Repository
+from shigoto_q.github.api.serializers import (
+    GitHubProfileSerializer,
+    RepositorySerializer,
+)
+from shigoto_q.github.models import GitHubProfile
 
 
 class GitHubList(
