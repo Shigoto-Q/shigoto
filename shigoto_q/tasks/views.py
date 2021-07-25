@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django_celery_beat.models import (
     ClockedSchedule,
     CrontabSchedule,
@@ -9,9 +9,11 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 from kombu.utils.json import loads
+from rest_framework import mixins
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from config.celery_app import app
 
@@ -89,6 +91,19 @@ def run_task(request, task_id):
         return JsonResponse({"message": f"No valid task for {not_found_name}"})
     task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
     return JsonResponse({"message": "success"})
+
+
+class TaskDeleteView(APIView):
+    def get_object(self, task_id):
+        try:
+            return PeriodicTask.objects.filter(id=task_id)
+        except PeriodicTask.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, task_id, format=None):
+        task = self.get_object(task_id)
+        task.delete()
+        return Response(data=task_id, status=204)
 
 
 class TaskView(ListCreateAPIView):

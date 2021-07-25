@@ -3,6 +3,8 @@ from celery import states
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_celery_beat.models import PeriodicTask
+
 
 ALL_STATES = sorted(states.ALL_STATES)
 TASK_STATE_CHOICES = sorted(zip(ALL_STATES, ALL_STATES))
@@ -104,3 +106,25 @@ class TaskResult(models.Model):
 
     def __str__(self):
         return f"<Task: {self.task_id} {self.status}>"
+
+
+class TaskImage(models.Model):
+    repo_url = models.CharField(
+        max_length=255, verbose_name=_("Url of the GitHub repository")
+    )
+
+    full_name = models.CharField(
+        max_length=255, verbose_name=_("Name of the GitHub repository")
+    )
+
+    image_name = models.CharField(
+        unique=True,
+        verbose_name=_("Image name"),
+        help_text=_("Name of the Docker image inside user namespace"),
+    )
+
+
+class Task(PeriodicTask):
+    TaskType = models.TextChoices("TaskType", "CUSTOM_ENDPOINT JOB")
+    type = models.CharField(choices=TaskType)
+    image = models.OneToOneField(TaskImage, null=True, on_delete=models.CASCADE)
