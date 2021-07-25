@@ -15,6 +15,7 @@ from rest_framework.fields import Field
 
 from shigoto_q.tasks.models import TaskResult, UserTask
 
+
 User = get_user_model()
 
 
@@ -147,6 +148,7 @@ class TaskPostSerializer(serializers.ModelSerializer):
         kwargs = json.loads(validated_data.get("kwargs"))
         kwargs.update({"user": self.context["request"].user.id})
         kwargs.update({"task_name": validated_data.get("name")})
+
         task_created = UserTask.objects.create(
             task=self.get_task(validated_data),
             task_type=1,
