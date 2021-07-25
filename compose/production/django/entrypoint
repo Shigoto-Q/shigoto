@@ -4,11 +4,14 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+# GKE configuration
+gcloud auth activate-service-account $GKE_SERVICE_ACCOUNT_NAME --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+gcloud config set project $GKE_PROJECT_NAME
+gcloud container clusters get-credentials $GKE_CLUSTER_NAME --zone $GKE_ZONE
 
 
 # N.B. If only .env files supported variable expansion...
 export CELERY_BROKER_URL="${REDIS_URL}"
-
 
 if [ -z "${POSTGRES_USER}" ]; then
     base_postgres_image_default_user='postgres'
@@ -19,9 +22,7 @@ export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES
 postgres_ready() {
 python << END
 import sys
-
 import psycopg2
-
 try:
     psycopg2.connect(
         dbname="${POSTGRES_DB}",
@@ -33,7 +34,6 @@ try:
 except psycopg2.OperationalError:
     sys.exit(-1)
 sys.exit(0)
-
 END
 }
 until postgres_ready; do

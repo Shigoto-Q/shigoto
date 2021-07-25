@@ -1,5 +1,4 @@
 from kubernetes import client, config, watch
-import time
 
 
 def initialize_client():
@@ -10,8 +9,14 @@ def initialize_client():
     return bv1
 
 
+def create_docker_image(image, repo_url, full_name):
+    pass
+
+
 def configure_job(name, image, command):
     container = client.V1Container(name=name, image=image, command=command)
+    print("container")
+    print(container)
 
     template = client.V1PodTemplateSpec(
         metadata=client.V1ObjectMeta(labels={"app": name}),
@@ -31,6 +36,7 @@ def configure_job(name, image, command):
 
 
 def create_job(api_instance, job):
+    print("Creating job...")
     api_response = api_instance.create_namespaced_job(body=job, namespace="default")
     print("Job created. status='%s'" % str(api_response.status))
 
@@ -78,12 +84,21 @@ def watch_job(job, namespace):
             # send websocket
             print(event)
 
+    w = watch.Watch()
+    for event in w.stream(
+        func=core_v1.list_namespaced_pod,
+        namespace=namespace,
+        label_selector="{}={}".format(list(label.keys())[0], list(label.values())[0]),
+        timeout_seconds=60,
+    ):
+        if event["object"].status.phase == "Succeeded":
+            print("Job succesfully completed!")
+            return "SUCCESS"
+        print(event["object"].status.phase)
+
 
 def run_job(name, image, command):
     bv1 = initialize_client()
     job = configure_job(name, image, command)
     create_job(bv1, job)
     watch_job(job, "default")
-
-
-run_job("lol", "perl", ["perl", "-Mbignum=bpi", "-wle", "print bpi(2000)"])

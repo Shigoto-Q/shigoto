@@ -12,7 +12,8 @@ from django_celery_beat.models import (
 from rest_framework import serializers
 from rest_framework.fields import Field
 
-from ..models import TaskResult
+from ..models import TaskResult, TaskImage, Task
+from ...github.models import Repository
 
 User = get_user_model()
 
@@ -120,10 +121,8 @@ class TaskGetSerializer(serializers.ModelSerializer):
 
 
 class TaskPostSerializer(serializers.ModelSerializer):
-    task = serializers.SerializerMethodField(read_only=True)
-
     def get_task(self, obj):
-        return getattr(obj, "task", "shigoto_q.tasks.tasks.custom_endpoint")
+        return "shigoto_q.tasks.tasks." + obj.get("task")
 
     class Meta:
         model = PeriodicTask
@@ -149,8 +148,8 @@ class TaskPostSerializer(serializers.ModelSerializer):
         kwargs.update({"user": self.context["request"].user.id})
         kwargs.update({"task_name": validated_data.get("name")})
 
-        task_created = PeriodicTask.objects.create(
-            task="shigoto_q.tasks.tasks.custom_endpoint",
+        task_created = Task.objects.create(
+            task=self.get_task(validated_data),
             crontab=validated_data.get("crontab"),
             interval=validated_data.get("interval"),
             clocked=validated_data.get("clocked"),
@@ -165,5 +164,6 @@ class TaskPostSerializer(serializers.ModelSerializer):
             one_off=validated_data.get("one_off"),
             enabled=validated_data.get("enabled"),
         )
+
         self.context["request"].user.task.add(task_created)
         return task_created

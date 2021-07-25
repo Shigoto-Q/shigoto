@@ -4,6 +4,7 @@ import time
 import requests
 
 from config import celery_app
+from services.kubernetes import kube_service
 
 
 @celery_app.task()
@@ -17,5 +18,5 @@ def custom_endpoint(request_endpoint, headers=None, user=None, task_name=None):
 
 
 @celery_app.task()
-def run_k8s_job():
-    pass
+def k8s_job(repo_url, full_name, image_name, command, user=None, task_name=None):
+    return kube_service.run_job(task_name, image_name, command)

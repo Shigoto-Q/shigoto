@@ -3,6 +3,12 @@ FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
+ENV GOOGLE_APPLICATION_CREDENTIALS /app/keyfiles/gke_account.json
+ENV GKE_SERVICE_ACCOUNT_NAME shigoto-account@tough-canto-314909.iam.gserviceaccount.com
+ENV GKE_PROJECT_NAME tough-canto-314909
+ENV GKE_CLUSTER_NAME shigoto-job-cluster
+ENV GKE_ZONE europe-west1-b
+
 RUN apt-get update \
   # dependencies for building Python packages
   && apt-get install -y build-essential \
