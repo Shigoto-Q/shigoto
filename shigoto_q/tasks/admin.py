@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from shigoto_q.tasks.models import TaskImage, UserTask
+
 try:
     ALLOW_EDITS = settings.DJANGO_CELERY_RESULTS["ALLOW_EDITS"]
 except (AttributeError, KeyError):
@@ -66,3 +68,53 @@ class TaskResultAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TaskResult, TaskResultAdmin)
+
+
+@admin.register(TaskImage)
+class TaskImageAdmin(admin.ModelAdmin):
+    list_display = ("id", "repo_url", "full_name", "image_name")
+
+
+@admin.register(UserTask)
+class UserTaskAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "task",
+        "interval",
+        "crontab",
+        "solar",
+        "clocked",
+        "args",
+        "kwargs",
+        "queue",
+        "exchange",
+        "routing_key",
+        "headers",
+        "priority",
+        "expires",
+        "expire_seconds",
+        "one_off",
+        "start_time",
+        "enabled",
+        "last_run_at",
+        "total_run_count",
+        "date_changed",
+        "description",
+        "task_type",
+        "image",
+    )
+    list_filter = (
+        "interval",
+        "crontab",
+        "solar",
+        "clocked",
+        "expires",
+        "one_off",
+        "start_time",
+        "enabled",
+        "last_run_at",
+        "date_changed",
+        "image",
+    )
+    search_fields = ("name",)
