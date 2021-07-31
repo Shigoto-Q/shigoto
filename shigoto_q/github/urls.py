@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from .views import GitHubList, RepositoryList
+from shigoto_q.github.views import GitHubList, RepositoryList
 
 urlpatterns = [
     path("github/profile/", GitHubList.as_view()),

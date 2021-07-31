@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('github', '0003_auto_20210622_0031'),
+        ("github", "0003_auto_20210622_0031"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='repository',
-            name='language',
-            field=models.CharField(default='', max_length=120),
+            model_name="repository",
+            name="language",
+            field=models.CharField(default="", max_length=120),
         ),
     ]
