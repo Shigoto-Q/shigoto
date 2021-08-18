@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('github', '0002_githubprofile_token'),
+        ("github", "0002_githubprofile_token"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='repository',
-            name='repo_author',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='github.githubprofile'),
+            model_name="repository",
+            name="repo_author",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="github.githubprofile",
+            ),
         ),
     ]

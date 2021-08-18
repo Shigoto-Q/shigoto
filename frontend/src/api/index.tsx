@@ -13,7 +13,6 @@ const api = axios.create({
 
 export const ghapi = axios.create({
     baseURL: "https://api.github.com",
-    headers: { Authorization: `Token ${localStorage.getItem("githubAccess")}` }
 })
 
 ghapi.interceptors.request.use(
