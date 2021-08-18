@@ -9,7 +9,8 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
-from rest_framework.generics import ListCreateAPIView
+from rest_framework import status
+from rest_framework.generics import ListCreateAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -23,7 +24,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskPostSerializer,
     TaskResultSerializer,
 )
-from shigoto_q.tasks.models import TaskResult
+from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
 
 User = get_user_model()

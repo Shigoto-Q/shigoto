@@ -1,11 +1,27 @@
 from __future__ import absolute_import
 
 import typing
+import requests
 
 from kubernetes import client, config, watch
 
+from config.settings.base import env
 
-class Kubernetes:
+
+class ImageService:
+    def __init__(self, repo_url, full_name, image_name):
+        self.repo_url = repo_url
+        self.full_name = full_name
+        self.image_name = image_name
+
+    def create_image(self):
+        res = requests.post(env('DOCKER_SERVICE_URL'), json={'repo_url': self.repo_url,
+                                                             'full_name': self.full_name,
+                                                             'image_name': self.image_name})
+        return res
+
+
+class KubernetesService:
     """
     kubernetes class to create and start job
     """
@@ -77,8 +93,8 @@ class Kubernetes:
                         list(label.keys())[0], list(label.values())[0]
                     ),
                 )
-                .items[0]
-                .metadata.name
+                    .items[0]
+                    .metadata.name
             )
             w = watch.Watch()
             for event in w.stream(
