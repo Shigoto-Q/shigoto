@@ -129,7 +129,7 @@ class TaskImage(models.Model):
     command = models.CharField(
         max_length=255,
         help_text=_("Command to execute after image startup."),
-        verbose_name=_("Command to execute")
+        verbose_name=_("Command to execute"),
     )
 
 

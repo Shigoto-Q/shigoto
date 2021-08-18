@@ -127,28 +127,27 @@ class TaskGetSerializer(serializers.ModelSerializer):
 class TaskImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskImage
-        fields = [
-            "full_name",
-            "repo_url",
-            "image_name",
-            "command"
-        ]
+        fields = ["full_name", "repo_url", "image_name", "command"]
 
     def validate(self, attrs):
         try:
-            image_service = ImageService(repo_url=attrs.get("repo_url"),
-                                         full_name=attrs.get("full_name"),
-                                         image_name=attrs.get("image_name"))
+            image_service = ImageService(
+                repo_url=attrs.get("repo_url"),
+                full_name=attrs.get("full_name"),
+                image_name=attrs.get("image_name"),
+            )
             image_service.create_image()
         except:
-            raise serializers.ValidationError("There was an error while pushing your image to Docker.")
+            raise serializers.ValidationError(
+                "There was an error while pushing your image to Docker."
+            )
 
     def create(self, validated_data):
         image_created = TaskImage.objects.create(
             repo_url=validated_data.get("repo_url"),
             full_name=validated_data.get("full_name"),
             image_name=validated_data.get("image_name"),
-            command=validated_data.get("command")
+            command=validated_data.get("command"),
         )
         return image_created
 
