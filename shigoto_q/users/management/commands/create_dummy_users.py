@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from shigoto_q.tests.factory.users.factory import users_factory
 from shigoto_q.users import models as user_models
-from shigoto_q.users.factory import users as factory_users
 
 
 class Command(BaseCommand):
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         self.stdout.write("Generating new users...")
         users = []
         for _ in range(self._number_of_users):
-            user = factory_users.UserFactory()
+            user = users_factory.UserFactory()
             self.stdout.write(
                 f"Creating User(id={user.id}, username={user.username}, password={self._password})"
             )
@@ -30,7 +30,7 @@ class Command(BaseCommand):
     def _create_super_users(self):
         admins = []
         for _ in range(self._number_of_admins):
-            admin = factory_users.UserFactory(flag_is_superuser=True)
+            admin = users_factory.UserFactory(flag_is_superuser=True)
             self.stdout.write(
                 f"Creating User(id={admin.id}, username={admin.username}, password={self._password})"
             )
