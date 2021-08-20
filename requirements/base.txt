@@ -10,6 +10,8 @@ django-celery-beat  # https://github.com/celery/django-celery-beat
 flower  # https://github.com/mher/flower
 uvicorn[standard]==0.13.4  # https://github.com/encode/uvicorn
 Twisted==20.3.0
+django-elasticsearch-dsl
+python-logstash
 kubernetes
 django_celery_results
 sqlalchemy

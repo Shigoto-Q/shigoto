@@ -57,11 +57,18 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt.token_blacklist",
     "djoser",
     "corsheaders",
     "django_celery_results",
     "djstripe",
+    "django_elasticsearch_dsl",
 ]
+
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": "localhost:9200"},
+}
+
 LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
     "shigoto_q.tasks.apps.TasksConfig",
@@ -168,28 +175,37 @@ LOGGING = {
         },
     },
     "handlers": {
-        "applogfile": {
-            "level": "DEBUG",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": "/webapps/myproject/logs/django/myproject.log",
-            "maxBytes": 1024 * 1024 * 15,  # 15MB
-            "backupCount": 10,
-            "formatter": "simple",
-        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
+        "logstash": {
+            "level": "DEBUG",
+            "class": "logstash.TCPLogstashHandler",
+            "host": "localhost",
+            "port": 5000,
+            "version": 1,
+            "message_type": "django",
+            "fqdn": True,
+            "tags": [],
+        },
     },
     "loggers": {
-        "app1": {
-            "handlers": ["applogfile", "console"],
+        "django.request": {
+            "handlers": ["logstash"],
             "level": "DEBUG",
+            "propagate": True,
         },
-        "app2": {
-            "handlers": ["applogfile", "console"],
+        "django": {
+            "handlers": ["logstash"],
             "level": "DEBUG",
+            "propagate": True,
+        },
+        "shigoto_q.tasks.services.tasks": {
+            "handlers": ["console", "logstash"],
+            "level": "DEBUG",
+            "propagate": True,
         },
     },
 }
