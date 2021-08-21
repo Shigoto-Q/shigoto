@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -266,3 +267,9 @@ sentry_sdk.init(
     environment=env("SENTRY_ENVIRONMENT", default="local"),
     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
 )
+
+# TODO Add these to env
+INFLUXDB_HOST = "influxdb"
+INFLUXDB_PORT = 8086
+INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
+INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
