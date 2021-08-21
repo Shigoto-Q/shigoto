@@ -183,12 +183,12 @@ LOGGING = {
         "logstash": {
             "level": "DEBUG",
             "class": "logstash.TCPLogstashHandler",
-            "host": "localhost",
+            "host": "logstash",
             "port": 5000,
             "version": 1,
             "message_type": "django",
             "fqdn": True,
-            "tags": [],
+            "tags": ["django.request"],
         },
     },
     "loggers": {

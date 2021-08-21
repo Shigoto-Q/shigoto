@@ -23,6 +23,8 @@ services:
     command: /start
     links:
       - redis
+    networks:
+      - shigoto
   react: &react
     build:
       context: .
@@ -35,6 +37,8 @@ services:
       - ./frontend:/app/frontend
     ports:
       - "3000:3000"
+    networks:
+      - shigoto
   postgres:
     build:
       context: .
@@ -48,26 +52,14 @@ services:
       - "5432:5432"
     env_file:
       - ./.envs/.local/.postgres
-
-  docs:
-    image: shigoto_q_local_docs
-    container_name: docs
-    build:
-      context: .
-      dockerfile: ./compose/local/docs/Dockerfile
-    env_file:
-      - ./.envs/.local/.django
-    volumes:
-      - ./docs:/docs:z
-      - ./config:/app/config:z
-      - ./shigoto_q:/app/shigoto_q:z
-    ports:
-      - "7000:7000"
-    command: /start-docs
+    networks:
+      - shigoto
 
   redis:
     image: redis:5.0
     container_name: redis
+    networks:
+      - shigoto
 
   celeryworker:
     <<: *django
@@ -78,6 +70,8 @@ services:
       - postgres
     ports: []
     command: /start-celeryworker
+    networks:
+      - shigoto
 
   celerybeat:
     <<: *django
@@ -88,3 +82,9 @@ services:
       - postgres
     ports: []
     command: /start-celerybeat
+    networks:
+      - shigoto
+
+networks:
+  shigoto:
+    driver: bridge
