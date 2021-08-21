@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -57,11 +58,18 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt.token_blacklist",
     "djoser",
     "corsheaders",
     "django_celery_results",
     "djstripe",
+    "django_elasticsearch_dsl",
 ]
+
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": "localhost:9200"},
+}
+
 LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
     "shigoto_q.tasks.apps.TasksConfig",
@@ -162,19 +170,45 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
-        }
+        "simple": {
+            "format": "[%(asctime)s] %(levelname)s|%(name)s|%(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
     },
     "handlers": {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        }
+            "formatter": "simple",
+        },
+        "logstash": {
+            "level": "DEBUG",
+            "class": "logstash.TCPLogstashHandler",
+            "host": "logstash",
+            "port": 5000,
+            "version": 1,
+            "message_type": "django",
+            "fqdn": True,
+            "tags": ["django.request"],
+        },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django.request": {
+            "handlers": ["logstash"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["logstash"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "shigoto_q.tasks.services.tasks": {
+            "handlers": ["console", "logstash"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }
 
 if USE_TZ:
@@ -233,3 +267,9 @@ sentry_sdk.init(
     environment=env("SENTRY_ENVIRONMENT", default="local"),
     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
 )
+
+# TODO Add these to env
+INFLUXDB_HOST = "influxdb"
+INFLUXDB_PORT = 8086
+INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
+INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"

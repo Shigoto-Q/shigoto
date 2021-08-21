@@ -9,7 +9,7 @@ User = get_user_model()
 class RepositorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
-        fields = ["repo_url", "full_name", "language"]
+        fields = ["id", "repo_url", "full_name", "language"]
 
     def create(self, validated_data):
         repo = Repository.objects.create(**validated_data)

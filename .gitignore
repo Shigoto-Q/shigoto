@@ -1,5 +1,8 @@
 ### Python template
+
+./keyfiles
 # Byte-compiled / optimized / DLL files
+#
 __pycache__/
 *.py[cod]
 *$py.class
@@ -278,4 +281,3 @@ shigoto_q/media/
 !.envs/.local/
 
 /keyfiles
-services/kubernetes/test_docker/Dockerfile

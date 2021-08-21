@@ -1,6 +1,7 @@
+from __future__ import absolute_import
+
 from django.contrib.auth import get_user_model
-from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.http import Http404
 from django_celery_beat.models import (
     ClockedSchedule,
     CrontabSchedule,
@@ -8,14 +9,12 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
-from kombu.utils.json import loads
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from config.celery_app import app
-
-from .api.serializers import (
+from shigoto_q.tasks.api.serializers import (
     ClockedSerializer,
     CrontabSerializer,
     IntervalSerializer,
@@ -24,71 +23,64 @@ from .api.serializers import (
     TaskPostSerializer,
     TaskResultSerializer,
 )
-from .models import TaskResult
+from shigoto_q.tasks.models import TaskResult
+from shigoto_q.tasks.services import tasks as task_services
 
 User = get_user_model()
 
 
+class RunTaskView(APIView):
+    """
+    An APIView to run the given task
+    get:
+        runs the task
+    """
+
+    def get_object(self, task_id: int):
+        try:
+            return task_services.run_task(app, task_id)
+        except Exception:
+            return Http404
+
+    def get(self, request, task_id: int, *args, **kwargs):
+        result = self.get_object(task_id)
+        return Response(result)
+
+
 class TaskResultView(APIView):
-    def get_object(self, task_id):
+    """
+    View to return task results
+    """
+
+    def get_object(self, task_id: int):
         try:
             return TaskResult.objects.filter(user=self.request.user, task_id=task_id)
         except TaskResult.DoesNotExist:
             return Http404
 
-    def get(self, request, task_id, *args, **kwargs):
+    def get(self, request, task_id: int, *args, **kwargs):
         task_result = self.get_object(task_id)
         serializer = TaskResultSerializer(task_result, many=True)
         return Response(serializer.data)
 
 
-def run_task(request, task_id):
+class TaskDeleteView(APIView):
     """
-    get:
-        Runs a task with the given task id
+    View to delete the given task id
+    delete:
+        deletes the task
     """
-    app.loader.import_default_modules()
-    tasks = PeriodicTask.objects.filter(id=task_id)
-    celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
-    if any(task is None for task in tasks):
-        for task in tasks:
-            if task is None:
-                break
-        not_found_name = tasks[0].name
-        return JsonResponse({"message": f"No valid task for {not_found_name}"})
-    task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
-    return JsonResponse({"message": "success"})
 
-
-class TaskResultView(APIView):
-    def get_object(self, task_id):
+    def get_object(self, task_id: int):
         try:
-            return TaskResult.objects.filter(user=self.request.user, task_id=task_id)
-        except TaskResult.DoesNotExist:
-            return Http404
+            return PeriodicTask.objects.filter(id=task_id)
+        except PeriodicTask.DoesNotExist:
+            raise Http404
 
-    def get(self, request, task_id, *args, **kwargs):
-        task_result = self.get_object(task_id)
-        serializer = TaskResultSerializer(task_result, many=True)
-        return Response(serializer.data)
-
-
-def run_task(request, task_id):
-    """
-    get:
-        Runs a task with the given task id
-    """
-    app.loader.import_default_modules()
-    tasks = PeriodicTask.objects.filter(id=task_id)
-    celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
-    if any(task is None for task in tasks):
-        for task in tasks:
-            if task is None:
-                break
-        not_found_name = tasks[0].name
-        return JsonResponse({"message": f"No valid task for {not_found_name}"})
-    task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
-    return JsonResponse({"message": "success"})
+    def delete(self, request, task_id: int, format=None):
+        task = self.get_object(task_id)
+        task.delete()
+        return Response(data=task_id, status=204)
 
 
 class TaskView(ListCreateAPIView):
