@@ -1,26 +1,22 @@
 from __future__ import absolute_import
 
+import json
 import typing
 import requests
 
 from kubernetes import client, config, watch
 
-from config.settings.base import env
+from django.conf import settings
 
 
 class ImageService:
-    def __init__(self, repo_url, full_name, image_name):
-        self.repo_url = repo_url
-        self.full_name = full_name
-        self.image_name = image_name
-
-    def create_image(self):
+    def create_image(self, repo_url, full_name, image_name):
         res = requests.post(
-            env("DOCKER_SERVICE_URL"),
+            settings.DOCKER_IMAGE_SERVICE,
             json={
-                "repo_url": self.repo_url,
-                "full_name": self.full_name,
-                "image_name": self.image_name,
+                "repo_url": repo_url,
+                "full_name": full_name,
+                "image_name": image_name,
             },
         )
         return res
@@ -31,22 +27,36 @@ class KubernetesService:
     kubernetes class to create and start job
     """
 
-    def __init__(self, name: str, image: str, command: typing.List[str]):
+    def __init__(
+        self,
+        repo_url: str,
+        full_name: str,
+        image_name: str,
+        command: typing.List[str],
+        user: int,
+        task_name: str,
+    ):
         config.load_kube_config()
         self._api_instance = client.BatchV1Api()
-        self.name = name
-        self.image = image
-        self.command = command
+        self.repo_url = repo_url
+        self.image_name = image_name
+        self.full_name = full_name
+        self.command = ["echo", "looool"]
+        self.user = user
+        self.task_name = task_name
         self._job = None
+        self.image_prefix = "bogdanp3trovic"
 
     def _configure_job(self):
+        print(self.command)
         container = client.V1Container(
-            name=self.name,
-            image=self.image,
+            name=self.task_name,
+            image=self.image_prefix + "/" + self.image_name,
             command=self.command,
         )
+
         template = client.V1PodTemplateSpec(
-            metadata=client.V1ObjectMeta(labels={"app": self.name}),
+            metadata=client.V1ObjectMeta(labels={"app": self.task_name}),
             spec=client.V1PodSpec(restart_policy="Never", containers=[container]),
         )
 
@@ -54,7 +64,7 @@ class KubernetesService:
         return client.V1Job(
             api_version="batch/v1",
             kind="Job",
-            metadata=client.V1ObjectMeta(name=self.name),
+            metadata=client.V1ObjectMeta(name=self.task_name),
             spec=spec,
         )
 
@@ -67,6 +77,7 @@ class KubernetesService:
 
     def watch_job(self, namespace: str = "default"):
         label = self._job.spec.template.metadata.labels
+        print(label)
         config.load_kube_config()
         w = watch.Watch()
         core_v1 = client.CoreV1Api()
@@ -80,10 +91,10 @@ class KubernetesService:
             ),
             timeout_seconds=60,
         ):
-            if event["object"].status.phase == "Running":
-                print("Job running!")
+            if event["object"].status.phase != "Pending":
                 job_running = True
                 w.stop()
+
             # event.type: ADDED, MODIFIED, DELETED
             if event["type"] == "DELETED":
                 # Pod was deleted while we were waiting for it to start.

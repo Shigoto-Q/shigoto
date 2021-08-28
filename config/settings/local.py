@@ -40,3 +40,6 @@ if env("USE_DOCKER") == "yes":
 
 INSTALLED_APPS += ["django_extensions"]  # noqa F405
 CELERY_TASK_EAGER_PROPAGATES = True
+DOCKER_IMAGE_SERVICE = env(
+    "DOCKER_IMAGE_SERVICE", default="http://host.docker.internal:5050/docker"
+)

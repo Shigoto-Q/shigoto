@@ -38,14 +38,17 @@ class RunTaskView(APIView):
     """
 
     def get_object(self, task_id: int):
-        try:
-            return task_services.run_task(app, task_id)
-        except Exception:
-            return Http404
+        return task_services.run_task(app, task_id)
+        # try:
+        #    return task_services.run_task(app, task_id)
+        # except Exception:
+        #    return None
 
     def get(self, request, task_id: int, *args, **kwargs):
         result = self.get_object(task_id)
-        return Response(result)
+        if result:
+            return Response(result)
+        return Response(status=404)
 
 
 class TaskResultView(APIView):

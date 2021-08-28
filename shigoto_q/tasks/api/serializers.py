@@ -18,6 +18,7 @@ from services.job_services import ImageService
 from shigoto_q.tasks.models import TaskResult, UserTask
 
 from shigoto_q.tasks.models import TaskImage
+from utils.enums import TaskEnum
 
 User = get_user_model()
 
@@ -131,25 +132,17 @@ class TaskImageSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         try:
-            image_service = ImageService(
+            image_service = ImageService()
+            image_service.create_image(
                 repo_url=attrs.get("repo_url"),
                 full_name=attrs.get("full_name"),
                 image_name=attrs.get("image_name"),
             )
-            image_service.create_image()
+            return attrs
         except:
             raise serializers.ValidationError(
                 "There was an error while pushing your image to Docker."
             )
-
-    def create(self, validated_data):
-        image_created = TaskImage.objects.create(
-            repo_url=validated_data.get("repo_url"),
-            full_name=validated_data.get("full_name"),
-            image_name=validated_data.get("image_name"),
-            command=validated_data.get("command"),
-        )
-        return image_created
 
 
 class TaskPostSerializer(serializers.ModelSerializer):
@@ -184,7 +177,8 @@ class TaskPostSerializer(serializers.ModelSerializer):
 
         image = None
 
-        if validated_data.get("task_type") == 2:
+        if validated_data.get("task_type") == TaskEnum.KUBERNETES_JOB.value:
+            print("yes")
             image_serializer = TaskImageSerializer(data=kwargs)
             if image_serializer.is_valid(raise_exception=True):
                 image = image_serializer.save()
