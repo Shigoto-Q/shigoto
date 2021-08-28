@@ -11,15 +11,15 @@
      <a href=""><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"></a>
     <a href="><img alt="codefactor" src="https://www.codefactor.io/repository/github/shigoto-q/shigoto_q/badge"></a>
       <a href="https://shigoto.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
-    
+
 </p>
 
 ## Demo
 <p align="center">
-<img src="https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif" width="320" alt="Shigoto Logo" />       
+<img src="https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif" width="320" alt="Shigoto Logo" />
  </p>
-                 
-                 
+
+
 ## About
 A [Django](https://www.djangoproject.com/) project for easy cron job, task planning and monitoring.
 
@@ -140,20 +140,23 @@ For continuous integration, a [TravisCI](https://travis-ci.com/) configuration `
 $ cd shigoto_q/frontend/
 $ npm i
 ```
+###### Running ELK Stack
+You can run ELK stack in docker swarm
+```sh
+$ docker swarm init
+$ docker stack deploy -c docker-elk-stack.yml elk
+$ docker stack services elk
+```
+Go to `localhost:5601` and log in.
+###### Running ELK stack as part of docker-compose
+```sh
+$ COMPOSE_FILE=docker-compose.yml:docker-compose-kibana-optional.yml
+$ docker-compose up
+```
 ######  Build the front end with
 ```shell script
 $ npm run build
 ```
-###### After you build the frontend go back to the root and build the containers
-```shell script
-$ cd ..
-$ docker-compose -f local.yml build
-```
-###### After the containers are built run
-```shell script
-$ docker-compose -f local.yml up
-```
-
 ## Running Tests
 
 To run tests, run the following command
