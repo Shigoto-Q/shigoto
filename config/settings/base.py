@@ -177,7 +177,7 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
@@ -195,12 +195,12 @@ LOGGING = {
     "loggers": {
         "django.request": {
             "handlers": ["logstash"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
         "django": {
             "handlers": ["logstash"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
         "shigoto_q.tasks.services.tasks": {

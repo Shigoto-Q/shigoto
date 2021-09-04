@@ -4,12 +4,6 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-# GKE configuration
-gcloud auth activate-service-account $GKE_SERVICE_ACCOUNT_NAME --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-gcloud config set project $GKE_PROJECT_NAME
-gcloud container clusters get-credentials $GKE_CLUSTER_NAME --zone $GKE_ZONE
-
-
 # N.B. If only .env files supported variable expansion...
 export CELERY_BROKER_URL="${REDIS_URL}"
 
