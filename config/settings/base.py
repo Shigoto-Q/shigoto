@@ -245,7 +245,7 @@ DJOSER = {
         "token_create": ["rest_framework.permissions.AllowAny"],
     },
 }
-# CORS_URLS_REGEX = r"^/api/v1/.*$"
+
 CORS_ALLOW_ALL_ORIGIN = True
 
 SENTRY_DSN = env("SENTRY_DSN")
