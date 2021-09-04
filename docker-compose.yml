@@ -72,4 +72,7 @@ services:
       - postgres
     ports: []
     command: /start-celerybeat
-
+    
+networks:
+  shigoto:
+    name: shigoto_network
