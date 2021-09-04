@@ -1,4 +1,4 @@
-name: Typing check(mypy)
+name: MyPy
 
 on: [push]
 
