@@ -1,6 +1,6 @@
 name: Flake8 Lint
 on:
-  pull_request:
+  push:
     paths:
       - '*.py'
 
