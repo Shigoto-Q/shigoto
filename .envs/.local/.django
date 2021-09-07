@@ -6,6 +6,7 @@ IPYTHONDIR=/app/.ipython
 # ------------------------------------------------------------------------------
 REDIS_URL=redis://redis:6379/0
 DOCKER_SERVICE_URL=http://host.docker.internal:5050/docker
+DOCKER_IMAGE_PREFIX=shigoto
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -20,7 +21,7 @@ TEST_SECRET_KEY="sk_test_518h2jFItAhzYJ7dgGweqmPd6Nvt8f9i2JxMdSxJZlh9j2fARaWnW03
 WEBHOOK_SECRET="whsec_8v7igqtCb4yNSNqQHsLD9KJiq7k4TK7F"
 
 # Sentry
-SENTRY_DSN="https://ccc28d65c4364c34b9c79292ba55e724@o965361.ingest.sentry.io/5916148"
+SENTRY_DSN="https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/5745020"
 SENTRY_ENVIRONMENT=local
 
 

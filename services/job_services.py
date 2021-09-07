@@ -41,11 +41,11 @@ class KubernetesService:
         self.repo_url = repo_url
         self.image_name = image_name
         self.full_name = full_name
-        self.command = ["echo", "looool"]
+        self.command = command
         self.user = user
         self.task_name = task_name
         self._job = None
-        self.image_prefix = "bogdanp3trovic"
+        self.image_prefix = settings.DOCKER_IMAGE_PREFIX
 
     def _configure_job(self):
         print(self.command)
