@@ -1,11 +1,7 @@
-import os
-
-from asgiref.sync import async_to_sync
 from celery.signals import (
     celeryd_after_setup,
     task_failure,
     task_prerun,
-    task_received,
     task_success,
 )
 from django.contrib.auth import get_user_model
