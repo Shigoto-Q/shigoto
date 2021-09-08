@@ -3,6 +3,12 @@ FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
+ENV GOOGLE_APPLICATION_CREDENTIALS /app/keyfiles/gke_account.json
+ENV GKE_SERVICE_ACCOUNT_NAME shigoto-account@tough-canto-314909.iam.gserviceaccount.com
+ENV GKE_PROJECT_NAME tough-canto-314909
+ENV GKE_CLUSTER_NAME shigoto-job-cluster
+ENV GKE_ZONE europe-west1-b
+
 RUN apt-get update \
   && apt-get install -y build-essential \
   && apt-get install -y libpq-dev \
@@ -37,8 +43,6 @@ RUN chmod +x /start-celerybeat
 COPY ./compose/local/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
-
-COPY ./keyfiles/config /root/.kube/config
 
 WORKDIR /app
 

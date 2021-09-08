@@ -126,12 +126,6 @@ class TaskImage(models.Model):
         max_length=255,
     )
 
-    command = models.CharField(
-        max_length=255,
-        help_text=_("Command to execute after image startup."),
-        verbose_name=_("Command to execute"),
-    )
-
 
 class UserTask(PeriodicTask):
     task_type = models.PositiveSmallIntegerField(enums.TaskEnum)

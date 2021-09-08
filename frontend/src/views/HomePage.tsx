@@ -12,6 +12,18 @@ const homeTransition = {
 class Home extends Component {
     constructor(props: any) {
         super(props);
+
+        this.particlesInit = this.particlesInit.bind(this);
+        this.particlesLoaded = this.particlesLoaded.bind(this);
+    }
+    particlesInit(main: any) {
+        console.log(main);
+
+        // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
+    }
+
+    particlesLoaded(container: any) {
+        console.log(container);
     }
 
     render() {

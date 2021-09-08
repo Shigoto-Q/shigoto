@@ -11,14 +11,10 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 from rest_framework import serializers
-from rest_framework.fields import Field, CharField
-from rest_framework.validators import UniqueValidator
+from rest_framework.fields import Field
 
-from services.job_services import ImageService
 from shigoto_q.tasks.models import TaskResult, UserTask
 
-from shigoto_q.tasks.models import TaskImage
-from utils.enums import TaskEnum
 
 User = get_user_model()
 
@@ -125,37 +121,15 @@ class TaskGetSerializer(serializers.ModelSerializer):
         ]
 
 
-class TaskImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaskImage
-        fields = ["full_name", "repo_url", "image_name", "command"]
-
-    def validate(self, attrs):
-        try:
-            image_service = ImageService()
-            image_service.create_image(
-                repo_url=attrs.get("repo_url"),
-                full_name=attrs.get("full_name"),
-                image_name=attrs.get("image_name"),
-            )
-            return attrs
-        except:
-            raise serializers.ValidationError(
-                "There was an error while pushing your image to Docker."
-            )
-
-
 class TaskPostSerializer(serializers.ModelSerializer):
     def get_task(self, obj):
         return "shigoto_q.tasks.tasks." + obj.get("task")
 
     class Meta:
-        model = UserTask
+        model = PeriodicTask
         fields = [
             "name",
             "task",
-            "task_type",
-            "image",
             "crontab",
             "interval",
             "clocked",
@@ -175,18 +149,9 @@ class TaskPostSerializer(serializers.ModelSerializer):
         kwargs.update({"user": self.context["request"].user.id})
         kwargs.update({"task_name": validated_data.get("name")})
 
-        image = None
-
-        if validated_data.get("task_type") == TaskEnum.KUBERNETES_JOB.value:
-            print("yes")
-            image_serializer = TaskImageSerializer(data=kwargs)
-            if image_serializer.is_valid(raise_exception=True):
-                image = image_serializer.save()
-
         task_created = UserTask.objects.create(
             task=self.get_task(validated_data),
-            task_type=validated_data.get("task_type"),
-            image=image,
+            task_type=1,
             crontab=validated_data.get("crontab"),
             interval=validated_data.get("interval"),
             clocked=validated_data.get("clocked"),

@@ -89,7 +89,6 @@ const TaskCreate = ({isAuthenticated, user, createTask} : TaskProps) => {
                     imageName: imageName,
                     command: command
                 }
-                console.log(selectedCron.id)
                 createTask(taskName, selectedType.value, selectedCron.id, kwargsJob, oneoff, enabled);
         }
     };

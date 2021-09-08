@@ -8,10 +8,8 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.documentation import include_docs_urls
 
-from shigoto import views as shigoto_views
-
 urlpatterns = [
-    path("", shigoto_views.HomePageView.as_view()),
+    path("", TemplateView.as_view(template_name="index.html"), name="home"),
     path(settings.ADMIN_URL, admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

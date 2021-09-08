@@ -9,8 +9,7 @@ from django_celery_beat.models import (
     PeriodicTask,
     SolarSchedule,
 )
-from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -24,7 +23,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskPostSerializer,
     TaskResultSerializer,
 )
-from shigoto_q.tasks.models import TaskResult, UserTask
+from shigoto_q.tasks.models import TaskResult
 from shigoto_q.tasks.services import tasks as task_services
 
 User = get_user_model()
@@ -38,17 +37,14 @@ class RunTaskView(APIView):
     """
 
     def get_object(self, task_id: int):
-        return task_services.run_task(app, task_id)
-        # try:
-        #    return task_services.run_task(app, task_id)
-        # except Exception:
-        #    return None
+        try:
+            return task_services.run_task(app, task_id)
+        except Exception:
+            return Http404
 
     def get(self, request, task_id: int, *args, **kwargs):
         result = self.get_object(task_id)
-        if result:
-            return Response(result)
-        return Response(status=404)
+        return Response(result)
 
 
 class TaskResultView(APIView):

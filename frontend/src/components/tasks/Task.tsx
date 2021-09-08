@@ -5,7 +5,6 @@ import { createTask } from "../../redux/actions/task/";
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { Check, Menu, } from "react-feather";
-import SpinnerComponent from "../Spinner";
 
 type TaskProps = {
   isAuthenticated: boolean;
@@ -19,25 +18,21 @@ function classNames(...classes: any) {
 const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
   const [enabled, setEnabled] = useState(true);
   const [oneoff, setOneoff] = useState(false);
+  const [taskName, setTaskName] = useState("");
   const [crontab, setCrontab] = useState({ value: "1 * * *", id: 1 });
   const [kwargs, setKwargs] = useState("");
-  const [taskName, setTaskName] = useState("");
   const userCrons = JSON.parse(user || "{}").crontab;
-  let actualCrons:any = []
-  if(userCrons) {
-      actualCrons = userCrons.map((item: any) => {
-      return {
-        value: [
-          item.minute,
-          item.hour,
-          item.day_of_month,
-          item.month_of_year,
-        ].join(" "),
-        id: item.id,
-      };
-    });
-  }
-
+  const actualCrons = userCrons.map((item: any) => {
+    return {
+      value: [
+        item.minute,
+        item.hour,
+        item.day_of_month,
+        item.month_of_year,
+      ].join(" "),
+      id: item.id,
+    };
+  });
   const handleSubmit = (event: any) => {
     event.preventDefault();
     createTask(taskName, crontab.id, kwargs, oneoff, enabled);
@@ -128,6 +123,7 @@ const CreateTask = ({ isAuthenticated, user, createTask }: TaskProps) => {
                         />
                       </span>
                     </Listbox.Button>
+
                     <Transition
                       show={open}
                       as={Fragment}

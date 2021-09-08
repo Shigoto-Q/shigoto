@@ -12,7 +12,7 @@ type Kwargs = {
 
 export const createTask = (
   taskName: string,
-  task: string,
+  taskType: string,
   crontab: number,
   kwargs: Kwargs,
   oneoff: boolean,
@@ -24,14 +24,11 @@ export const createTask = (
     },
   };
   let kw = {}
-  let taskType = undefined;
-  if(task === "custom_endpoint") {
-    taskType = 1
+  if(taskType === "custom_endpoint") {
     kw = {
       "request_endpoint": kwargs.requestEndpoint
     }
-  } else if (task === "k8s_job") {
-    taskType = 2
+  } else if (taskType === "k8s_job") {
     kw = {
       "repo_url" : kwargs.repoUrl,
       "full_name" : kwargs.repoName,
@@ -40,19 +37,15 @@ export const createTask = (
     }
   }
 
-
   const body = {
     name: taskName,
-    task: task,
-    task_type: taskType,
+    task: taskType,
     crontab: crontab,
     args: '',
     kwargs: JSON.stringify(kw),
     one_off: oneoff,
     enabled: enabled,
   };
-
-  console.log(kw)
 
 
   await api

@@ -87,4 +87,4 @@ services:
 
 networks:
   shigoto:
-    name: shigoto_network
+    driver: bridge

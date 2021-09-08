@@ -89,6 +89,7 @@ export const login = (username: string, password: string) => async (dispatch: Di
         username: username,
         password: password
     }
+    console.log(api.defaults)
     await bareAPI.post('/auth/jwt/create/', body, config)
         .then(res => {
             dispatch({
