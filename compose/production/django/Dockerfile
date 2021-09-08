@@ -1,7 +1,11 @@
-
 FROM python:3.8-slim-buster
 
 ENV PYTHONUNBUFFERED 1
+
+#ENV GKE_SERVICE_ACCOUNT_NAME shigoto-account@tough-canto-314909.iam.gserviceaccount.com
+#ENV GKE_PROJECT_NAME tough-canto-314909
+#ENV GKE_CLUSTER_NAME shigoto-job-cluster
+#ENV GKE_ZONE europe-west1-b
 
 RUN apt-get update \
   # dependencies for building Python packages
@@ -12,7 +16,17 @@ RUN apt-get update \
   && apt-get install -y gettext \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && apt-get install gnupg2 -y \
+  && apt-get install curl -y \
   && rm -rf /var/lib/apt/lists/*
+
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" \
+  | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+  | apt-key --keyring /usr/share/keyrings/cloud.google.gpg \
+    add - && apt-get update -y \
+   && apt-get install google-cloud-sdk -y
+RUN apt-get install kubectl
 
 RUN addgroup --system django \
     && adduser --system --ingroup django django
@@ -44,6 +58,24 @@ COPY ./compose/production/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
 COPY --chown=django:django . /app
+
+COPY ./config /config
+
+COPY ./services /services
+
+COPY ./shigoto_q /shigoto_q
+
+COPY ./utils /utils
+
+COPY ./constants.py /constants.py
+
+COPY ./manage.py /manage.py
+
+COPY ./pytest.ini ./pytest.ini
+
+COPY ./setup.cfg /setup.cfg
+
+
 
 USER django
 

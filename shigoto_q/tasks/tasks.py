@@ -4,7 +4,7 @@ import time
 import requests
 
 from config import celery_app
-from services import kubernetes as kube_service
+from services import job_services as kube_service
 
 
 @celery_app.task()
@@ -18,14 +18,9 @@ def custom_endpoint(request_endpoint, headers=None, user=None, task_name=None):
 
 
 @celery_app.task()
-def k8s_job(
-    repo_url,
-    full_name,
-    image_name,
-    command,
-    user=None,
-    task_name=None,
-):
-    kubernetes = kube_service.KubernetesService(task_name, image_name, command)
+def k8s_job(repo_url, full_name, image_name, command, user, task_name):
+    kubernetes = kube_service.KubernetesService(
+        repo_url, full_name, image_name, command, user, task_name
+    )
     kubernetes.create_job()
     kubernetes.watch_job()

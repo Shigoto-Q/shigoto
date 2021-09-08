@@ -5,6 +5,8 @@ IPYTHONDIR=/app/.ipython
 # Redis
 # ------------------------------------------------------------------------------
 REDIS_URL=redis://redis:6379/0
+DOCKER_SERVICE_URL=http://host.docker.internal:5050/docker
+DOCKER_IMAGE_PREFIX=shigoto
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -23,8 +25,4 @@ SENTRY_DSN="https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/57
 SENTRY_ENVIRONMENT=local
 
 
-GOOGLE_APPLICATION_CREDENTIALS=/app/keyfiles/gke_account.json
-GKE_SERVICE_ACCOUNT_NAME=shigoto-account@tough-canto-314909.iam.gserviceaccount.com
-GKE_PROJECT_NAME=tough-canto-314909
-GKE_CLUSTER_NAME=shigoto-job-cluster
-GKE_ZONE=europe-west1-b
+
