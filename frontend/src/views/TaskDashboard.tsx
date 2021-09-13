@@ -126,35 +126,6 @@ class Dashboard extends Component<TaskStatus, any> {
                 <div className="relative flex flex-col flex-1">
                     <main>
                         <div className="grid grid-cols-4 gap-4">
-                            <div>
-                                <ButtonToolbar>
-                                    <Button onClick={this.toggleDrawer}>Open</Button>
-                                </ButtonToolbar>
-                                <Drawer
-                                    show={this.state.show}
-                                    onHide={this.close}
-                                    backdropclassName="dark:text-gray-200 transition-colors duration-200  bg-white dark:bg-gray-700"
-                                    dialogClassName="dark:text-gray-200 transition-colors duration-200  bg-white dark:bg-gray-700"
-
-                                >
-                                    <Drawer.Header
-                                        className="dark:text-gray-200 transition-colors duration-200 dark:bg-gray-700 "
-                                    >
-                                        <Drawer.Title>Create a task</Drawer.Title>
-                                    </Drawer.Header>
-                                    <Drawer.Body
-                                        className="dark:text-gray-200 transition-colors duration-200 dark:bg-gray-700 "
-
-                                    >
-                                    </Drawer.Body>
-                                    <Drawer.Footer
-                                        className="dark:text-gray-200 transition-colors duration-200  bg-white dark:bg-gray-700 "
-                                    >
-                                        <Button onClick={this.close} appearance="primary">Confirm</Button>
-                                        <Button onClick={this.close} appearance="subtle">Cancel</Button>
-                                    </Drawer.Footer>
-                                </Drawer>
-                            </div>
                             <TaskCard
                                 cats={this.state.time}
                                 label="Successful"

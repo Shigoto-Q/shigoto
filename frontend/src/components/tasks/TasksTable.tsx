@@ -73,6 +73,16 @@ const TaskTable = ({ isAuthenticated, runTask, deleteTask }: TaskProps) => {
                   >
                     Enabled
                   </th>
+                  <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500  dark:text-gray-200 uppercase tracking-wider"
+                  >
+                  </th>
+                  <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500  dark:text-gray-200 uppercase tracking-wider"
+                  >
+                  </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>
                   </th>
@@ -125,7 +135,7 @@ const TaskTable = ({ isAuthenticated, runTask, deleteTask }: TaskProps) => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200">
                       {task.enabled ? <CheckCircle /> : <XCircle />}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200">
                       <button
                         type="submit"
                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-400 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
@@ -134,7 +144,7 @@ const TaskTable = ({ isAuthenticated, runTask, deleteTask }: TaskProps) => {
                         Run
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200">
                       <button
                           type="submit"
                           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
