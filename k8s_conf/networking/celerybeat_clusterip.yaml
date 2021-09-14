@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: celerybeat-clusterip
+  name: celerybeat
 spec:
   ports:
   - port: 8000

@@ -14,23 +14,46 @@ spec:
       labels:
         component: django
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
         - name: django
           image: bogdanp3trovic/shigoto_q_production_django
           ports:
             - containerPort: 8000
-          volumeMounts:
-            - name: sharedpv
-              mountPath: /app
-              readOnly: true
           args:
             - /start
           env:
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: DJANGO_SECRET_KEY
+                  name: django-secret
+            - name: WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: WEBHOOK_SECRET
+                  name: django-secret
+            - name: LIVE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: LIVE_SECRET_KEY
+                  name: django-secret
             - name: CELERY_FLOWER_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: CELERY_FLOWER_PASSWORD
                   name: django-configmap
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  key: SENTRY_DSN
+                  name: django-secret
+            - name: TEST_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: TEST_SECRET_KEY
+                  name: django-secret
             - name: CELERY_FLOWER_USER
               valueFrom:
                 configMapKeyRef:
@@ -41,40 +64,10 @@ spec:
                 configMapKeyRef:
                   key: DOCKER_SERVICE_URL
                   name: django-configmap
-            - name: GKE_CLUSTER_NAME
-              valueFrom:
-                configMapKeyRef:
-                  key: GKE_CLUSTER_NAME
-                  name: django-configmap
-            - name: GKE_PROJECT_NAME
-              valueFrom:
-                configMapKeyRef:
-                  key: GKE_PROJECT_NAME
-                  name: django-configmap
-            - name: GKE_SERVICE_ACCOUNT_NAME
-              valueFrom:
-                configMapKeyRef:
-                  key: GKE_SERVICE_ACCOUNT_NAME
-                  name: django-configmap
-            - name: GKE_ZONE
-              valueFrom:
-                configMapKeyRef:
-                  key: GKE_ZONE
-                  name: django-configmap
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              valueFrom:
-                configMapKeyRef:
-                  key: GOOGLE_APPLICATION_CREDENTIALS
-                  name: django-configmap
             - name: IPYTHONDIR
               valueFrom:
                 configMapKeyRef:
                   key: IPYTHONDIR
-                  name: django-configmap
-            - name: LIVE_SECRET_KEY
-              valueFrom:
-                configMapKeyRef:
-                  key: LIVE_SECRET_KEY
                   name: django-configmap
             - name: POSTGRES_DB
               valueFrom:
@@ -106,32 +99,17 @@ spec:
                 configMapKeyRef:
                   key: REDIS_URL
                   name: django-configmap
-            - name: SENTRY_DSN
-              valueFrom:
-                configMapKeyRef:
-                  key: SENTRY_DSN
-                  name: django-configmap
             - name: SENTRY_ENVIRONMENT
               valueFrom:
                 configMapKeyRef:
                   key: SENTRY_ENVIRONMENT
-                  name: django-configmap
-            - name: TEST_SECRET_KEY
-              valueFrom:
-                configMapKeyRef:
-                  key: TEST_SECRET_KEY
                   name: django-configmap
             - name: USE_DOCKER
               valueFrom:
                 configMapKeyRef:
                   key: USE_DOCKER
                   name: django-configmap
-            - name: WEBHOOK_SECRET
+            - name: HOST_IP
               valueFrom:
-                configMapKeyRef:
-                  key: WEBHOOK_SECRET
-                  name: django-configmap
-      volumes:
-      - name: sharedpv
-        persistentVolumeClaim:
-          claimName: shared-pv
+                fieldRef:
+                  fieldPath: status.hostIP
