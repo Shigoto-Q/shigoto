@@ -21,6 +21,7 @@ def run_task(app, task_id: int) -> dict:
         for task in tasks:
             if task is None:
                 break
+            print(task.kwargs)
         not_found_name = tasks[0].name
         return {"message": f"No valid task for {not_found_name}"}
     task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]

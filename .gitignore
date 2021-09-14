@@ -281,3 +281,4 @@ shigoto_q/media/
 !.envs/.local/
 
 /keyfiles
+/.idea
