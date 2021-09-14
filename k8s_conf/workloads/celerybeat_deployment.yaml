@@ -14,15 +14,13 @@ spec:
       labels:
         component: celerybeat
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
         - name: celerybeat
           image: bogdanp3trovic/shigoto_q_production_celerybeat
           ports:
           - containerPort: 8000
-          volumeMounts:
-            - name: sharedpv
-              mountPath: /app
-              readOnly: true
           args: 
             - /start-celerybeat
           env:
@@ -136,8 +134,3 @@ spec:
                 configMapKeyRef:
                   key: PYTHONUNBUFFERED
                   name: django-configmap
-      volumes:
-        - name: sharedpv
-          persistentVolumeClaim:
-            claimName: shared-pv
-          

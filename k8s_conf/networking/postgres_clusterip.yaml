@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: celeryworker
+  name: postgres
 spec:
   ports:
-  - port: 8000
+  - port: 5432
     protocol: TCP
-    targetPort: 8000
+    targetPort: 5432
   selector:
-    component: celeryworker
+    component: postgres
   type: ClusterIP
