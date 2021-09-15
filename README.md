@@ -6,13 +6,14 @@
 <h2 align="center">Shigoto</h2>
 
 <p align="center">
+        <a href="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml"><img alt="ci" src="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml/badge.svg?branch=master"></a> 
     <a href=""><img alt="madewith" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg"></a>
     <a href=""><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"></a>
     <a href=""><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"></a>
     <a href="><img alt="codefactor" src="https://www.codefactor.io/repository/github/shigoto-q/shigoto_q/badge"></a>
     <a href="https://shigoto.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
     <a href="https://github.com/PyCQA/bandit"><img alt="Bandit check" src="https://img.shields.io/badge/security-bandit-yellow.svg"></a>
-
+                                                                                                                          
 </p>
 
 ## Demo

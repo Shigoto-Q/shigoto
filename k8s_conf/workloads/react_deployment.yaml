@@ -16,12 +16,7 @@ spec:
     spec:
       containers:
         - name: shigoto-react
-          image: bogdanp3trovic/react
+          image: bogdanp3trovic/shigoto_q_production_react
           ports:
             - containerPort: 3000
-          volumeMounts:
-          - mountPath: /app/frontend
-            name: react-volume
-      volumes:
-        - name: react-volume
-          emptyDir: {}
+
