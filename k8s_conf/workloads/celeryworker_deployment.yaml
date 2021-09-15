@@ -14,17 +14,18 @@ spec:
       labels:
         component: celeryworker
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
         - name: celeryworker
           image: bogdanp3trovic/shigoto_q_production_celeryworker
           ports:
           - containerPort: 8000
-          volumeMounts:
-            - name: sharedpv
-              mountPath: /app
-              readOnly: true
           args:
             - /start-celeryworker
+          volumeMounts:
+          - name: cw-kubeconfig
+            mountPath: /home/django/.kube
           env:
             - name: CELERY_FLOWER_PASSWORD
               valueFrom:
@@ -132,7 +133,7 @@ spec:
                   key: WEBHOOK_SECRET
                   name: django-configmap
       volumes:
-      - name: sharedpv
-        persistentVolumeClaim:
-          claimName: shared-pv
+      - name: cw-kubeconfig
+        secret:
+          secretName: kubeconfig
         

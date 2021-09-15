@@ -19,19 +19,6 @@ services:
       - ./.envs/.production/.postgres
     command: /start
 
-  react: &react
-    build:
-      context: .
-      dockerfile: ./compose/production/react/Dockerfile
-    image: shigoto_q_production_react
-    container_name: react
-    environment:
-      CHOKIDAR_USEPOLLING: "true"
-    volumes:
-      - ./frontend:/app/frontend
-    ports:
-      - "3000:3000"
-
   postgres:
     build:
       context: .
@@ -42,20 +29,6 @@ services:
       - production_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.production/.postgres
-
-  traefik:
-    build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
-    image: shigoto_q_production_traefik
-    depends_on:
-      - django
-    volumes:
-      - production_traefik:/etc/traefik/acme:z
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-      - "0.0.0.0:5555:5555"
 
   redis:
     image: redis:5.0
