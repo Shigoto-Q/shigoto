@@ -22,17 +22,19 @@ jobs:
         run: docker-compose -f production.yml build
 
       - name: Tag Docker images 
-        run: docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django
-        run: docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres
-        run: docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
-        run: docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
+        run: | 
+          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django
+          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres
+          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
+          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
 
       - name: Push Docker images 
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
-        run: export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
+          export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
 
 
       - name: Configure Kubernetes context
@@ -45,11 +47,12 @@ jobs:
         run: kubectl create secret generic regcred --from-file=.dockerconfigjson=~/.docker/config.json
 
       - name: Kubectl apply
-        run: kubectl apply -f ./k8s_conf/config
-        run: kubectl apply -f ./k8s_conf/networking
-        run: kubectl apply -f ./k8s_conf/statefulsets
-        run: kubectl apply -f ./k8s_conf/storage
-        run: kubectl apply -f ./k8s_conf/workloads
+        run: |
+          kubectl apply -f ./k8s_conf/config
+          kubectl apply -f ./k8s_conf/networking
+          kubectl apply -f ./k8s_conf/statefulsets
+          kubectl apply -f ./k8s_conf/storage
+          kubectl apply -f ./k8s_conf/workloads
 
 
 
