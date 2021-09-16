@@ -1,5 +1,10 @@
 name: Signal dispatch (ONLY FOR TESTING!!)
 
+on:
+  push:
+    branches:
+      - master
+      
 jobs:
   build:
     name: Build
