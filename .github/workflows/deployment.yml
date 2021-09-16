@@ -49,4 +49,4 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: Shigoto-Q/sgt-infrastructure 
           event-type: build-successful
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ steps.vars.outputs.sha_short }}"}'
