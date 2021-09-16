@@ -1,4 +1,4 @@
-name: Deployment
+name: Continuous Deployment
 
 on:
   push:
@@ -35,26 +35,3 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
           export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
-
-
-      - name: Configure Kubernetes context
-        uses: Azure/k8s-set-context@v1
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-
-      - name: Create Docker credentials secret
-        run: kubectl create secret generic regcred --from-file=.dockerconfigjson=~/.docker/config.json
-
-      - name: Kubectl apply
-        run: |
-          kubectl apply -f ./k8s_conf/config
-          kubectl apply -f ./k8s_conf/networking
-          kubectl apply -f ./k8s_conf/statefulsets
-          kubectl apply -f ./k8s_conf/storage
-          kubectl apply -f ./k8s_conf/workloads
-
-
-
-
-
