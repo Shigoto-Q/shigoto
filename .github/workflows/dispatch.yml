@@ -1,0 +1,14 @@
+name: Signal dispatch (ONLY FOR TESTING!!)
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: Shigoto-Q/sgt-infrastructure 
+          event-type: build-successful
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
