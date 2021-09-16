@@ -8,8 +8,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:
-      GIT_SHA: $(git rev-parse HEAD)
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v2
@@ -25,17 +23,17 @@ jobs:
 
       - name: Tag Docker images 
         run: | 
-          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:$GIT_SHA
-          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:$GIT_SHA
-          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:$GIT_SHA
-          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:$GIT_SHA
+          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:${{ env.GITHUB_SHA }}
+          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:${{ env.GITHUB_SHA }}
+          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ env.GITHUB_SHA }}
+          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:${{ env.GITHUB_SHA }}
 
       - name: Push Docker images 
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:$GIT_SHA
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:$GIT_SHA
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:$GIT_SHA
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:$GIT_SHA
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:${{ env.GITHUB_SHA }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:${{ env.GITHUB_SHA }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ env.GITHUB_SHA }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:${{ env.GITHUB_SHA }}
           export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
 
       - name: Repository Dispatch
