@@ -1,0 +1,2 @@
+DJANGO_DEBUG=False
+DJANGO_ALLOWED_HOSTS=['shigoto.live']
