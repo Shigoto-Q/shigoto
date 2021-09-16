@@ -9,7 +9,7 @@ services:
   django: &django
     build:
       context: .
-      dockerfile: ./compose/production/django/Dockerfile
+      dockerfile: ./compose/production/django/Dockerfile.django
     image: shigoto_q_production_django
     depends_on:
       - postgres
@@ -35,10 +35,16 @@ services:
 
   celeryworker:
     <<: *django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile.celeryworker
     image: shigoto_q_production_celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile.celerybeat
     image: shigoto_q_production_celerybeat
     command: /start-celerybeat
