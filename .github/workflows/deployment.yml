@@ -35,3 +35,11 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker
           export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
+
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: Shigoto-Q/shigoto
+          event-type: build-successful
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
