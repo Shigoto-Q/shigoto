@@ -44,7 +44,7 @@ jobs:
       - name: Create Docker credentials secret
         run: kubectl create secret generic regcred --from-file=.dockerconfigjson=~/.docker/config.json
 
-      -name: Kubectl apply
+      - name: Kubectl apply
         run: kubectl apply -f ./k8s_conf/config
         run: kubectl apply -f ./k8s_conf/networking
         run: kubectl apply -f ./k8s_conf/statefulsets
