@@ -5,10 +5,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from shigoto import views as shigoto_views
 
 urlpatterns = [
-    path("", shigoto_views.HomePageView.as_view()),
     path(settings.ADMIN_URL, admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
@@ -20,8 +18,10 @@ urlpatterns += [
     path("api/v1/", include("shigoto_q.tasks.urls")),
     path("api/v1/", include("shigoto_q.users.urls")),
     path("api/v1/", include("shigoto_q.github.urls")),
+    path("backoffice/api/", include("shigoto.urls"))
 ]
 urlpatterns += [re_path("^payments/", include("djstripe.urls", namespace="djstripe"))]
+
 
 react_urls = [re_path(r"^.*$", TemplateView.as_view(template_name="index.html"))]
 

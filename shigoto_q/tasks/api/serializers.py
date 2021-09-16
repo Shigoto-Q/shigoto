@@ -12,7 +12,6 @@ from django_celery_beat.models import (
 )
 from rest_framework import serializers
 from rest_framework.fields import Field, CharField
-from rest_framework.validators import UniqueValidator
 
 from services.job_services import ImageService
 from shigoto_q.tasks.models import TaskResult, UserTask

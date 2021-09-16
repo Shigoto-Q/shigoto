@@ -74,6 +74,7 @@ LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
     "shigoto_q.tasks.apps.TasksConfig",
     "shigoto_q.github.apps.GithubConfig",
+    "shigoto.apps.ShigotoConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -101,8 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -245,8 +246,6 @@ DJOSER = {
         "token_create": ["rest_framework.permissions.AllowAny"],
     },
 }
-
-CORS_ALLOW_ALL_ORIGIN = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
