@@ -39,7 +39,7 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:${{ steps.vars.outputs.sha_short }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ steps.vars.outputs.sha_shorth }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ steps.vars.outputs.sha_short }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:${{ steps.vars.outputs.sha_short }}
           export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
 
