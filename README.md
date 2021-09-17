@@ -1,6 +1,6 @@
 <p align="center">
 
-<img src="https://i.imgur.com/MK7NlZI.png" width="320" alt="Shigoto Logo" />
+<img src="https://i.imgur.com/bkB9LUA.png" width="320" alt="Shigoto Logo" />
 
 </p>
 <h2 align="center">Shigoto</h2>
