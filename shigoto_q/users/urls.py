@@ -10,4 +10,5 @@ urlpatterns = [
     path("hooks/", my_webhook_view),
     path("create_customer/", create_customer_sub, name="create_customer_sub"),
     path("create-checkout-session/", create_checkout, name="create_checkout"),
+    path("jwt/verify/", views.CustomJwtView.as_view(), name="custom_view_jwt"),
 ]
