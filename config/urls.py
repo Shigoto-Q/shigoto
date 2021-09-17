@@ -18,7 +18,7 @@ urlpatterns += [
     path("api/v1/", include("shigoto_q.tasks.urls")),
     path("api/v1/", include("shigoto_q.users.urls")),
     path("api/v1/", include("shigoto_q.github.urls")),
-    path("backoffice/api/", include("shigoto.urls"))
+    path("backoffice/api/", include("shigoto.urls")),
 ]
 urlpatterns += [re_path("^payments/", include("djstripe.urls", namespace="djstripe"))]
 

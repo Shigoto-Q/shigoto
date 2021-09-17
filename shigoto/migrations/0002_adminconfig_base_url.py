@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shigoto', '0001_initial'),
+        ("shigoto", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='adminconfig',
-            name='base_url',
-            field=models.CharField(default='http://shigoto.live', max_length=56),
+            model_name="adminconfig",
+            name="base_url",
+            field=models.CharField(default="http://shigoto.live", max_length=56),
         ),
     ]
