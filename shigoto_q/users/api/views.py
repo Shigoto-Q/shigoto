@@ -1,7 +1,8 @@
+from __future__ import absolute_import
+
 from django.contrib.auth import get_user_model
-from django.db.models import Prefetch
 from django.http import Http404
-from djstripe.models import Plan, Product
+from djstripe.models import Product
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -9,9 +10,24 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import ProductSerializer, UserSerializer
+from shigoto_q.users.api.serializers import ProductSerializer, UserSerializer
+from shigoto_q.users.services import token as token_services
 
 User = get_user_model()
+
+
+class CustomJwtView(APIView):
+    permission_classes = []
+    """
+    Custom endpoint to return back the user id for the matching token
+    """
+
+    def post(self, request, *args, **kwargs):
+        user = token_services.check_user_token(request.data.get("token"))
+        if user:
+            response = dict(user_id=user)
+            return Response(response)
+        return Response(dict(detail="Invalid token"))
 
 
 class ProductView(APIView):

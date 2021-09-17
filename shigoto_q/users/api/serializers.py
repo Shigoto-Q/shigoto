@@ -1,9 +1,12 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from djoser.serializers import TokenSerializer
 from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djstripe.models import Plan, Product
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from shigoto_q.github.api.serializers import GitHubProfileSerializer
 
@@ -88,3 +91,17 @@ class UserCreateSerializer(DjoserUserCreateSerializer):
             "city",
             "country",
         ]
+
+
+class UserIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id"]
+
+
+class CustomTokenSerializer(serializers.Serializer):
+    auth_token = serializers.CharField()
+
+    class Meta:
+        model = Token
+        fields = ["auth_token"]

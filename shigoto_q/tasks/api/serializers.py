@@ -145,6 +145,12 @@ class TaskImageSerializer(serializers.ModelSerializer):
 
 
 class TaskPostSerializer(serializers.ModelSerializer):
+    crontab = CrontabSerializer()
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 485b2b4... add crontab serializer field for TaskPostSerializer
     def get_task(self, obj):
         return "shigoto_q.tasks.tasks." + obj.get("task")
 
