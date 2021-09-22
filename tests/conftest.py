@@ -1,9 +1,6 @@
 import pytest
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def celery_config():
-    return {
-        'broker_url': 'redis://',
-        'result_backend': 'redis://'
-    }
+    return {"broker_url": "redis://", "result_backend": "redis://"}
