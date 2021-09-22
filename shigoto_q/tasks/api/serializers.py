@@ -177,7 +177,6 @@ class TaskPostSerializer(serializers.ModelSerializer):
         image = None
 
         if validated_data.get("task_type") == TaskEnum.KUBERNETES_JOB.value:
-            print("yes")
             image_serializer = TaskImageSerializer(data=kwargs)
             if image_serializer.is_valid(raise_exception=True):
                 image = image_serializer.save()
