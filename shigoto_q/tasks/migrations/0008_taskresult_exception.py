@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0007_auto_20210813_2306'),
+        ("tasks", "0007_auto_20210813_2306"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='taskresult',
-            name='exception',
-            field=models.TextField(default=True, help_text='Exception from the task', null=True, verbose_name='Exception'),
+            model_name="taskresult",
+            name="exception",
+            field=models.TextField(
+                default=True,
+                help_text="Exception from the task",
+                null=True,
+                verbose_name="Exception",
+            ),
         ),
     ]
