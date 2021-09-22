@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Code Repository
         uses: actions/checkout@v2
 
@@ -30,6 +29,9 @@ jobs:
 
       - name: Run Django Tests
         run:  docker-compose run django pytest
+
+      - name: Run Integration Tests
+        run: docker-compose run django pytest --reuse-db --create-db
 
       - name: Tear down the Stack
         run:  docker-compose down
