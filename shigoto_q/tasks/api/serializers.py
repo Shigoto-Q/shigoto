@@ -40,6 +40,7 @@ class TaskResultSerializer(serializers.ModelSerializer):
             "status",
             "result",
             "traceback",
+            "exception",
             "date_done",
             "date_created",
             "user",

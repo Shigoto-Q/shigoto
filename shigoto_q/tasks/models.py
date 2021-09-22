@@ -63,6 +63,12 @@ class TaskResult(models.Model):
         verbose_name=_("Traceback"),
         help_text=_("Traceback from the task"),
     )
+    exception = models.TextField(
+        null=True,
+        default=True,
+        verbose_name=_("Exception"),
+        help_text=_("Exception from the task"),
+    )
     date_done = models.DateTimeField(
         auto_now=True,
         verbose_name=_("Task completion datetime"),
