@@ -39,8 +39,9 @@ def task_success_handler(sender=None, result=None, **kwargs):
 
 
 @task_failure.connect
-def task_failure_handler(sender=None, traceback=None, **kwargs):
+def task_failure_handler(sender=None, traceback=None, exception=None, **kwargs):
     task_result = TaskResult.objects.get(task_id=sender.request.id)
     task_result.traceback = traceback
+    task_result.exception = exception
     task_result.status = "FAILURE"
     task_result.save()
