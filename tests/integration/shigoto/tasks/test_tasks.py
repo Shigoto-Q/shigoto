@@ -1,11 +1,11 @@
-from tests.factory.users.users_factory import UserFactory
-from tests.factory.tasks.tasks_factory import TaskFactory
-from django.urls import include, path, reverse
-from rest_framework.test import APITestCase, URLPatternsTestCase
 from rest_framework import status
 
 
-class UserTask(APITestCase, URLPatternsTestCase):
+from tests.factory.users.users_factory import UserFactory
+from tests.factory.tasks.tasks_factory import TaskFactory
+
+
+class UserTask:
     """
     Steps:
         Login user
@@ -14,12 +14,6 @@ class UserTask(APITestCase, URLPatternsTestCase):
         Edit task
         pytest tests/integration/tasks/test_tasks.py
     """
-
-    urlpatterns = [
-        path("api/v1/", include("shigoto_q.tasks.urls")),
-        path("auth/", include("djoser.urls")),
-    ]
-
     def test_create(self, regular_user):
         print(regular_user)
         login_url = reverse(
