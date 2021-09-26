@@ -10,7 +10,7 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -23,6 +23,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskGetSerializer,
     TaskPostSerializer,
     TaskResultSerializer,
+    TaskUpdateSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
@@ -66,6 +67,24 @@ class TaskResultView(APIView):
         task_result = self.get_object(task_id)
         serializer = TaskResultSerializer(task_result, many=True)
         return Response(serializer.data)
+
+
+class TaskUpdateView(UpdateAPIView):
+    serializer_class = TaskUpdateSerializer
+
+    def get_object(self, task_id: int):
+        try:
+            return UserTask.objects.get(pk=task_id)
+        except UserTask.DoesNotExist:
+            raise Http404
+
+    def update(self, request, task_id, *args, **kwargs):
+        instance = self.get_object(task_id)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 
 class TaskDeleteView(APIView):
