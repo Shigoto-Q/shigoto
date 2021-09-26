@@ -1,6 +1,10 @@
 import factory
 
-from tests.factory.schedule.schedule_factory import CrontabFactory, IntervalFactory, SolarFactory
+from tests.factory.schedule.schedule_factory import (
+    CrontabFactory,
+    IntervalFactory,
+    SolarFactory,
+)
 from shigoto_q.tasks.models import UserTask
 from shigoto_q.tasks import enums as task_enums
 
@@ -10,7 +14,7 @@ class TaskFactory(factory.django.DjangoModelFactory):
         model = UserTask
 
     id = factory.Faker("pyint", min_value=0, max_value=10000)
-    name = factory.Faker('pystr')
+    name = factory.Faker("pystr")
     task = task_enums.TaskTypeEnum.REQUEST_ENDPOINT.value
     crontab = factory.SubFactory(CrontabFactory)
     interval = factory.SubFactory(IntervalFactory)

@@ -14,6 +14,7 @@ class UserTask(APITestCase, URLPatternsTestCase):
         Edit task
         pytest tests/integration/tasks/test_tasks.py
     """
+
     urlpatterns = [
         path("api/v1/", include("shigoto_q.tasks.urls")),
         path("auth/", include("djoser.urls")),
@@ -21,9 +22,11 @@ class UserTask(APITestCase, URLPatternsTestCase):
 
     def test_create(self, regular_user):
         print(regular_user)
-        login_url = reverse("user-create")  # find the right url name, username is whatever is created, password in
+        login_url = reverse(
+            "user-create"
+        )  # find the right url name, username is whatever is created, password in
         # 'secret'
-        url = reverse('shigoto.tasks.update-task')
+        url = reverse("shigoto.tasks.update-task")
         print(url)
         print(login_url)
         assert url
