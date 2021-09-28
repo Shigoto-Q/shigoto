@@ -14,6 +14,7 @@ class UserTask:
         Edit task
         pytest tests/integration/tasks/test_tasks.py
     """
+    
     def test_create(self, regular_user):
         print(regular_user)
         login_url = reverse(
