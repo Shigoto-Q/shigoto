@@ -126,7 +126,7 @@ class TaskView(ListCreateAPIView):
         return context
 
     def get_queryset(self):
-        return self.request.user.task.all()
+        return self.request.user.task.all().order_by('id')
 
 
 class CrontabView(APIView):
