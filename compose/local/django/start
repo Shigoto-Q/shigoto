@@ -4,5 +4,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+
 python manage.py migrate
-uvicorn config.asgi:application --host 0.0.0.0 --reload
+#python manage.py runprofileserver 0.0.0.0:8000 --use-cprofile --prof-path=/tmp/my-profile-data
+uvicorn config.asgi:application --workers 4 --host 0.0.0.0 --reload

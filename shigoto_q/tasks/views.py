@@ -24,11 +24,36 @@ from shigoto_q.tasks.api.serializers import (
     TaskPostSerializer,
     TaskResultSerializer,
     TaskUpdateSerializer,
+    TaskLoadSerializer,
+    TaskDumpSerializer,
+    TasksListSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
+from rest.views import ResourceView, ResourceListView
 
 User = get_user_model()
+
+
+class UserTaskListView(ResourceListView):
+    serializer_dump_class = TasksListSerializer
+    serializer_load_class = TasksListSerializer
+
+    def fetch(self, filters):
+        return task_services.list_user_tasks(
+            user_id=self.request.user.id,
+            filters=filters,
+        )
+
+
+class TaskCreateView(ResourceView):
+    http_method_names = ["post"]
+    serializer_dump_class = TaskDumpSerializer
+    serializer_load_class = TaskLoadSerializer
+    owner_check = True
+
+    def execute(self, data):
+        return task_services.create_task(data)
 
 
 class RunTaskView(APIView):
@@ -40,10 +65,6 @@ class RunTaskView(APIView):
 
     def get_object(self, task_id: int):
         return task_services.run_task(app, task_id)
-        # try:
-        #    return task_services.run_task(app, task_id)
-        # except Exception:
-        #    return None
 
     def get(self, request, task_id: int, *args, **kwargs):
         result = self.get_object(task_id)
@@ -243,3 +264,10 @@ class SolarView(APIView):
             request.user.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+
+
+class TaskTypeView(APIView):
+    def get(self, request):
+        return Response(
+            data=task_services.get_all_task_types(), status=status.HTTP_200_OK
+        )

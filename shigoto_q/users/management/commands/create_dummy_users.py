@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from shigoto_q.tests.factory.users.factory import users_factory
+from tests.factory.users import users_factory
 from shigoto_q.users import models as user_models
 
 
@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = "Generate dummy users"
     _number_of_users = 20
     _number_of_admins = 2
-    _password = factory_users.UserFactory.password
+    _password = users_factory.UserFactory.password
 
     @transaction.atomic
     def _create_normal_users(self):

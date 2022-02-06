@@ -1,19 +1,21 @@
 from __future__ import absolute_import
 
+import json
 import logging
+import inspect
 
+from django.db import transaction
 from kombu.utils.json import loads
 
 from shigoto_q.tasks import models as task_models
+from shigoto_q.tasks import enums as task_enums
 
 logger = logging.getLogger(__name__)
+_LOG_PREFIX = "[TASK_SERVICES]"
 
 
 def run_task(app, task_id: int) -> dict:
-    print("HEE-$$$$$$$$$$$$$$$$$$$$$$$$")
-    print(__name__)
-    logger.warning(f"Running task {task_id}")
-    print("HEE-$$$$$$$$$$$$$$$$$$$$$$$$")
+    logger.info(f"{_LOG_PREFIX} Running task {task_id}")
     app.loader.import_default_modules()
     tasks = task_models.UserTask.objects.filter(id=task_id)
     celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
@@ -25,3 +27,54 @@ def run_task(app, task_id: int) -> dict:
         return {"message": f"No valid task for {not_found_name}"}
     task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
     return {"message": "success"}
+
+
+def get_all_task_types():
+    return list(map(lambda task: task.value._asdict(), task_enums.TaskEnum))
+
+
+def create_task(kwargs):
+    with transaction.atomic():
+        task = task_models.UserTask.objects.create(**kwargs)
+    logger.info(
+        f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')})"
+    )
+    return task.__dict__
+
+
+def create_task_result(kwargs):
+    kwargs = parse_params(kwargs)
+    logger.info(f"{_LOG_PREFIX} Creating result task with kwargs={kwargs}")
+    task_result = task_models.TaskResult.objects.create(**kwargs)
+    task_result.save()
+    return task_result
+
+
+def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
+    task_result = task_models.TaskResult.objects.get(task_id=task_id)
+    with transaction.atomic():
+        for k, v in kwargs.items():
+            setattr(task_result, k, v)
+        task_result.save()
+    logger.info(
+        f"{_LOG_PREFIX} Updating TaskResult(task_id={task_id}) with kwargs={kwargs}"
+    )
+    return task_result
+
+
+def list_user_tasks(user_id, filters):
+    filters = filters or {}
+    data = list(
+        task_models.UserTask.objects.filter(user_id=user_id).filter(**filters).values()
+    )
+    for i in data:
+        parsed_data = i["kwargs"].replace("'", '"')
+        i["kwargs"] = json.loads(parsed_data)
+    return data
+
+
+def parse_params(kwargs: dict) -> dict:
+    accepted_fields = [
+        field.name for field in task_models.TaskResult._meta.get_fields()
+    ]
+    return {k: v for k, v in kwargs.items() if k in accepted_fields}

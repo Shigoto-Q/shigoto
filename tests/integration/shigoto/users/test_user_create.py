@@ -11,7 +11,6 @@ class AccountTests(APITestCase, URLPatternsTestCase):
     def test_create_account(self):
         url = reverse("user-list")
         data = {
-            "username": "joey",
             "password": "a2da2dad2a",
             "email": "joey@gmail.com",
             "first_name": "Joey",

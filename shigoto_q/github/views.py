@@ -23,7 +23,6 @@ class GitHubList(
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print(request)
         return self.create(request, *args, **kwargs)
 
 
