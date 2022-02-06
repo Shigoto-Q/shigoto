@@ -17,7 +17,7 @@ from services.job_services import ImageService
 from shigoto_q.tasks.models import TaskResult, UserTask
 
 from shigoto_q.tasks.models import TaskImage
-from utils.enums import TaskEnum
+from shigoto_q.tasks.enums import TaskEnum
 
 User = get_user_model()
 
@@ -30,6 +30,7 @@ class TaskUserSerializer(serializers.ModelSerializer):
 
 class TaskResultSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username", read_only=True)
+    user_id = serializers.IntegerField(source="user.id", read_only=True)
 
     class Meta:
         model = TaskResult
@@ -44,6 +45,7 @@ class TaskResultSerializer(serializers.ModelSerializer):
             "date_done",
             "date_created",
             "user",
+            "user_id",
         ]
 
     def get_group_name(self):

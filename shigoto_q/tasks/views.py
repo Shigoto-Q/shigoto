@@ -25,6 +25,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskResultSerializer,
     TaskUpdateSerializer,
 )
+from utils import enums as task_enums
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
 
@@ -40,10 +41,6 @@ class RunTaskView(APIView):
 
     def get_object(self, task_id: int):
         return task_services.run_task(app, task_id)
-        # try:
-        #    return task_services.run_task(app, task_id)
-        # except Exception:
-        #    return None
 
     def get(self, request, task_id: int, *args, **kwargs):
         result = self.get_object(task_id)
@@ -243,3 +240,10 @@ class SolarView(APIView):
             request.user.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+
+
+class TaskTypeView(APIView):
+    def get(self, request):
+        return Response(
+            data=task_services.get_all_task_types(), status=status.HTTP_200_OK
+        )
