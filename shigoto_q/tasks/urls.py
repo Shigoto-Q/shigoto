@@ -20,4 +20,5 @@ urlpatterns = [
         views.TaskUpdateView.as_view(),
         name="shigoto.tasks.update-task",
     ),
+    path("task/types/", views.TaskTypeView.as_view()),
 ]

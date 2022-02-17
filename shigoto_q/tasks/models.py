@@ -5,11 +5,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import PeriodicTask
 
-from utils import enums
+from shigoto_q.tasks import enums
 
-
-ALL_STATES = sorted(states.ALL_STATES)
-TASK_STATE_CHOICES = sorted(zip(ALL_STATES, ALL_STATES))
 User = get_user_model()
 
 
@@ -36,10 +33,9 @@ class TaskResult(models.Model):
         verbose_name=_("Named arguments"),
         help_text=_("JSON represantation of the named arguments"),
     )
-    status = models.CharField(
-        max_length=50,
-        default=states.PENDING,
-        choices=TASK_STATE_CHOICES,
+    status = models.PositiveSmallIntegerField(
+        default=enums.TaskStatus.PENDING.value[0],
+        choices=enums.TaskStatus.get_values(),
         verbose_name=_("Task status"),
         help_text=_("Current state of the task being run"),
     )

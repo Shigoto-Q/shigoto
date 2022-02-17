@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import utils.enums
+import shigoto_q.tasks.enums
 
 
 class Migration(migrations.Migration):
@@ -64,7 +64,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "task_type",
-                    models.PositiveSmallIntegerField(verbose_name=utils.enums.TaskEnum),
+                    models.PositiveSmallIntegerField(
+                        verbose_name=shigoto_q.tasks.enums.TaskEnum
+                    ),
                 ),
                 (
                     "image",
