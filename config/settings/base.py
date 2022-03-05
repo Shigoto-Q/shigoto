@@ -294,9 +294,14 @@ INFLUXDB_PORT = 8086
 INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
 INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
 
+
 # TODO Read from env
 REDIS_HOST = "redis"
 REDIS_PORT = 6379
 
 DIND_HOST = "shigoto_docker"
 DIND_PORT = 2375
+
+REDIS_HOST = "redis"
+REDIS_PORT = 6379
+

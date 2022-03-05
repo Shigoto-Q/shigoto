@@ -18,8 +18,10 @@ from shigoto_q.tasks.models import TaskResult, UserTask
 
 from shigoto_q.tasks.models import TaskImage
 from shigoto_q.tasks.enums import TaskEnum
+
 from rest.serializers import CamelCaseSerializer
 from rest.fields import JSONField
+
 
 User = get_user_model()
 

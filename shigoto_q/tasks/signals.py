@@ -5,6 +5,7 @@ from celery.signals import (
     before_task_publish,
     task_failure,
     task_prerun,
+    task_retry,
     task_success,
     task_revoked,
 )
@@ -20,9 +21,11 @@ from shigoto_q.tasks.services import tasks as task_services
 from shigoto_q.tasks.api.serializers import TaskResultSerializer
 
 
+
 User = get_user_model()
 client = RedisClient
 logger = logging.getLogger(__name__)
+
 
 
 def get_user(user_id: int) -> User:
@@ -40,6 +43,7 @@ def task_sent_handler(sender=None, headers=None, body=None, properties=None, **k
     task_result = task_services.create_task_result(kwargsrepr)
     serialized_task_result = TaskResultSerializer(task_result)
     client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+
 
 
 @task_prerun.connect
@@ -70,6 +74,7 @@ def task_failure_handler(sender=None, traceback=None, exception=None, **kwargs):
     client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
+
 @task_revoked.connect
 def task_prerun_handler(sender=None, *args, **kwargs):
     kwargs = dict(status=TaskStatus.REVOKED)
@@ -85,7 +90,7 @@ def task_prerun_handler(sender=None, *args, **kwargs):
     serialized_task_result = TaskResultSerializer(task_result)
     client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
-
+   
 @receiver(post_save, sender=TaskResult)
 def send_task_count(sender, instance, **kwargs):
     user_id = instance.user_id
@@ -102,3 +107,4 @@ def send_task_count(sender, instance, **kwargs):
 def send_pre_save_task_status(sender, instance, **kwargs):
     serialized_task_result = TaskResultSerializer(instance)
     client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+

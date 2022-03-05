@@ -28,6 +28,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskDumpSerializer,
     TasksListSerializer,
 )
+from utils import enums as task_enums
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
 from rest.views import ResourceView, ResourceListView
