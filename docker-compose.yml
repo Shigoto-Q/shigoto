@@ -1,6 +1,8 @@
 version: '3'
 
 volumes:
+  dind-certs-ca:
+  dind-certs-client:
   local_postgres_data: {}
   local_postgres_data_backups: {}
 
@@ -13,7 +15,10 @@ services:
     container_name: django
     depends_on:
       - postgres
+      - shigoto_docker
+      - redis
     volumes:
+      - ./var/run/docker.sock:/var/run/docker.sock
       - .:/app:z
     env_file:
       - ./.envs/.local/.django
@@ -23,8 +28,17 @@ services:
     command: /start
     links:
       - redis
+      - shigoto_docker
     networks:
       - shigoto
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - shigoto
+
   postgres:
     build:
       context: .
@@ -70,6 +84,21 @@ services:
     command: /start-celerybeat
     networks:
       - shigoto
+
+  shigoto_docker: &shigoto_docker
+    container_name: shigoto_dind
+    image: docker:dind
+    privileged: true
+    volumes:
+      - dind-certs-ca:/certs/ca
+      - dind-certs-client:/certs/client
+    expose:
+      - 2375
+    networks:
+      - shigoto
+    environment:
+      - DOCKER_TLS_CERTDIR=
+
 
 networks:
   shigoto:

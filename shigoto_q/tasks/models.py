@@ -1,9 +1,13 @@
-from asgiref.sync import async_to_sync
-from celery import states
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.models import PeriodicTask
+from django_celery_beat.models import (
+    PeriodicTask,
+    SolarSchedule,
+    CrontabSchedule,
+    IntervalSchedule,
+    ClockedSchedule,
+)
 
 from shigoto_q.tasks import enums
 
@@ -34,8 +38,8 @@ class TaskResult(models.Model):
         help_text=_("JSON represantation of the named arguments"),
     )
     status = models.PositiveSmallIntegerField(
-        default=enums.TaskStatus.PENDING.value[0],
-        choices=enums.TaskStatus.get_values(),
+        default=enums.TaskStatus.PENDING,
+        choices=enums.TaskStatus.choices,
         verbose_name=_("Task status"),
         help_text=_("Current state of the task being run"),
     )
@@ -140,7 +144,15 @@ class UserTask(PeriodicTask):
     image = models.OneToOneField(
         TaskImage,
         null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name="%(app_label)s_%(class)s_related",
         related_query_name="%(app_label)s_%(class)ss",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        verbose_name=_("User"),
     )

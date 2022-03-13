@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import json
 import logging
 import inspect
 
@@ -33,8 +34,17 @@ def get_all_task_types():
 
 
 def create_task(kwargs):
+    with transaction.atomic():
+        task = task_models.UserTask.objects.create(**kwargs)
+    logger.info(
+        f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')})"
+    )
+    return task.__dict__
+
+
+def create_task_result(kwargs):
     kwargs = parse_params(kwargs)
-    logger.info(f"{_LOG_PREFIX} Creating task with kwargs={kwargs}")
+    logger.info(f"{_LOG_PREFIX} Creating result task with kwargs={kwargs}")
     task_result = task_models.TaskResult.objects.create(**kwargs)
     task_result.save()
     return task_result
@@ -50,6 +60,17 @@ def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
         f"{_LOG_PREFIX} Updating TaskResult(task_id={task_id}) with kwargs={kwargs}"
     )
     return task_result
+
+
+def list_user_tasks(user_id, filters):
+    filters = filters or {}
+    data = list(
+        task_models.UserTask.objects.filter(user_id=user_id).filter(**filters).values()
+    )
+    for i in data:
+        parsed_data = i["kwargs"].replace("'", '"')
+        i["kwargs"] = json.loads(parsed_data)
+    return data
 
 
 def parse_params(kwargs: dict) -> dict:

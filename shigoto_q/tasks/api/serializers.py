@@ -11,13 +11,17 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 from rest_framework import serializers
-from rest_framework.fields import Field, CharField
+from rest_framework.fields import Field
 
-from services.job_services import ImageService
+from services.internal_docker.client import DockerImageService
 from shigoto_q.tasks.models import TaskResult, UserTask
 
 from shigoto_q.tasks.models import TaskImage
 from shigoto_q.tasks.enums import TaskEnum
+
+from rest.serializers import CamelCaseSerializer
+from rest.fields import JSONField
+
 
 User = get_user_model()
 
@@ -164,8 +168,7 @@ class TaskImageSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         try:
-            image_service = ImageService()
-            image_service.create_image(
+            DockerImageService.create_image(
                 repo_url=attrs.get("repo_url"),
                 full_name=attrs.get("full_name"),
                 image_name=attrs.get("image_name"),
@@ -204,7 +207,7 @@ class TaskPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         kwargs = json.loads(validated_data.get("kwargs"))
-        kwargs.update({"user": self.context["request"].user.id})
+        kwargs.update({"user": self.context["request"].user})
         kwargs.update({"task_name": validated_data.get("name")})
 
         image = None
@@ -233,5 +236,72 @@ class TaskPostSerializer(serializers.ModelSerializer):
             enabled=validated_data.get("enabled"),
         )
 
-        self.context["request"].user.task.add(task_created)
         return task_created
+
+
+class UserTaskImageSerializer(CamelCaseSerializer):
+    full_name = serializers.CharField()
+    repo_url = serializers.CharField()
+    image_name = serializers.CharField()
+    command = serializers.CharField()
+
+
+class TaskLoadSerializer(CamelCaseSerializer):
+    name = serializers.CharField(required=True)
+    task_type = serializers.IntegerField(required=True)
+    image = UserTaskImageSerializer(required=False, allow_null=True)
+    crontab_id = serializers.IntegerField(default=None, required=False, allow_null=True)
+    interval_id = serializers.IntegerField(
+        default=None, required=False, allow_null=True
+    )
+    solar_id = serializers.IntegerField(default=None, required=False, allow_null=True)
+    clocked_id = serializers.IntegerField(default=None, required=False, allow_null=True)
+    args = serializers.ListField(default=[], allow_null=True)
+    kwargs = serializers.DictField(default=None, required=False)
+    queue = serializers.IntegerField(default=None, required=False, allow_null=True)
+    priority = serializers.IntegerField(default=None, required=False, allow_null=True)
+    expires = serializers.IntegerField(default=None, required=False, allow_null=True)
+    expire_seconds = serializers.IntegerField(
+        default=None, required=False, allow_null=True
+    )
+    one_off = serializers.BooleanField(required=False)
+    enabled = serializers.BooleanField(required=False)
+
+
+class TaskDumpSerializer(CamelCaseSerializer):
+    name = serializers.CharField(required=True)
+    task_type = serializers.IntegerField(required=True)
+    image = UserTaskImageSerializer(required=False, allow_null=True)
+    crontab_id = serializers.IntegerField(required=False, allow_null=True)
+    interval_id = serializers.IntegerField(required=False, allow_null=True)
+    solar_id = serializers.IntegerField(required=False, allow_null=True)
+    clocked_id = serializers.IntegerField(required=False, allow_null=True)
+    args = serializers.ListField(default=None, allow_null=True)
+    kwargs = serializers.DictField(required=False, default=None, allow_null=True)
+    queue = serializers.IntegerField(default=None, required=False, allow_null=True)
+    priority = serializers.IntegerField(default=None, required=False, allow_null=True)
+    expires = serializers.IntegerField(default=None, required=False, allow_null=True)
+    expire_seconds = serializers.IntegerField(
+        default=None, required=False, allow_null=True
+    )
+    one_off = serializers.BooleanField(default=None, allow_null=True)
+    enabled = serializers.BooleanField(default=True, allow_null=True)
+    user_id = serializers.IntegerField()
+
+
+class TasksListSerializer(CamelCaseSerializer):
+    name = serializers.CharField(required=False)
+    task_type = serializers.IntegerField(required=False)
+    image = UserTaskImageSerializer(required=False, allow_null=True)
+    crontab_id = serializers.IntegerField(required=False, allow_null=True)
+    interval_id = serializers.IntegerField(required=False, allow_null=True)
+    solar_id = serializers.IntegerField(required=False, allow_null=True)
+    clocked_id = serializers.IntegerField(required=False, allow_null=True)
+    args = serializers.CharField(required=False)
+    kwargs = JSONField(required=False)
+    queue = serializers.IntegerField(required=False, allow_null=True)
+    priority = serializers.IntegerField(required=False, allow_null=True)
+    expires = serializers.IntegerField(required=False, allow_null=True)
+    expire_seconds = serializers.IntegerField(required=False, allow_null=True)
+    one_off = serializers.BooleanField(default=False, required=False)
+    enabled = serializers.BooleanField(default=False, required=False)

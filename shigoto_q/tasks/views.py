@@ -24,12 +24,37 @@ from shigoto_q.tasks.api.serializers import (
     TaskPostSerializer,
     TaskResultSerializer,
     TaskUpdateSerializer,
+    TaskLoadSerializer,
+    TaskDumpSerializer,
+    TasksListSerializer,
 )
 from utils import enums as task_enums
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
+from rest.views import ResourceView, ResourceListView
 
 User = get_user_model()
+
+
+class UserTaskListView(ResourceListView):
+    serializer_dump_class = TasksListSerializer
+    serializer_load_class = TasksListSerializer
+
+    def fetch(self, filters):
+        return task_services.list_user_tasks(
+            user_id=self.request.user.id,
+            filters=filters,
+        )
+
+
+class TaskCreateView(ResourceView):
+    http_method_names = ["post"]
+    serializer_dump_class = TaskDumpSerializer
+    serializer_load_class = TaskLoadSerializer
+    owner_check = True
+
+    def execute(self, data):
+        return task_services.create_task(data)
 
 
 class RunTaskView(APIView):

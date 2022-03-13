@@ -13,7 +13,6 @@ from sentry_sdk.integrations.redis import RedisIntegration
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "shigoto_q"
 env = environ.Env()
-REACT_DIR = ROOT_DIR / "frontend"
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 
@@ -51,6 +50,7 @@ DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "django.contrib.admin",
     "django.forms",
 ]
@@ -74,7 +74,6 @@ LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
     "shigoto_q.tasks.apps.TasksConfig",
     "shigoto_q.github.apps.GithubConfig",
-    "shigoto.apps.ShigotoConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -85,7 +84,7 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
-LOGIN_URL = "account_login"
+LOGIN_URL = "jwt-create"
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -129,7 +128,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR / "templates"), str(REACT_DIR / "build")],
+        "DIRS": [str(APPS_DIR / "templates")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -166,50 +165,57 @@ ADMINS = [("""Simeon Aleksov""", "simeon-aleksov@example.com")]
 MANAGERS = ADMINS
 
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "simple": {
-            "format": "[%(asctime)s] %(levelname)s|%(name)s|%(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
-    },
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-        "logstash": {
-            "level": "DEBUG",
-            "class": "logstash.TCPLogstashHandler",
-            "host": "logstash",
-            "port": 5000,
-            "version": 1,
-            "message_type": "django",
-            "fqdn": True,
-            "tags": ["django.request"],
-        },
-    },
-    "loggers": {
-        "django.request": {
-            "handlers": ["logstash"],
-            "level": "INFO",
-            "propagate": True,
-        },
-        "django": {
-            "handlers": ["logstash"],
-            "level": "INFO",
-            "propagate": True,
-        },
-        "shigoto_q.tasks.services.tasks": {
-            "handlers": ["console", "logstash"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "simple": {
+#             "format": "[%(asctime)s] %(levelname)s:%(name)s:%(message)s",
+#             "datefmt": "%Y-%m-%d %H:%M:%S",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "INFO",
+#             "class": "logging.StreamHandler",
+#             "formatter": "simple",
+#         },
+#         "logstash": {
+#             "level": "DEBUG",
+#             "class": "logstash.TCPLogstashHandler",
+#             "host": "logstash",
+#             "port": 5000,
+#             "version": 1,
+#             "message_type": "django",
+#             "fqdn": True,
+#             "tags": ["django.request"],
+#         },
+#     },
+#     "loggers": {
+#         "django.request": {
+#             "handlers": ["logstash"],
+#             "level": "INFO",
+#             "propagate": True,
+#         },
+#         "django": {
+#             "handlers": ["logstash"],
+#             "level": "INFO",
+#             "propagate": True,
+#             "stream": "ext://sys.stdout",
+#         },
+#         "shigoto_q.tasks.services.tasks": {
+#             "handlers": ["console", "logstash"],
+#             "level": "DEBUG",
+#             "propagate": True,
+#         },
+#         "shigoto_q": {
+#             "handlers": ["console", "logstash"],
+#             "level": "DEBUG",
+#             "propagate": True,
+#             "stream": "ext://sys.stdout",
+#         },
+#     },
+# }
 
 if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
@@ -236,8 +242,10 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 DJOSER = {
+    "LOGIN_FIELD": "email",
+    "PASSWORD_RESET_CONFIRM_URL": "auth/users/reset_password_confirm/{uid}/{token}/",
     "SERIALIZERS": {
-        "current_user": "shigoto_q.users.api.serializers.UserSerializer",
+        "current_user": "shigoto_q.users.api.serializers.UserSerializerDAB",
         "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
     },
     "PERMISSIONS": {
@@ -260,7 +268,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_DSN = "https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/5745020"
 SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
 sentry_logging = LoggingIntegration(
@@ -285,6 +293,14 @@ INFLUXDB_HOST = "influxdb"
 INFLUXDB_PORT = 8086
 INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
 INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
+
+
+# TODO Read from env
+REDIS_HOST = "redis"
+REDIS_PORT = 6379
+
+DIND_HOST = "shigoto_docker"
+DIND_PORT = 2375
 
 REDIS_HOST = "redis"
 REDIS_PORT = 6379

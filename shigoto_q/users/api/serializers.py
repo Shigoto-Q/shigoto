@@ -1,7 +1,4 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from djoser.serializers import TokenSerializer
 from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djstripe.models import Plan, Product
@@ -9,6 +6,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from shigoto_q.github.api.serializers import GitHubProfileSerializer
+from rest.serializers import CamelCaseSerializer
 
 from ...tasks.api.serializers import (
     ClockedSerializer,
@@ -27,18 +25,30 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = ["amount", "interval", "trial_period_days", "id"]
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    plan_set = PlanSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Product
-        ordering = [
-            "plan_set",
-        ]
-        fields = ["id", "name", "plan_set", "metadata"]
+class ProductSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    plan_set = serializers.CharField()
+    metadata = serializers.CharField()
 
 
-class UserSerializer(DjoserUserSerializer):
+class UserListSerializer(CamelCaseSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    email = serializers.EmailField(required=False)
+    company = serializers.CharField(required=False)
+    country = serializers.CharField(required=False)
+
+
+class UserLoadSerializer(UserListSerializer):
+    password = serializers.CharField(required=True)
+
+
+class UserDumpSerializer(UserListSerializer):
+    pass
+
+
+class UserSerializerDAB(DjoserUserSerializer):
     crontab = CrontabSerializer(read_only=True, many=True)
     task = TaskGetSerializer(read_only=True, many=True)
     interval = IntervalSerializer(read_only=True, many=True)
@@ -105,3 +115,11 @@ class CustomTokenSerializer(serializers.Serializer):
     class Meta:
         model = Token
         fields = ["auth_token"]
+
+
+class SubscriberSerializer(CamelCaseSerializer):
+    email = serializers.EmailField()
+
+
+class UserLogoutSerializer(CamelCaseSerializer):
+    refresh_token = serializers.CharField()
