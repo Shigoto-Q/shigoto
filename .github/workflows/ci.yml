@@ -27,11 +27,5 @@ jobs:
       - name: Run DB Migrations
         run:  docker-compose run --rm django python manage.py migrate
 
-      - name: Run Django Tests
-        run:  docker-compose run django pytest
-
-      - name: Run Integration Tests
-        run: docker-compose run django pytest --reuse-db --create-db
-
       - name: Tear down the Stack
         run:  docker-compose down
