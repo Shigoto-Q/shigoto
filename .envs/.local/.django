@@ -23,6 +23,3 @@ WEBHOOK_SECRET="whsec_8v7igqtCb4yNSNqQHsLD9KJiq7k4TK7F"
 # Sentry
 SENTRY_DSN="https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/5745020"
 SENTRY_ENVIRONMENT=local
-
-
-

@@ -84,5 +84,3 @@ WORKDIR /app
 ENTRYPOINT ["/entrypoint"]
 
 CMD ["/start-celerybeat"]
-
-
