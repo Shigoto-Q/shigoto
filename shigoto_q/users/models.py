@@ -1,4 +1,9 @@
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser, UserManager
+from django.contrib.auth.models import (
+    AbstractUser,
+    AbstractBaseUser,
+    UserManager,
+    PermissionsMixin,
+)
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -13,7 +18,7 @@ from django_celery_beat.models import (
 from shigoto_q.github.models import GitHubProfile
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=256, default="")
     last_name = models.CharField(max_length=256, default="")
     email = models.CharField(
@@ -56,6 +61,7 @@ class User(AbstractBaseUser):
         null=True,
         blank=True,
     )
+    is_staff = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
 
     objects = UserManager()

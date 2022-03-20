@@ -1,23 +1,29 @@
 from __future__ import absolute_import
 
+import ast
 import json
 import logging
-import inspect
 
 from django.db import transaction
+from django.forms import model_to_dict
 from kombu.utils.json import loads
 
-from shigoto_q.tasks import models as task_models
 from shigoto_q.tasks import enums as task_enums
+from shigoto_q.tasks import models as task_models
+from shigoto_q.tasks.enums import TaskType, TaskTypeEnum
+from shigoto_q.tasks.services import messages as task_messages
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[TASK_SERVICES]"
 
 
-def run_task(app, task_id: int) -> dict:
-    logger.info(f"{_LOG_PREFIX} Running task {task_id}")
+def run_task(app, external_task_id: int, user) -> dict:
+    logger.info(f"{_LOG_PREFIX} Running task {external_task_id}")
     app.loader.import_default_modules()
-    tasks = task_models.UserTask.objects.filter(id=task_id)
+    tasks = task_models.UserTask.objects.filter(
+        external_task_id=external_task_id, user=user
+    )
+    celery_task = []
     celery_task = [(app.tasks.get(task.task), loads(task.kwargs)) for task in tasks]
     if any(task is None for task in tasks):
         for task in tasks:
@@ -26,18 +32,24 @@ def run_task(app, task_id: int) -> dict:
         not_found_name = tasks[0].name
         return {"message": f"No valid task for {not_found_name}"}
     task_ids = [task.apply_async(kwargs=kwargs) for task, kwargs in celery_task]
-    return {"message": "success"}
+    return tasks.first().__dict__
 
 
 def get_all_task_types():
     return list(map(lambda task: task.value._asdict(), task_enums.TaskEnum))
 
 
-def create_task(kwargs):
+def create_task(kwargs, user):
     with transaction.atomic():
+        if kwargs.get("task_type") == TaskType.SIMPLE_HTTP_OPERATOR.value:
+            kwargs["task"] = TaskTypeEnum.SIMPLE_HTTP_OPERATOR.value
+            kwargs["kwargs"] = {
+                "url": kwargs.pop("http_endpoint"),
+                "user_id": user.id,
+            }
         task = task_models.UserTask.objects.create(**kwargs)
     logger.info(
-        f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')})"
+        f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')}, task={kwargs.get('task')})"
     )
     return task.__dict__
 
@@ -64,13 +76,12 @@ def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
 
 def list_user_tasks(user_id, filters):
     filters = filters or {}
-    data = list(
-        task_models.UserTask.objects.filter(user_id=user_id).filter(**filters).values()
-    )
-    for i in data:
-        parsed_data = i["kwargs"].replace("'", '"')
-        i["kwargs"] = json.loads(parsed_data)
-    return data
+    return [
+        task_messages.UserTask.from_model(obj)._asdict()
+        for obj in task_models.UserTask.objects.filter(user_id=user_id).filter(
+            **filters
+        )
+    ]
 
 
 def parse_params(kwargs: dict) -> dict:
@@ -78,3 +89,13 @@ def parse_params(kwargs: dict) -> dict:
         field.name for field in task_models.TaskResult._meta.get_fields()
     ]
     return {k: v for k, v in kwargs.items() if k in accepted_fields}
+
+
+def get_user_docker_images(filters: dict, user_id: int) -> list:
+    filters = filters or {}
+    return [
+        task_messages.UserDockerImage.from_model(obj)._asdict()
+        for obj in task_models.TaskImage.objects.filter(user_id=user_id).filter(
+            **filters
+        )
+    ]

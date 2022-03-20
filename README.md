@@ -6,16 +6,16 @@
 <h2 align="center">Shigoto</h2>
 
 <p align="center">
-        <a href="https://github.com/Shigoto-Q/shigoto/actions/workflows/deployment.yml"><img alt="Continuous Deploymen" src="https://github.com/Shigoto-Q/shigoto/actions/workflows/deployment.yml/badge.svg"></a>
-        <a href="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml"><img alt="ci" src="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml/badge.svg?branch=master"></a> 
+    <a href="https://github.com/Shigoto-Q/shigoto/actions/workflows/deployment.yml"><img alt="Continuous Deploymen" src="https://github.com/Shigoto-Q/shigoto/actions/workflows/deployment.yml/badge.svg"></a>
+    <a href="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml"><img alt="ci" src="https://github.com/Shigoto-Q/shigoto_q/actions/workflows/ci.yml/badge.svg?branch=master"></a>
     <a href=""><img alt="madewith" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg"></a>
     <a href=""><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"></a>
     <a href="https://github.com/psf/black"><img alt="format" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <a href="><img alt="codefactor" src="https://www.codefactor.io/repository/github/shigoto-q/shigoto_q/badge"></a>
     <a href="https://shigoto.com/api-docs/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/black/badge/?version=stable"></a>
     <a href="https://github.com/PyCQA/bandit"><img alt="Bandit check" src="https://img.shields.io/badge/security-bandit-yellow.svg"></a>
+    <a href="https://results.pre-commit.ci/latest/github/Shigoto-Q/shigoto/master"><img alt="Bandit check" src="https://results.pre-commit.ci/badge/github/Shigoto-Q/shigoto/master.svg"></a>
 </p>
-
 ## Demo
 <p align="center">
 <img src="https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif" width="320" alt="Shigoto Logo" />

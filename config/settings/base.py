@@ -74,6 +74,7 @@ LOCAL_APPS = [
     "shigoto_q.users.apps.UsersConfig",
     "shigoto_q.tasks.apps.TasksConfig",
     "shigoto_q.github.apps.GithubConfig",
+    "shigoto_q.schedule.apps.ScheduleConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -84,7 +85,7 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
-LOGIN_URL = "jwt-create"
+LOGIN_URL = "shigoto_q.users.token_obtain_pair"
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
