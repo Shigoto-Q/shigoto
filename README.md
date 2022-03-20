@@ -18,7 +18,7 @@
 </p>
 ## Demo
 <p align="center">
-<img src="https://media2.giphy.com/media/SzKqAr6u2U6RdGFlL5/giphy.gif?cid=790b76117599548aca1f9e1325ce29870be94a01dfd095e6&rid=giphy.gif" width="320" alt="Shigoto Logo" />
+<img src="https://i.imgur.com/baTgX6B.mp4" width="320" alt="Shigoto Logo" />
  </p>
 
 
