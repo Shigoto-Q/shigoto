@@ -8,6 +8,14 @@ from rest.serializers import CamelCaseSerializer
 User = get_user_model()
 
 
+class UserImageCreateSerializer(CamelCaseSerializer):
+    name = serializers.CharField()
+    repository = serializers.CharField()
+    image_name = serializers.CharField()
+    command = serializers.CharField()
+    user_id = serializers.IntegerField(required=False)
+
+
 class UserTaskImageSerializer(CamelCaseSerializer):
     name = serializers.CharField()
     repository = serializers.CharField()

@@ -9,6 +9,7 @@ from shigoto_q.tasks.api.serializers import (
     TaskLoadSerializer,
     TaskRunSerializer,
     TasksListSerializer,
+    UserImageCreateSerializer,
     UserTaskImageSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
@@ -16,6 +17,16 @@ from shigoto_q.tasks.services import tasks as task_services
 from utils import enums as task_enums
 
 User = get_user_model()
+
+
+class DockerImageCreateView(ResourceView):
+    http_method_names = ["post"]
+    serializer_dump_class = UserImageCreateSerializer
+    serializer_load_class = UserImageCreateSerializer
+    owner_check = True
+
+    def execute(self, data):
+        return task_services.create_docker_image(data=data)
 
 
 class UserImageListView(ResourceListView):
