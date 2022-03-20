@@ -1,11 +1,10 @@
 import collections
-import logging
 import json
+import logging
 
 from rest_framework.views import APIView
 
 from rest.serializers import BadResponseSerializer
-
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[REST]"

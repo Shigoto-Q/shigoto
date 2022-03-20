@@ -20,7 +20,7 @@ class ResourceListView(BaseView):
         return OkResponse(response)
 
     def _process_post_response_data(self, resource):
-        response_data = self.get_dump_serializer(data=resource, many=True)
+        response_data = self.get_dump_serializer(data=resource, many=True,)
         response_data.is_valid(raise_exception=True)
         return response_data.data
 

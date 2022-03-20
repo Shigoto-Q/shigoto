@@ -6,7 +6,7 @@ from shigoto_q.tasks import messages as task_messages
 
 
 class TaskTypeEnum(enum.Enum):
-    REQUEST_ENDPOINT = "shigoto_q.tasks.tasks.simple_http_operator"
+    SIMPLE_HTTP_OPERATOR = "shigoto_q.tasks.tasks.simple_http_operator"
     KUBERNETES_JOB = "shigoto_q.tasks.tasks.kubernetes"
     DOCKER_JOB = "shigoto_q.tasks.tasks.docker"
 
@@ -29,6 +29,12 @@ class TaskStatus(models.IntegerChoices):
     REJECTED = 6
     RETRY = 7
     IGNORED = 8
+
+
+class TaskType(models.IntegerChoices):
+    SIMPLE_HTTP_OPERATOR = 0
+    KUBERNETES_OPERATOR = 1
+    DOCKER_OPERATOR = 2
 
 
 class TaskEnum(enum.Enum):

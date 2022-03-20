@@ -3,8 +3,8 @@ import logging
 from django.conf import settings
 from kubernetes import client, config, watch
 
-from services.kubernetes.exceptions import KubernetesJobNotFoundError
 from services.kubernetes.constants import KubernetesEventType
+from services.kubernetes.exceptions import KubernetesJobNotFoundError
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[KUBERNETES-SERVICE]"

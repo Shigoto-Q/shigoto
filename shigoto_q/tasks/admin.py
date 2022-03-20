@@ -1,84 +1,33 @@
-from django.conf import settings
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
 
-from shigoto_q.tasks.models import TaskImage, UserTask
-
-try:
-    ALLOW_EDITS = settings.DJANGO_CELERY_RESULTS["ALLOW_EDITS"]
-except (AttributeError, KeyError):
-    ALLOW_EDITS = False
-    pass
-
-from .models import TaskResult
+from .models import TaskImage, TaskResult, UserTask
 
 
+@admin.register(TaskResult)
 class TaskResultAdmin(admin.ModelAdmin):
-    """Admin-interface for results of tasks."""
-
-    model = TaskResult
-    date_hierarchy = "date_done"
-    list_display = ("task_id", "task_name", "date_done", "status", "worker")
-    list_filter = ("status", "date_done", "task_name", "worker")
-    readonly_fields = ("date_created", "date_done", "result")
-    search_fields = ("task_name", "task_id", "status", "task_args", "task_kwargs")
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "task_id",
-                    "task_name",
-                    "status",
-                    "worker",
-                    "user",
-                ),
-                "classes": ("extrapretty", "wide"),
-            },
-        ),
-        (
-            _("Parameters"),
-            {
-                "fields": (
-                    "task_args",
-                    "task_kwargs",
-                ),
-                "classes": ("extrapretty", "wide"),
-            },
-        ),
-        (
-            _("Result"),
-            {
-                "fields": (
-                    "result",
-                    "date_created",
-                    "date_done",
-                    "traceback",
-                ),
-                "classes": ("extrapretty", "wide"),
-            },
-        ),
+    list_display = (
+        "id",
+        "task_id",
+        "task_name",
+        "status",
+        "date_done",
+        "date_created",
+        "user",
+        "task_beat_id",
     )
-
-    def get_readonly_fields(self, request, obj=None):
-        if ALLOW_EDITS:
-            return self.readonly_fields
-        else:
-            return list(set([field.name for field in self.opts.local_fields]))
-
-
-admin.site.register(TaskResult, TaskResultAdmin)
+    list_filter = ("date_done", "date_created", "user")
 
 
 @admin.register(TaskImage)
 class TaskImageAdmin(admin.ModelAdmin):
-    list_display = ("id", "repo_url", "full_name", "image_name")
+    list_display = ("id", "repo_url", "full_name", "image_name", "command")
 
 
 @admin.register(UserTask)
 class UserTaskAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "external_task_id",
         "name",
         "task",
         "interval",
@@ -101,8 +50,10 @@ class UserTaskAdmin(admin.ModelAdmin):
         "total_run_count",
         "date_changed",
         "description",
+        "external_task_id",
         "task_type",
         "image",
+        "user",
     )
     list_filter = (
         "interval",
@@ -116,5 +67,6 @@ class UserTaskAdmin(admin.ModelAdmin):
         "last_run_at",
         "date_changed",
         "image",
+        "user",
     )
     search_fields = ("name",)

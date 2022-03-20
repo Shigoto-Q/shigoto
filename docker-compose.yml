@@ -68,6 +68,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - shigoto_docker
     ports: []
     command: /start-celeryworker
     networks:
@@ -80,6 +81,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - shigoto_docker
     ports: []
     command: /start-celerybeat
     networks:

@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -7,6 +9,8 @@ from django_celery_beat.models import (
     CrontabSchedule,
     IntervalSchedule,
     ClockedSchedule,
+    SINGULAR_PERIODS,
+    PERIOD_CHOICES,
 )
 
 from shigoto_q.tasks import enums
@@ -140,7 +144,13 @@ class TaskImage(models.Model):
 
 
 class UserTask(PeriodicTask):
-    task_type = models.PositiveSmallIntegerField(enums.TaskEnum)
+    external_task_id = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+    )
+    task_type = models.PositiveSmallIntegerField(
+        choices=enums.TaskType.choices, default=enums.TaskType.SIMPLE_HTTP_OPERATOR
+    )  # TODO Rename to type
     image = models.OneToOneField(
         TaskImage,
         null=True,
@@ -156,3 +166,51 @@ class UserTask(PeriodicTask):
         default=None,
         verbose_name=_("User"),
     )
+
+    @property
+    def schedule(self):
+        if self.interval:
+            return self._to_interval_representation(
+                every=self.interval.every, self_period=self.interval.period
+            )
+        if self.crontab:
+            return self._to_crontab_representation(crontab=self.crontab)
+        if self.solar:
+            return self.solar.schedule
+        if self.clocked:
+            return self._to_clocked_representation(clocked_time=self.clocked)
+
+    @classmethod
+    def _to_interval_representation(cls, every, self_period):
+        readable_period = None
+        if every == 1:
+            for period, _readable_period in SINGULAR_PERIODS:
+                if period == self_period:
+                    readable_period = _readable_period.lower()
+                    break
+            return "every {}".format(readable_period)
+        for period, _readable_period in PERIOD_CHOICES:
+            if period == self_period:
+                readable_period = _readable_period.lower()
+                break
+        return "every {} {}".format(every, readable_period)
+
+    @classmethod
+    def _cronexp(cls, field):
+        """Representation of cron expression."""
+        return field and str(field).replace(" ", "") or "*"
+
+    @classmethod
+    def _to_crontab_representation(cls, crontab):
+        return "{0} {1} {2} {3} {4} (m/h/dM/MY/d) {5}".format(
+            cls._cronexp(crontab.minute),
+            cls._cronexp(crontab.hour),
+            cls._cronexp(crontab.day_of_month),
+            cls._cronexp(crontab.month_of_year),
+            cls._cronexp(crontab.day_of_week),
+            str(crontab.timezone),
+        )
+
+    @classmethod
+    def _to_clocked_representation(cls, clocked_time):
+        return "{}".format(clocked_time)
