@@ -5,9 +5,8 @@ from djstripe.models import Plan, Product
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from shigoto_q.github.api.serializers import GitHubProfileSerializer
 from rest.serializers import CamelCaseSerializer
-
+from shigoto_q.github.api.serializers import GitHubProfileSerializer
 
 User = get_user_model()
 

@@ -25,7 +25,9 @@
 # and the script is at ./some_folder/some_script.py
 # you must make sure ./some_folder/__init__.py exists
 # and run  ./manage.py runscript some_folder.some_script
-import os, sys
+import os
+import sys
+
 from django.db import transaction
 
 
@@ -122,6 +124,7 @@ except ImportError as e:
 
 import datetime
 from decimal import Decimal
+
 from django.contrib.contenttypes.models import ContentType
 
 try:

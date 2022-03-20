@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
-
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[USER-SERVICE]"
 

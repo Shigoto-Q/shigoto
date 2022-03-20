@@ -6,6 +6,7 @@ from djstripe.models import Product
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from rest.views import ResourceListView, ResourceView
 from shigoto_q.users.api.serializers import (
     ProductSerializer,
     UserDumpSerializer,
@@ -13,8 +14,6 @@ from shigoto_q.users.api.serializers import (
     UserLoadSerializer,
 )
 from shigoto_q.users.services import users as user_services
-from rest.views import ResourceView, ResourceListView
-
 
 User = get_user_model()
 

@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
+from django.db import models
 
 
 class FavoriteSchedule(models.Model):
