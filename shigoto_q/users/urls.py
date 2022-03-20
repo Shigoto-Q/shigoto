@@ -10,11 +10,7 @@ from shigoto_q.users.views import SubscriberCreateView, UserLogoutView
 app_name = "users"
 
 urlpatterns = [
-    path(
-        "user/logout",
-        UserLogoutView.as_view(),
-        name="shigoto_q.users.logout"
-    ),
+    path("user/logout", UserLogoutView.as_view(), name="shigoto_q.users.logout"),
     path(
         "user/<str:user>/",
         api_views.UserView.as_view(),

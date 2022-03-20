@@ -10,7 +10,7 @@ urlpatterns = [
     path(
         "task/create/",
         views.TaskCreateView.as_view(),
-        name="shigoto_q.tasks.task.create"
+        name="shigoto_q.tasks.task.create",
     ),
     path(
         "tasks/list/",
@@ -21,5 +21,10 @@ urlpatterns = [
         "task/run/",
         views.TaskRunView.as_view(),
         name="shigoto_q.tasks.task.run",
+    ),
+    path(
+        "docker/images/list/",
+        views.UserImageListView.as_view(),
+        name="shigoto_q.tasks.docker.images-list",
     ),
 ]

@@ -1,18 +1,16 @@
 from __future__ import absolute_import
 
-
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from rest.serializers import CamelCaseSerializer
 
-
 User = get_user_model()
 
 
 class UserTaskImageSerializer(CamelCaseSerializer):
-    full_name = serializers.CharField()
-    repo_url = serializers.CharField()
+    name = serializers.CharField()
+    repository = serializers.CharField()
     image_name = serializers.CharField()
     command = serializers.CharField()
 

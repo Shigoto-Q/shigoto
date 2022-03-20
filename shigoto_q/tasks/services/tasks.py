@@ -89,3 +89,13 @@ def parse_params(kwargs: dict) -> dict:
         field.name for field in task_models.TaskResult._meta.get_fields()
     ]
     return {k: v for k, v in kwargs.items() if k in accepted_fields}
+
+
+def get_user_docker_images(filters: dict, user_id: int) -> list:
+    filters = filters or {}
+    return [
+        task_messages.UserDockerImage.from_model(obj)._asdict()
+        for obj in task_models.TaskImage.objects.filter(user_id=user_id).filter(
+            **filters
+        )
+    ]

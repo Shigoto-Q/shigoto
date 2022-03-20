@@ -20,7 +20,14 @@ class TaskResultAdmin(admin.ModelAdmin):
 
 @admin.register(TaskImage)
 class TaskImageAdmin(admin.ModelAdmin):
-    list_display = ("id", "repo_url", "full_name", "image_name", "command")
+    list_display = (
+        "id",
+        "repository",
+        "name",
+        "image_name",
+        "command",
+        "user",
+    )
 
 
 @admin.register(UserTask)

@@ -4,13 +4,13 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import (
-    PeriodicTask,
-    SolarSchedule,
+    PERIOD_CHOICES,
+    SINGULAR_PERIODS,
+    ClockedSchedule,
     CrontabSchedule,
     IntervalSchedule,
-    ClockedSchedule,
-    SINGULAR_PERIODS,
-    PERIOD_CHOICES,
+    PeriodicTask,
+    SolarSchedule,
 )
 
 from shigoto_q.tasks import enums
@@ -121,11 +121,11 @@ class TaskResult(models.Model):
 
 
 class TaskImage(models.Model):
-    repo_url = models.CharField(
+    repository = models.CharField(
         max_length=255, verbose_name=_("Url of the GitHub repository")
     )
 
-    full_name = models.CharField(
+    name = models.CharField(
         max_length=255, verbose_name=_("Name of the GitHub repository")
     )
 
@@ -140,6 +140,13 @@ class TaskImage(models.Model):
         max_length=255,
         help_text=_("Command to execute after image startup."),
         verbose_name=_("Command to execute"),
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        verbose_name=_("User"),
     )
 
 

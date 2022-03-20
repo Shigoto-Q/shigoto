@@ -7,29 +7,49 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_celery_beat', '0015_edit_solarschedule_events_choices'),
-        ('schedule', '0001_initial'),
+        ("django_celery_beat", "0015_edit_solarschedule_events_choices"),
+        ("schedule", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='favoriteschedule',
-            name='clocked',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.clockedschedule'),
+            model_name="favoriteschedule",
+            name="clocked",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="django_celery_beat.clockedschedule",
+            ),
         ),
         migrations.AddField(
-            model_name='favoriteschedule',
-            name='crontab',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.crontabschedule'),
+            model_name="favoriteschedule",
+            name="crontab",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="django_celery_beat.crontabschedule",
+            ),
         ),
         migrations.AddField(
-            model_name='favoriteschedule',
-            name='interval',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.intervalschedule'),
+            model_name="favoriteschedule",
+            name="interval",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="django_celery_beat.intervalschedule",
+            ),
         ),
         migrations.AddField(
-            model_name='favoriteschedule',
-            name='solar',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.solarschedule'),
+            model_name="favoriteschedule",
+            name="solar",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="django_celery_beat.solarschedule",
+            ),
         ),
     ]

@@ -34,3 +34,24 @@ class UserTask(
             last_run_at=task.last_run_at,
             task_type=task.task_type,
         )
+
+
+class UserDockerImage(
+    typing.NamedTuple(
+        "UserTask",
+        [
+            ("name", str),
+            ("repository", str),
+            ("image_name", str),
+            ("command", str),
+        ],
+    )
+):
+    @classmethod
+    def from_model(cls, image: task_models.TaskImage):
+        return cls(
+            name=image.name,
+            repository=image.repository,
+            image_name=image.image_name,
+            command=image.command,
+        )

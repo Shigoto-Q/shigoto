@@ -7,13 +7,13 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0013_auto_20220226_1216'),
+        ("tasks", "0013_auto_20220226_1216"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='usertask',
-            name='external_task_id',
+            model_name="usertask",
+            name="external_task_id",
             field=models.UUIDField(default=uuid.uuid4, editable=False),
         ),
     ]

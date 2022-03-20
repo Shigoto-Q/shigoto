@@ -3,18 +3,30 @@ from __future__ import absolute_import
 from django.contrib.auth import get_user_model
 
 from config.celery_app import app
+from rest.views import ResourceListView, ResourceView
 from shigoto_q.tasks.api.serializers import (
-    TaskLoadSerializer,
     TaskDumpSerializer,
-    TasksListSerializer,
+    TaskLoadSerializer,
     TaskRunSerializer,
+    TasksListSerializer,
+    UserTaskImageSerializer,
 )
-from utils import enums as task_enums
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
-from rest.views import ResourceView, ResourceListView
+from utils import enums as task_enums
 
 User = get_user_model()
+
+
+class UserImageListView(ResourceListView):
+    serializer_dump_class = UserTaskImageSerializer
+    serializer_load_class = UserTaskImageSerializer
+
+    def fetch(self, filters):
+        return task_services.get_user_docker_images(
+            filters=filters,
+            user_id=self.request.user.id,
+        )
 
 
 class UserTaskListView(ResourceListView):
@@ -47,6 +59,6 @@ class TaskRunView(ResourceView):
     def execute(self, data):
         return task_services.run_task(
             app=app,
-            external_task_id=data.get('external_task_id'),
+            external_task_id=data.get("external_task_id"),
             user=self.request.user,
         )
