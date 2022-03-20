@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from tests.factory.users import users_factory
 from shigoto_q.users import models as user_models
+from tests.factory.users import users_factory
 
 
 class Command(BaseCommand):

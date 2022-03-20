@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
-from rest_framework import serializers
-from rest_framework import status
+from rest_framework import serializers, status
 
 from rest.utils import CaseConverter
 

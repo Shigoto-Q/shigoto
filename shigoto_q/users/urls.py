@@ -1,8 +1,5 @@
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from shigoto_q.users.api import views as api_views
 from shigoto_q.users.views import SubscriberCreateView, UserLogoutView
