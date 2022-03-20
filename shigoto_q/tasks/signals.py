@@ -6,19 +6,18 @@ from celery.signals import (
     task_failure,
     task_prerun,
     task_retry,
-    task_success,
     task_revoked,
+    task_success,
 )
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save, pre_save
 from django.db.models import Count, Q
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from services.redis.client import RedisClient
-from shigoto_q.tasks.models import TaskResult
 from shigoto_q.tasks.enums import LogEvent, TaskStatus
+from shigoto_q.tasks.models import TaskResult
 from shigoto_q.tasks.services import tasks as task_services
-
 
 User = get_user_model()
 client = RedisClient

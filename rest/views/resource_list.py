@@ -3,10 +3,9 @@ import logging
 from django.core import exceptions as django_exceptions
 from rest_framework import exceptions as drf_exceptions
 
-from rest.views.base import BaseView
+from rest.responses import BadResponse, OkResponse
 from rest.serializers import ResourceListResponseSerializer
-from rest.responses import OkResponse, BadResponse
-
+from rest.views.base import BaseView
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[REST-RESOURCE-LIST]"

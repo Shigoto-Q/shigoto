@@ -1,12 +1,12 @@
 import factory
 
+from shigoto_q.tasks import enums as task_enums
+from shigoto_q.tasks.models import UserTask
 from tests.factory.schedule.schedule_factory import (
     CrontabFactory,
     IntervalFactory,
     SolarFactory,
 )
-from shigoto_q.tasks.models import UserTask
-from shigoto_q.tasks import enums as task_enums
 
 
 class TaskFactory(factory.django.DjangoModelFactory):
