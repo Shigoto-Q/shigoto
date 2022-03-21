@@ -8,7 +8,6 @@ from django.db import transaction
 from django.forms import model_to_dict
 from kombu.utils.json import loads
 
-from services.internal_docker.client import DockerImageService
 from shigoto_q.tasks import enums as task_enums
 from shigoto_q.tasks import models as task_models
 from shigoto_q.tasks.enums import TaskType, TaskTypeEnum
@@ -105,10 +104,5 @@ def get_user_docker_images(filters: dict, user_id: int) -> list:
 def create_docker_image(data):
     with transaction.atomic():
         image = task_models.TaskImage.objects.create(**data)
-        DockerImageService.create_docker_image(
-            repo_url=image.repository,
-            full_name=image.name,
-            image_name=image.image_name,
-        )
         logger.info(f"{_LOG_PREFIX} Creating new docker image with data - {data}")
     return image.__dict__

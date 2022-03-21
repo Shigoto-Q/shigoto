@@ -305,3 +305,6 @@ DIND_PORT = 2375
 
 REDIS_HOST = "redis"
 REDIS_PORT = 6379
+
+TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
+DOCKER_TAG_PREFIX = "shigoto/"
