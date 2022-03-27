@@ -44,6 +44,7 @@ class UserDockerImage(
             ("repository", str),
             ("image_name", str),
             ("command", str),
+            ("secret_key", str),
         ],
     )
 ):
@@ -54,4 +55,5 @@ class UserDockerImage(
             repository=image.repository,
             image_name=image.image_name,
             command=image.command,
+            secret_key=image.secret_key,
         )

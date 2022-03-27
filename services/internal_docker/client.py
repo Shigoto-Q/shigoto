@@ -59,3 +59,11 @@ class DockerClient:
             pass
         for _ in cls.push_image(image_tag=image_tag):
             pass
+
+    @classmethod
+    def get_image_details(cls, image_name):
+        image = cls.client.inspect_image(image_name)
+        return dict(
+            last_update=image["Metadata"]["LastTagTime"],
+            created_at=image["Created"],
+        )

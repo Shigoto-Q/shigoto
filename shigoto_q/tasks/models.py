@@ -1,3 +1,4 @@
+import secrets
 import uuid
 
 from django.contrib.auth import get_user_model
@@ -16,6 +17,10 @@ from django_celery_beat.models import (
 from shigoto_q.tasks import enums
 
 User = get_user_model()
+
+
+def generate_secret():
+    return secrets.token_urlsafe()
 
 
 class TaskResult(models.Model):
@@ -147,6 +152,12 @@ class TaskImage(models.Model):
         null=True,
         default=None,
         verbose_name=_("User"),
+    )
+    secret_key = models.CharField(
+        max_length=512,
+        default=generate_secret,
+        null=True,
+        blank=True,
     )
 
 

@@ -32,4 +32,9 @@ urlpatterns = [
         views.DockerImageCreateView.as_view(),
         name="shigoto_q.tasks.docker.images-create",
     ),
+    path(
+        "stream/",
+        views.test_sse,
+        name="shigoto_q.tasks.docker.stream",
+    ),
 ]

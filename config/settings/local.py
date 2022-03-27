@@ -14,7 +14,7 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="ps4DJ3Yd03UX80YHig5jDOtXWAqORqVpO6jj0pqDMCnc5e9lEKIrXm3MxYsGGLd9",
 )
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "django"]
 CORS_ALLOW_ALL_ORIGINS = True
 CACHES = {
     "default": {
