@@ -12,8 +12,8 @@ from shigoto_q.tasks.api.serializers import (
     TaskLoadSerializer,
     TaskRunSerializer,
     TasksListSerializer,
-    UserImageCreateLoadSerializer,
     UserImageCreateDumpSerializer,
+    UserImageCreateLoadSerializer,
     UserTaskImageSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
