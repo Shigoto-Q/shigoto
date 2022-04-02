@@ -5,7 +5,6 @@ from shigoto_q.docker import models as docker_models
 from shigoto_q.tasks import models as task_models
 
 
-
 class UserTask(
     typing.NamedTuple(
         "UserTask",

@@ -11,45 +11,209 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('django_celery_beat', '0015_edit_solarschedule_events_choices'),
+        ("django_celery_beat", "0015_edit_solarschedule_events_choices"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('docker', '0001_initial'),
+        ("docker", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserTask',
+            name="UserTask",
             fields=[
-                ('periodictask_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='django_celery_beat.periodictask')),
-                ('external_task_id', models.UUIDField(default=uuid.uuid4, editable=False)),
-                ('task_type', models.PositiveSmallIntegerField(choices=[(0, 'Simple Http Operator'), (1, 'Kubernetes Operator'), (2, 'Docker Operator')], default=0)),
-                ('image', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tasks_usertask_related', related_query_name='tasks_usertasks', to='docker.dockerimage')),
-                ('user', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                (
+                    "periodictask_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="django_celery_beat.periodictask",
+                    ),
+                ),
+                (
+                    "external_task_id",
+                    models.UUIDField(default=uuid.uuid4, editable=False),
+                ),
+                (
+                    "task_type",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (0, "Simple Http Operator"),
+                            (1, "Kubernetes Operator"),
+                            (2, "Docker Operator"),
+                        ],
+                        default=0,
+                    ),
+                ),
+                (
+                    "image",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tasks_usertask_related",
+                        related_query_name="tasks_usertasks",
+                        to="docker.dockerimage",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="User",
+                    ),
+                ),
             ],
-            bases=('django_celery_beat.periodictask',),
+            bases=("django_celery_beat.periodictask",),
         ),
         migrations.CreateModel(
-            name='TaskResult',
+            name="TaskResult",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('task_id', models.CharField(help_text='Celery ID for the task that was run', max_length=255, unique=True, verbose_name='Task ID')),
-                ('task_name', models.CharField(help_text='Name of the task that was run', max_length=255, null=True, verbose_name='Task name')),
-                ('task_args', models.TextField(help_text='JSON represantation of the positional arguments', null=True, verbose_name='Positional arguments')),
-                ('task_kwargs', models.TextField(help_text='JSON represantation of the named arguments', null=True, verbose_name='Named arguments')),
-                ('status', models.PositiveSmallIntegerField(choices=[(0, 'Pending'), (1, 'Received'), (2, 'Started'), (3, 'Success'), (4, 'Failure'), (5, 'Revoked'), (6, 'Rejected'), (7, 'Retry'), (8, 'Ignored')], default=0, help_text='Current state of the task being run', verbose_name='Task status')),
-                ('worker', models.CharField(default=None, help_text='Worker that executes the tasks', max_length=100, null=True, verbose_name='Worker')),
-                ('result', models.TextField(default=None, editable=False, help_text='The data retuned by the task', null=True, verbose_name='Task result')),
-                ('traceback', models.TextField(default=True, help_text='Traceback from the task', null=True, verbose_name='Traceback')),
-                ('exception', models.TextField(default=True, help_text='Exception from the task', null=True, verbose_name='Exception')),
-                ('date_done', models.DateTimeField(auto_now=True, help_text='DateTime field when the task finished(in UTC).', verbose_name='Task completion datetime')),
-                ('date_created', models.DateTimeField(auto_now_add=True, help_text='Datetime field when the task was created(in UTC).', null=True, verbose_name='Created datetime')),
-                ('task_beat_id', models.IntegerField(help_text='Celery beat (periodic task) ID', null=True, verbose_name='Celery beat ID')),
-                ('user', models.ForeignKey(default=None, help_text='User who ran the task', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "task_id",
+                    models.CharField(
+                        help_text="Celery ID for the task that was run",
+                        max_length=255,
+                        unique=True,
+                        verbose_name="Task ID",
+                    ),
+                ),
+                (
+                    "task_name",
+                    models.CharField(
+                        help_text="Name of the task that was run",
+                        max_length=255,
+                        null=True,
+                        verbose_name="Task name",
+                    ),
+                ),
+                (
+                    "task_args",
+                    models.TextField(
+                        help_text="JSON represantation of the positional arguments",
+                        null=True,
+                        verbose_name="Positional arguments",
+                    ),
+                ),
+                (
+                    "task_kwargs",
+                    models.TextField(
+                        help_text="JSON represantation of the named arguments",
+                        null=True,
+                        verbose_name="Named arguments",
+                    ),
+                ),
+                (
+                    "status",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (0, "Pending"),
+                            (1, "Received"),
+                            (2, "Started"),
+                            (3, "Success"),
+                            (4, "Failure"),
+                            (5, "Revoked"),
+                            (6, "Rejected"),
+                            (7, "Retry"),
+                            (8, "Ignored"),
+                        ],
+                        default=0,
+                        help_text="Current state of the task being run",
+                        verbose_name="Task status",
+                    ),
+                ),
+                (
+                    "worker",
+                    models.CharField(
+                        default=None,
+                        help_text="Worker that executes the tasks",
+                        max_length=100,
+                        null=True,
+                        verbose_name="Worker",
+                    ),
+                ),
+                (
+                    "result",
+                    models.TextField(
+                        default=None,
+                        editable=False,
+                        help_text="The data retuned by the task",
+                        null=True,
+                        verbose_name="Task result",
+                    ),
+                ),
+                (
+                    "traceback",
+                    models.TextField(
+                        default=True,
+                        help_text="Traceback from the task",
+                        null=True,
+                        verbose_name="Traceback",
+                    ),
+                ),
+                (
+                    "exception",
+                    models.TextField(
+                        default=True,
+                        help_text="Exception from the task",
+                        null=True,
+                        verbose_name="Exception",
+                    ),
+                ),
+                (
+                    "date_done",
+                    models.DateTimeField(
+                        auto_now=True,
+                        help_text="DateTime field when the task finished(in UTC).",
+                        verbose_name="Task completion datetime",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        help_text="Datetime field when the task was created(in UTC).",
+                        null=True,
+                        verbose_name="Created datetime",
+                    ),
+                ),
+                (
+                    "task_beat_id",
+                    models.IntegerField(
+                        help_text="Celery beat (periodic task) ID",
+                        null=True,
+                        verbose_name="Celery beat ID",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        help_text="User who ran the task",
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="User",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Task Result',
-                'verbose_name_plural': 'Task results',
-                'ordering': ['-date_done'],
+                "verbose_name": "Task Result",
+                "verbose_name_plural": "Task results",
+                "ordering": ["-date_done"],
             },
         ),
     ]

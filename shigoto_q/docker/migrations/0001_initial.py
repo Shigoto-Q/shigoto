@@ -16,15 +16,66 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='DockerImage',
+            name="DockerImage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('repository', models.CharField(max_length=255, verbose_name='Github repository url')),
-                ('name', models.CharField(max_length=255, verbose_name='Github repository name')),
-                ('image_name', models.CharField(help_text='Name of the Docker image inside user namespace', max_length=255, unique=True, verbose_name='Image name')),
-                ('command', models.CharField(help_text='Command to execute after image startup.', max_length=255, verbose_name='Command to execute')),
-                ('secret_key', models.CharField(blank=True, default=shigoto_q.docker.models.generate_secret, max_length=512, null=True, unique=True)),
-                ('user', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "repository",
+                    models.CharField(
+                        max_length=255, verbose_name="Github repository url"
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, verbose_name="Github repository name"
+                    ),
+                ),
+                (
+                    "image_name",
+                    models.CharField(
+                        help_text="Name of the Docker image inside user namespace",
+                        max_length=255,
+                        unique=True,
+                        verbose_name="Image name",
+                    ),
+                ),
+                (
+                    "command",
+                    models.CharField(
+                        help_text="Command to execute after image startup.",
+                        max_length=255,
+                        verbose_name="Command to execute",
+                    ),
+                ),
+                (
+                    "secret_key",
+                    models.CharField(
+                        blank=True,
+                        default=shigoto_q.docker.models.generate_secret,
+                        max_length=512,
+                        null=True,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="User",
+                    ),
+                ),
             ],
         ),
     ]

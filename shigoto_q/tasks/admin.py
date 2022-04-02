@@ -18,7 +18,6 @@ class TaskResultAdmin(admin.ModelAdmin):
     list_filter = ("date_done", "date_created", "user")
 
 
-
 @admin.register(UserTask)
 class UserTaskAdmin(admin.ModelAdmin):
     list_display = (
