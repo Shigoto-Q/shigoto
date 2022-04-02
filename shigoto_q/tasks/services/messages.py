@@ -45,15 +45,42 @@ class UserDockerImage(
             ("image_name", str),
             ("command", str),
             ("secret_key", str),
+            ("id", int),
         ],
     )
 ):
     @classmethod
-    def from_model(cls, image: task_models.TaskImage):
+    def from_model(cls, image: task_models.DockerImage):
         return cls(
             name=image.name,
             repository=image.repository,
             image_name=image.image_name,
             command=image.command,
             secret_key=image.secret_key,
+            id=image.id,
+        )
+
+
+class TaskResult(
+    typing.NamedTuple(
+        "TaskResult",
+        [
+            ("task_id", str),
+            ("task_name", str),
+            ("status", int),
+            ("user", str),
+            ("user_id", int),
+            ("finished_at", datetime.datetime)
+        ],
+    )
+):
+    @classmethod
+    def from_model(cls, task_result: task_models.TaskResult):
+        return cls(
+            task_id=task_result.task_id,
+            task_name=task_result.task_name,
+            status=task_result.status,
+            user=task_result.user.first_name,
+            user_id=task_result.user_id,
+            finished_at=task_result.date_done,
         )

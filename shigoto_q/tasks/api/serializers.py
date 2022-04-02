@@ -8,7 +8,21 @@ from rest.serializers import CamelCaseSerializer
 User = get_user_model()
 
 
+class TaskResultSerializer(CamelCaseSerializer):
+    task_id = serializers.CharField(required=False)
+    task_name = serializers.CharField(required=False, allow_null=True)
+    status = serializers.IntegerField(required=False)
+    user = serializers.CharField(required=False)
+    user_id = serializers.IntegerField(required=False)
+    finished_at = serializers.DateTimeField(required=False)
+
+
+class DockerImageDeleteSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
+
+
 class UserImageCreateDumpSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
     repository = serializers.CharField()
     image_name = serializers.CharField()
@@ -26,6 +40,7 @@ class UserImageCreateLoadSerializer(CamelCaseSerializer):
 
 
 class UserTaskImageSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
     repository = serializers.CharField()
     image_name = serializers.CharField()

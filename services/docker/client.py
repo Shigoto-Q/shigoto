@@ -5,7 +5,7 @@ import logging
 import docker
 from django.conf import settings
 
-from services.internal_docker.exceptions import (
+from services.docker.exceptions import (
     DockerContainerNotFound,
     DockerImageNotFound,
 )
@@ -41,7 +41,7 @@ class DockerClient:
             for line in cls.client.pull(image_tag, stream=stream, decode=True):
                 yield json.dumps(line, indent=4)
         else:
-            return cls.client.pull(self.image_name, decode=True)
+            return cls.client.pull(cls.image_name, decode=True)
 
     @classmethod
     def build_and_push_image(cls, internal_path: str, image_tag: str):
@@ -67,3 +67,8 @@ class DockerClient:
             last_update=image["Metadata"]["LastTagTime"],
             created_at=image["Created"],
         )
+
+
+    @classmethod
+    def delete_docker_image(cls, image_name):
+       pass

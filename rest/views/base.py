@@ -53,7 +53,6 @@ class BaseView(APIView):
         return data
 
     def _process_request_data(self):
-        print(self.post_data)
         load_serializer = self.get_load_serializer(data=self.post_data)
         load_serializer.is_valid(raise_exception=True)
         data = load_serializer.validated_data

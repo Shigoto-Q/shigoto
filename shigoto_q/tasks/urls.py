@@ -23,6 +23,11 @@ urlpatterns = [
         name="shigoto_q.tasks.task.run",
     ),
     path(
+        "tasks/results/list/",
+        views.TaskResultListView.as_view(),
+        name="shigoto_q.tasks.tasks.result.list",
+    ),
+    path(
         "docker/images/list/",
         views.UserImageListView.as_view(),
         name="shigoto_q.tasks.docker.images-list",
@@ -33,8 +38,8 @@ urlpatterns = [
         name="shigoto_q.tasks.docker.images-create",
     ),
     path(
-        "stream/",
-        views.test_sse,
-        name="shigoto_q.tasks.docker.stream",
+        "docker/images/delete/",
+        views.DockerImageDeleteView.as_view(),
+        name="shigoto_q.tasks.docker.images-delete",
     ),
 ]

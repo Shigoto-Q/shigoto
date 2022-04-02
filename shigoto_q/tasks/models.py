@@ -125,7 +125,7 @@ class TaskResult(models.Model):
         return f"<Task: {self.task_id} {self.status}>"
 
 
-class TaskImage(models.Model):
+class DockerImage(models.Model):
     repository = models.CharField(
         max_length=255, verbose_name=_("Url of the GitHub repository")
     )
@@ -158,6 +158,7 @@ class TaskImage(models.Model):
         default=generate_secret,
         null=True,
         blank=True,
+        unique=True,
     )
 
 
@@ -170,7 +171,7 @@ class UserTask(PeriodicTask):
         choices=enums.TaskType.choices, default=enums.TaskType.SIMPLE_HTTP_OPERATOR
     )  # TODO Rename to type
     image = models.OneToOneField(
-        TaskImage,
+        DockerImage,
         null=True,
         blank=True,
         on_delete=models.CASCADE,

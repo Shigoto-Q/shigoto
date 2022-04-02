@@ -15,6 +15,8 @@ from shigoto_q.tasks.api.serializers import (
     UserImageCreateLoadSerializer,
     UserImageCreateDumpSerializer,
     UserTaskImageSerializer,
+    DockerImageDeleteSerializer,
+    TaskResultSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
@@ -23,12 +25,26 @@ from utils import enums as task_enums
 User = get_user_model()
 
 
-def test_sse(request):
-    def event_stream():
-        for i in range(1, 20):
-            yield f"data: event #{i}"
+class TaskResultListView(ResourceListView):
+    serializer_dump_class = TaskResultSerializer
+    serializer_load_class = TaskResultSerializer
+    owner_check = True
 
-    return StreamingHttpResponse(event_stream(), content_type="text/event-stream")
+    def fetch(self, filters):
+        return task_services.list_task_results(filters=filters)
+
+
+
+class DockerImageDeleteView(ResourceView):
+    serializer_dump_class = DockerImageDeleteSerializer
+    serializer_load_class = DockerImageDeleteSerializer
+    owner_check = True
+
+    def execute(self, data):
+        return task_services.delete_docker_image(
+            task_id=data.get('id'),
+            user_id=data.get('user_id'),
+        )
 
 
 class DockerImageCreateView(ResourceView):
