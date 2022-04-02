@@ -1,9 +1,8 @@
 import datetime
 
 from services.docker.client import DockerClient
-
-from shigoto_q.docker.api.messages import DockerImage
 from shigoto_q.docker import models as docker_models
+from shigoto_q.docker.api.messages import DockerImage
 
 
 def list_docker_images(filters: dict = None):
