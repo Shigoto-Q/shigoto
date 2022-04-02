@@ -47,7 +47,3 @@ class DockerImage(models.Model):
         blank=True,
         unique=True,
     )
-
-
-
-

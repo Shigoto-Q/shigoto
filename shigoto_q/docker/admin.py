@@ -13,4 +13,3 @@ class DockerImageAdmin(admin.ModelAdmin):
         "command",
         "user",
     )
-
