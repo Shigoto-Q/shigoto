@@ -135,7 +135,7 @@ class UserTask(PeriodicTask):
         choices=enums.TaskType.choices, default=enums.TaskType.SIMPLE_HTTP_OPERATOR
     )  # TODO Rename to type
     image = models.OneToOneField(
-        'docker.DockerImage',
+        "docker.DockerImage",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

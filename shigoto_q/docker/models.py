@@ -17,9 +17,7 @@ class DockerImage(models.Model):
         max_length=255, verbose_name=_("Github repository url")
     )
 
-    name = models.CharField(
-        max_length=255, verbose_name=_("Github repository name")
-    )
+    name = models.CharField(max_length=255, verbose_name=_("Github repository name"))
 
     image_name = models.CharField(
         unique=True,

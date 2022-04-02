@@ -9,7 +9,7 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[DOCKER-SERVICE]"
-_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class DockerClient:
