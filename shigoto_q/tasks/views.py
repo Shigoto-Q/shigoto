@@ -8,15 +8,15 @@ from django.http import StreamingHttpResponse
 from config.celery_app import app
 from rest.views import ResourceListView, ResourceView
 from shigoto_q.tasks.api.serializers import (
+    DockerImageDeleteSerializer,
     TaskDumpSerializer,
     TaskLoadSerializer,
+    TaskResultSerializer,
     TaskRunSerializer,
     TasksListSerializer,
     UserImageCreateDumpSerializer,
     UserImageCreateLoadSerializer,
     UserTaskImageSerializer,
-    DockerImageDeleteSerializer,
-    TaskResultSerializer,
 )
 from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services

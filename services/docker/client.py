@@ -5,10 +5,7 @@ import logging
 import docker
 from django.conf import settings
 
-from services.docker.exceptions import (
-    DockerContainerNotFound,
-    DockerImageNotFound,
-)
+from services.docker.exceptions import DockerContainerNotFound, DockerImageNotFound
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[DOCKER-SERVICE]"
