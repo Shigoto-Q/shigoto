@@ -113,8 +113,13 @@ def delete_docker_image(task_id: int, user_id: int):
 
 def list_task_results(filters, page=1, size=10):
     pages = Paginator(
-        object_list=task_models.TaskResult.objects.filter(**filters).select_related('user'),
-        per_page=size
+        object_list=task_models.TaskResult.objects.filter(**filters).select_related(
+            "user"
+        ),
+        per_page=size,
     )
-    data = [task_messages.TaskResult.from_model(obj)._asdict() for obj in pages.get_page(page)]
+    data = [
+        task_messages.TaskResult.from_model(obj)._asdict()
+        for obj in pages.get_page(page)
+    ]
     return data

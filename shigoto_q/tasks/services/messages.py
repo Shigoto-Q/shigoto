@@ -70,7 +70,7 @@ class TaskResult(
             ("status", int),
             ("user", str),
             ("user_id", int),
-            ("finished_at", datetime.datetime)
+            ("finished_at", datetime.datetime),
         ],
     )
 ):

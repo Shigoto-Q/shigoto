@@ -34,7 +34,6 @@ class TaskResultListView(ResourceListView):
         return task_services.list_task_results(filters=filters)
 
 
-
 class DockerImageDeleteView(ResourceView):
     serializer_dump_class = DockerImageDeleteSerializer
     serializer_load_class = DockerImageDeleteSerializer
@@ -42,8 +41,8 @@ class DockerImageDeleteView(ResourceView):
 
     def execute(self, data):
         return task_services.delete_docker_image(
-            task_id=data.get('id'),
-            user_id=data.get('user_id'),
+            task_id=data.get("id"),
+            user_id=data.get("user_id"),
         )
 
 

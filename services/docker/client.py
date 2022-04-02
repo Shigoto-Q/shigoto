@@ -68,7 +68,6 @@ class DockerClient:
             created_at=image["Created"],
         )
 
-
     @classmethod
     def delete_docker_image(cls, image_name):
-       pass
+        pass
