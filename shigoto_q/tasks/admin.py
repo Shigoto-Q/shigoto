@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import DockerImage, TaskResult, UserTask
+from .models import TaskResult, UserTask
 
 
 @admin.register(TaskResult)
@@ -17,17 +17,6 @@ class TaskResultAdmin(admin.ModelAdmin):
     )
     list_filter = ("date_done", "date_created", "user")
 
-
-@admin.register(DockerImage)
-class DockerImageAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "repository",
-        "name",
-        "image_name",
-        "command",
-        "user",
-    )
 
 
 @admin.register(UserTask)
@@ -58,7 +47,7 @@ class UserTaskAdmin(admin.ModelAdmin):
         "date_changed",
         "description",
         "external_task_id",
-        "task_type",
+        "type",
         "image",
         "user",
     )

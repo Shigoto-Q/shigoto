@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from kombu.utils.json import loads
 
+from shigoto_q.docker import models as docker_models
 from shigoto_q.tasks import enums as task_enums
 from shigoto_q.tasks import models as task_models
 from shigoto_q.tasks.enums import TaskType, TaskTypeEnum
@@ -33,13 +34,13 @@ def run_task(app, external_task_id: int, user) -> dict:
     return tasks.first().__dict__
 
 
-def get_all_task_types():
+def get_all_types():
     return list(map(lambda task: task.value._asdict(), task_enums.TaskEnum))
 
 
 def create_task(kwargs, user):
     with transaction.atomic():
-        if kwargs.get("task_type") == TaskType.SIMPLE_HTTP_OPERATOR.value:
+        if kwargs.get("type") == TaskType.SIMPLE_HTTP_OPERATOR.value:
             kwargs["task"] = TaskTypeEnum.SIMPLE_HTTP_OPERATOR.value
             kwargs["kwargs"] = {
                 "url": kwargs.pop("http_endpoint"),
@@ -93,7 +94,7 @@ def get_user_docker_images(filters: dict, user_id: int) -> list:
     filters = filters or {}
     return [
         task_messages.UserDockerImage.from_model(obj)._asdict()
-        for obj in task_models.DockerImage.objects.filter(user_id=user_id).filter(
+        for obj in docker_models.DockerImage.objects.filter(user_id=user_id).filter(
             **filters
         )
     ]
@@ -101,14 +102,14 @@ def get_user_docker_images(filters: dict, user_id: int) -> list:
 
 def create_docker_image(data):
     with transaction.atomic():
-        image = task_models.DockerImage.objects.create(**data)
+        image = docker_models.DockerImage.objects.create(**data)
         logger.info(f"{_LOG_PREFIX} Creating new docker image with data - {data}")
     return image.__dict__
 
 
 def delete_docker_image(task_id: int, user_id: int):
     with transaction.atomic():
-        task_models.DockerImage.objects.get(id=task_id, user_id=user_id).delete()
+        docker_models.DockerImage.objects.get(id=task_id, user_id=user_id).delete()
 
 
 def list_task_results(filters, page=1, size=10):

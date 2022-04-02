@@ -1,14 +1,15 @@
-import datetime
 import json
 import logging
+
+from django.utils.dateparse import parse_datetime
 
 import docker
 from django.conf import settings
 
-from services.docker.exceptions import DockerContainerNotFound, DockerImageNotFound
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[DOCKER-SERVICE]"
+_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class DockerClient:
@@ -59,10 +60,10 @@ class DockerClient:
 
     @classmethod
     def get_image_details(cls, image_name):
-        image = cls.client.inspect_image(image_name)
+        image = cls.client.inspect_image(f"shigoto/{image_name}")
         return dict(
-            last_update=image["Metadata"]["LastTagTime"],
-            created_at=image["Created"],
+            last_update=parse_datetime(image["Metadata"]["LastTagTime"]),
+            created_at=parse_datetime(image["Created"]),
         )
 
     @classmethod

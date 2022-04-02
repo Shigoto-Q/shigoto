@@ -1,8 +1,9 @@
 import datetime
 import typing
 
-from shigoto_q.tasks import enums
+from shigoto_q.docker import models as docker_models
 from shigoto_q.tasks import models as task_models
+
 
 
 class UserTask(
@@ -17,7 +18,7 @@ class UserTask(
             ("enabled", bool),
             ("total_run_count", int),
             ("last_run_at", datetime.datetime),
-            ("task_type", int),
+            ("type", int),
         ],
     )
 ):
@@ -32,7 +33,7 @@ class UserTask(
             enabled=task.enabled,
             total_run_count=task.total_run_count,
             last_run_at=task.last_run_at,
-            task_type=task.task_type,
+            type=task.type,
         )
 
 
@@ -50,7 +51,7 @@ class UserDockerImage(
     )
 ):
     @classmethod
-    def from_model(cls, image: task_models.DockerImage):
+    def from_model(cls, image: docker_models.DockerImage):
         return cls(
             name=image.name,
             repository=image.repository,
