@@ -1,28 +1,59 @@
 from __future__ import absolute_import
 
+from time import sleep
+
 from django.contrib.auth import get_user_model
 
 from config.celery_app import app
+from rest.common.fetch import fetch_and_paginate
 from rest.views import ResourceListView, ResourceView
 from shigoto_q.tasks.api.serializers import (
+    DockerImageDeleteSerializer,
     TaskDumpSerializer,
     TaskLoadSerializer,
+    TaskResultSerializer,
     TaskRunSerializer,
     TasksListSerializer,
-    UserImageCreateSerializer,
+    UserImageCreateDumpSerializer,
+    UserImageCreateLoadSerializer,
     UserTaskImageSerializer,
 )
-from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
-from utils import enums as task_enums
+from shigoto_q.tasks.services.messages import TaskResult
 
 User = get_user_model()
 
 
+class TaskResultListView(ResourceListView):
+    serializer_dump_class = TaskResultSerializer
+    serializer_load_class = TaskResultSerializer
+    owner_check = True
+
+    def fetch(self, filters, pagination):
+        return fetch_and_paginate(
+            func=task_services.list_task_results,
+            filters=filters,
+            pagination=pagination,
+            serializer_func=TaskResult.from_model
+        )
+
+
+class DockerImageDeleteView(ResourceView):
+    serializer_dump_class = DockerImageDeleteSerializer
+    serializer_load_class = DockerImageDeleteSerializer
+    owner_check = True
+
+    def execute(self, data):
+        return task_services.delete_docker_image(
+            task_id=data.get("id"),
+            user_id=data.get("user_id"),
+        )
+
+
 class DockerImageCreateView(ResourceView):
     http_method_names = ["post"]
-    serializer_dump_class = UserImageCreateSerializer
-    serializer_load_class = UserImageCreateSerializer
+    serializer_dump_class = UserImageCreateDumpSerializer
+    serializer_load_class = UserImageCreateLoadSerializer
     owner_check = True
 
     def execute(self, data):

@@ -8,7 +8,30 @@ from rest.serializers import CamelCaseSerializer
 User = get_user_model()
 
 
-class UserImageCreateSerializer(CamelCaseSerializer):
+class TaskResultSerializer(CamelCaseSerializer):
+    task_id = serializers.CharField(required=False)
+    task_name = serializers.CharField(required=False)
+    status = serializers.IntegerField(required=False)
+    user = serializers.CharField(required=False)
+    user_id = serializers.IntegerField(required=False)
+    finished_at = serializers.DateTimeField(required=False)
+
+
+class DockerImageDeleteSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
+
+
+class UserImageCreateDumpSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    repository = serializers.CharField()
+    image_name = serializers.CharField()
+    command = serializers.CharField()
+    user_id = serializers.IntegerField(required=False)
+    secret_key = serializers.CharField(required=False)
+
+
+class UserImageCreateLoadSerializer(CamelCaseSerializer):
     name = serializers.CharField()
     repository = serializers.CharField()
     image_name = serializers.CharField()
@@ -17,6 +40,7 @@ class UserImageCreateSerializer(CamelCaseSerializer):
 
 
 class UserTaskImageSerializer(CamelCaseSerializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
     repository = serializers.CharField()
     image_name = serializers.CharField()
@@ -33,7 +57,7 @@ class SimpleHttpOperatorSerializer(CamelCaseSerializer):
 
 class TaskLoadSerializer(CamelCaseSerializer):
     name = serializers.CharField(required=True)
-    task_type = serializers.IntegerField(required=True)
+    type = serializers.IntegerField(required=True)
     image = UserTaskImageSerializer(required=False, allow_null=True)
     crontab_id = serializers.IntegerField(default=None, required=False, allow_null=True)
     interval_id = serializers.IntegerField(
@@ -54,7 +78,7 @@ class TaskLoadSerializer(CamelCaseSerializer):
 
 class TaskDumpSerializer(CamelCaseSerializer):
     name = serializers.CharField(required=True)
-    task_type = serializers.IntegerField(required=True)
+    type = serializers.IntegerField(required=True)
     image = UserTaskImageSerializer(required=False, allow_null=True)
     crontab_id = serializers.IntegerField(required=False, allow_null=True)
     interval_id = serializers.IntegerField(required=False, allow_null=True)
@@ -74,7 +98,7 @@ class TaskDumpSerializer(CamelCaseSerializer):
 class TasksListSerializer(CamelCaseSerializer):
     name = serializers.CharField(required=False)
     external_task_id = serializers.UUIDField(required=False)
-    task_type = serializers.IntegerField(required=False)
+    type = serializers.IntegerField(required=False)
     image = UserTaskImageSerializer(required=False, allow_null=True)
     crontab_id = serializers.IntegerField(required=False, allow_null=True)
     interval_id = serializers.IntegerField(required=False, allow_null=True)

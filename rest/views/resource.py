@@ -3,7 +3,7 @@ import logging
 from django.core import exceptions as django_exceptions
 from rest_framework import exceptions as drf_exceptions
 
-from rest.responses import BadResponse, OkResponse
+from rest.responses import BadResponse, NoContentResponse, OkResponse
 from rest.views.base import BaseView
 
 logger = logging.getLogger(__name__)
@@ -25,6 +25,8 @@ class ResourceView(BaseView):
         try:
             load_serializer = self._process_request_data()
             resource = self.execute(load_serializer)
+            if resource is None:
+                return NoContentResponse()
             _response_data = self._process_post_response_data(resource)
             return OkResponse(data=_response_data)
         except drf_exceptions.ValidationError as e:

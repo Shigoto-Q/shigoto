@@ -15,6 +15,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from services.redis.client import RedisClient
+from shigoto_q.tasks.api.serializers import TaskResultSerializer
 from shigoto_q.tasks.enums import LogEvent, TaskStatus
 from shigoto_q.tasks.models import TaskResult
 from shigoto_q.tasks.services import tasks as task_services
@@ -37,24 +38,24 @@ def task_sent_handler(sender=None, headers=None, body=None, properties=None, **k
     kwargsrepr["user"] = get_user(kwargsrepr.get("user_id"))
     kwargsrepr["status"] = TaskStatus.RECEIVED
     task_result = task_services.create_task_result(kwargsrepr)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @task_prerun.connect
 def task_prerun_handler(sender=None, *args, **kwargs):
     kwargs = dict(status=TaskStatus.STARTED)
     task_result = task_services.update_task_result(kwargs, sender.request.id)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @task_success.connect
 def task_success_handler(sender=None, result=None, **kwargs):
     kwargs = dict(result=result, status=TaskStatus.SUCCESS)
     task_result = task_services.update_task_result(kwargs, sender.request.id)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @task_failure.connect
@@ -65,24 +66,24 @@ def task_failure_handler(sender=None, traceback=None, exception=None, **kwargs):
         status=TaskStatus.FAILURE,
     )
     task_result = task_services.update_task_result(kwargs, sender.request.id)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @task_revoked.connect
 def task_prerun_handler(sender=None, *args, **kwargs):
     kwargs = dict(status=TaskStatus.REVOKED)
     task_result = task_services.update_task_result(kwargs, sender.request.id)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @task_revoked.connect
 def task_prerun_handler(sender=None, *args, **kwargs):
     kwargs = dict(status=TaskStatus.RETRY)
     task_result = task_services.update_task_result(kwargs, sender.request.id)
-    # serialized_task_result = TaskResultSerializer(task_result)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(task_result)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
 
 
 @receiver(post_save, sender=TaskResult)
@@ -103,6 +104,5 @@ def send_task_count(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=TaskResult)
 def send_pre_save_task_status(sender, instance, **kwargs):
-    pass
-    # serialized_task_result = TaskResultSerializer(instance)
-    # client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))
+    serialized_task_result = TaskResultSerializer(instance)
+    client.publish(LogEvent.TASK_RESULTS.value, json.dumps(serialized_task_result.data))

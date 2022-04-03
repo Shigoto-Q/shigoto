@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 
-import ast
 import json
 import logging
 
+from django.core.paginator import Paginator
 from django.db import transaction
-from django.forms import model_to_dict
 from kombu.utils.json import loads
 
-from services.internal_docker.client import DockerImageService
+from shigoto_q.docker import models as docker_models
 from shigoto_q.tasks import enums as task_enums
 from shigoto_q.tasks import models as task_models
 from shigoto_q.tasks.enums import TaskType, TaskTypeEnum
@@ -36,19 +35,22 @@ def run_task(app, external_task_id: int, user) -> dict:
     return tasks.first().__dict__
 
 
-def get_all_task_types():
+def get_all_types():
     return list(map(lambda task: task.value._asdict(), task_enums.TaskEnum))
 
 
 def create_task(kwargs, user):
     with transaction.atomic():
-        if kwargs.get("task_type") == TaskType.SIMPLE_HTTP_OPERATOR.value:
+        if kwargs.get("type") == TaskType.SIMPLE_HTTP_OPERATOR.value:
             kwargs["task"] = TaskTypeEnum.SIMPLE_HTTP_OPERATOR.value
             kwargs["kwargs"] = {
                 "url": kwargs.pop("http_endpoint"),
                 "user_id": user.id,
+                "task_name": kwargs.get("name"),
             }
         task = task_models.UserTask.objects.create(**kwargs)
+        task.kwargs = json.dumps(task.kwargs).replace("'", '"')
+        task.save()
     logger.info(
         f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')}, task={kwargs.get('task')})"
     )
@@ -60,7 +62,7 @@ def create_task_result(kwargs):
     logger.info(f"{_LOG_PREFIX} Creating result task with kwargs={kwargs}")
     task_result = task_models.TaskResult.objects.create(**kwargs)
     task_result.save()
-    return task_result
+    return task_messages.TaskResult.from_model(task_result)._asdict()
 
 
 def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
@@ -72,7 +74,7 @@ def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
     logger.info(
         f"{_LOG_PREFIX} Updating TaskResult(task_id={task_id}) with kwargs={kwargs}"
     )
-    return task_result
+    return task_messages.TaskResult.from_model(task_result)._asdict()
 
 
 def list_user_tasks(user_id, filters):
@@ -96,7 +98,7 @@ def get_user_docker_images(filters: dict, user_id: int) -> list:
     filters = filters or {}
     return [
         task_messages.UserDockerImage.from_model(obj)._asdict()
-        for obj in task_models.TaskImage.objects.filter(user_id=user_id).filter(
+        for obj in docker_models.DockerImage.objects.filter(user_id=user_id).filter(
             **filters
         )
     ]
@@ -104,11 +106,18 @@ def get_user_docker_images(filters: dict, user_id: int) -> list:
 
 def create_docker_image(data):
     with transaction.atomic():
-        image = task_models.TaskImage.objects.create(**data)
-        DockerImageService.create_docker_image(
-            repo_url=image.repository,
-            full_name=image.name,
-            image_name=image.image_name,
-        )
+        image = docker_models.DockerImage.objects.create(**data)
         logger.info(f"{_LOG_PREFIX} Creating new docker image with data - {data}")
     return image.__dict__
+
+
+def delete_docker_image(task_id: int, user_id: int):
+    with transaction.atomic():
+        docker_models.DockerImage.objects.get(id=task_id, user_id=user_id).delete()
+
+
+def list_task_results(
+    filters: dict,
+    ordering: list = None,
+):
+    return task_models.TaskResult.objects.filter(**filters).order_by(*ordering).select_related("user")

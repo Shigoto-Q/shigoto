@@ -1,3 +1,4 @@
+import secrets
 import uuid
 
 from django.contrib.auth import get_user_model
@@ -13,9 +14,14 @@ from django_celery_beat.models import (
     SolarSchedule,
 )
 
+from shigoto_q.docker.models import DockerImage
 from shigoto_q.tasks import enums
 
 User = get_user_model()
+
+
+def generate_secret():
+    return secrets.token_urlsafe()
 
 
 class TaskResult(models.Model):
@@ -120,46 +126,16 @@ class TaskResult(models.Model):
         return f"<Task: {self.task_id} {self.status}>"
 
 
-class TaskImage(models.Model):
-    repository = models.CharField(
-        max_length=255, verbose_name=_("Url of the GitHub repository")
-    )
-
-    name = models.CharField(
-        max_length=255, verbose_name=_("Name of the GitHub repository")
-    )
-
-    image_name = models.CharField(
-        unique=True,
-        verbose_name=_("Image name"),
-        help_text=_("Name of the Docker image inside user namespace"),
-        max_length=255,
-    )
-
-    command = models.CharField(
-        max_length=255,
-        help_text=_("Command to execute after image startup."),
-        verbose_name=_("Command to execute"),
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,
-        default=None,
-        verbose_name=_("User"),
-    )
-
-
 class UserTask(PeriodicTask):
     external_task_id = models.UUIDField(
         default=uuid.uuid4,
         editable=False,
     )
-    task_type = models.PositiveSmallIntegerField(
+    type = models.PositiveSmallIntegerField(
         choices=enums.TaskType.choices, default=enums.TaskType.SIMPLE_HTTP_OPERATOR
     )  # TODO Rename to type
     image = models.OneToOneField(
-        TaskImage,
+        "docker.DockerImage",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

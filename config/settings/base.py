@@ -75,6 +75,8 @@ LOCAL_APPS = [
     "shigoto_q.tasks.apps.TasksConfig",
     "shigoto_q.github.apps.GithubConfig",
     "shigoto_q.schedule.apps.ScheduleConfig",
+    "shigoto_q.kubernetes.apps.KubernetesConfig",
+    "shigoto_q.docker.apps.DockerConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -305,3 +307,6 @@ DIND_PORT = 2375
 
 REDIS_HOST = "redis"
 REDIS_PORT = 6379
+
+TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
+DOCKER_TAG_PREFIX = "shigoto/"
