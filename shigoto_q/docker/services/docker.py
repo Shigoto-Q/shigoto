@@ -1,13 +1,11 @@
 import datetime
 
 from services.docker.client import DockerClient
-
 from shigoto_q.docker import models as docker_models
 
 
 def list_docker_images(filters: dict = None):
     data = []
-    print(filters)
     docker_images = docker_models.DockerImage.objects.filter(**filters)
     for image in docker_images:
         image_details = DockerClient.get_image_details(image.image_name)
