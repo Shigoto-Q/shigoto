@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import json
 import logging
 
 from django.core.paginator import Paginator
@@ -45,8 +46,11 @@ def create_task(kwargs, user):
             kwargs["kwargs"] = {
                 "url": kwargs.pop("http_endpoint"),
                 "user_id": user.id,
+                "task_name": kwargs.get("name"),
             }
         task = task_models.UserTask.objects.create(**kwargs)
+        task.kwargs = json.dumps(task.kwargs).replace("'", '"')
+        task.save()
     logger.info(
         f"{_LOG_PREFIX} Creating Task(id={kwargs.get('id')}, user_id={kwargs.get('user_id')}, task={kwargs.get('task')})"
     )
@@ -112,15 +116,8 @@ def delete_docker_image(task_id: int, user_id: int):
         docker_models.DockerImage.objects.get(id=task_id, user_id=user_id).delete()
 
 
-def list_task_results(filters, page=1, size=10):
-    pages = Paginator(
-        object_list=task_models.TaskResult.objects.filter(**filters).select_related(
-            "user"
-        ),
-        per_page=size,
-    )
-    data = [
-        task_messages.TaskResult.from_model(obj)._asdict()
-        for obj in pages.get_page(page)
-    ]
-    return data
+def list_task_results(
+    filters: dict,
+    ordering: list = None,
+):
+    return task_models.TaskResult.objects.filter(**filters).order_by(*ordering).select_related("user")

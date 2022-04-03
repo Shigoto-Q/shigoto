@@ -3,9 +3,9 @@ from __future__ import absolute_import
 from time import sleep
 
 from django.contrib.auth import get_user_model
-from django.http import StreamingHttpResponse
 
 from config.celery_app import app
+from rest.common.fetch import fetch_and_paginate
 from rest.views import ResourceListView, ResourceView
 from shigoto_q.tasks.api.serializers import (
     DockerImageDeleteSerializer,
@@ -18,9 +18,8 @@ from shigoto_q.tasks.api.serializers import (
     UserImageCreateLoadSerializer,
     UserTaskImageSerializer,
 )
-from shigoto_q.tasks.models import TaskResult, UserTask
 from shigoto_q.tasks.services import tasks as task_services
-from utils import enums as task_enums
+from shigoto_q.tasks.services.messages import TaskResult
 
 User = get_user_model()
 
@@ -30,8 +29,13 @@ class TaskResultListView(ResourceListView):
     serializer_load_class = TaskResultSerializer
     owner_check = True
 
-    def fetch(self, filters):
-        return task_services.list_task_results(filters=filters)
+    def fetch(self, filters, pagination):
+        return fetch_and_paginate(
+            func=task_services.list_task_results,
+            filters=filters,
+            pagination=pagination,
+            serializer_func=TaskResult.from_model
+        )
 
 
 class DockerImageDeleteView(ResourceView):

@@ -10,7 +10,7 @@ User = get_user_model()
 
 class TaskResultSerializer(CamelCaseSerializer):
     task_id = serializers.CharField(required=False)
-    task_name = serializers.CharField(required=False, allow_null=True)
+    task_name = serializers.CharField(required=False)
     status = serializers.IntegerField(required=False)
     user = serializers.CharField(required=False)
     user_id = serializers.IntegerField(required=False)

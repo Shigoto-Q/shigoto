@@ -1,9 +1,11 @@
 import collections
+import copy
 import json
 import logging
 
 from rest_framework.views import APIView
 
+from rest.common.types import Page
 from rest.serializers import BadResponseSerializer
 
 logger = logging.getLogger(__name__)
@@ -26,6 +28,7 @@ class BaseView(APIView):
     request_param = "pk"
     post_data = {}
     get_data = {}
+    page = None
     http_method_names = [
         "get",
         "post",
@@ -110,6 +113,10 @@ class BaseView(APIView):
 
     def _process_get_params(self):
         self.get_data = self.request.GET.dict()
+        self.page = Page(
+            page=self.get_data.get('page', 1),
+            size=self.get_data.get('perPage', 10),
+        )
         load_serializer = self.get_load_serializer(data=self.post_data)
         load_serializer.is_valid(raise_exception=True)
         data = load_serializer.validated_data
