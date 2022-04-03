@@ -1,9 +1,11 @@
 import json
 import logging
 
+from django.utils.dateparse import parse_datetime
+
 import docker
 from django.conf import settings
-from django.utils.dateparse import parse_datetime
+
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[DOCKER-SERVICE]"
