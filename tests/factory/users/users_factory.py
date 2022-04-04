@@ -8,7 +8,9 @@ class UserFactory(factory.django.DjangoModelFactory):
     id = factory.Faker("pyint", min_value=0, max_value=10000)
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    email = factory.LazyAttribute(lambda a: '{}.{}@shigo.to'.format(a.first_name, a.last_name).lower())
+    email = factory.LazyAttribute(
+        lambda a: "{}.{}@shigo.to".format(a.first_name, a.last_name).lower()
+    )
     is_staff = False
     is_superuser = False
     password = "secret"
