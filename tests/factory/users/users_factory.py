@@ -8,14 +8,12 @@ class UserFactory(factory.django.DjangoModelFactory):
     id = factory.Faker("pyint", min_value=0, max_value=10000)
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    username = factory.Sequence(lambda n: "user-%d" % n)
+    email = factory.LazyAttribute(
+        lambda a: "{}.{}@shigo.to".format(a.first_name, a.last_name).lower()
+    )
     is_staff = False
     is_superuser = False
     password = "secret"
-
-    @factory.lazy_attribute
-    def email(self):
-        return "%s@test.com" % self.username
 
     class Meta:
         model = User
@@ -24,7 +22,6 @@ class UserFactory(factory.django.DjangoModelFactory):
         flag_is_superuser = factory.Trait(
             is_superuser=True,
             is_staff=True,
-            username=factory.Sequence(lambda n: "admin-%d" % n),
         )
 
     @classmethod

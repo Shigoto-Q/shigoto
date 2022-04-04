@@ -19,7 +19,7 @@ from shigoto_q.tasks.api.serializers import (
     UserTaskImageSerializer,
 )
 from shigoto_q.tasks.services import tasks as task_services
-from shigoto_q.tasks.services.messages import TaskResult
+from shigoto_q.tasks.services.messages import TaskResult, UserTask
 
 User = get_user_model()
 
@@ -34,7 +34,7 @@ class TaskResultListView(ResourceListView):
             func=task_services.list_task_results,
             filters=filters,
             pagination=pagination,
-            serializer_func=TaskResult.from_model
+            serializer_func=TaskResult.from_model,
         )
 
 
@@ -75,10 +75,12 @@ class UserTaskListView(ResourceListView):
     serializer_dump_class = TasksListSerializer
     serializer_load_class = TasksListSerializer
 
-    def fetch(self, filters):
-        return task_services.list_user_tasks(
-            user_id=self.request.user.id,
+    def fetch(self, filters, pagination):
+        return fetch_and_paginate(
+            task_services.list_user_tasks,
             filters=filters,
+            pagination=pagination,
+            serializer_func=UserTask.from_model,
         )
 
 

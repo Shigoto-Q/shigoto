@@ -77,14 +77,10 @@ def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
     return task_messages.TaskResult.from_model(task_result)._asdict()
 
 
-def list_user_tasks(user_id, filters):
+def list_user_tasks(filters: dict = None):
     filters = filters or {}
-    return [
-        task_messages.UserTask.from_model(obj)._asdict()
-        for obj in task_models.UserTask.objects.filter(user_id=user_id).filter(
-            **filters
-        )
-    ]
+    print(filters)
+    return task_models.UserTask.objects.filter(**filters)
 
 
 def parse_params(kwargs: dict) -> dict:
@@ -120,4 +116,8 @@ def list_task_results(
     filters: dict,
     ordering: list = None,
 ):
-    return task_models.TaskResult.objects.filter(**filters).order_by(*ordering).select_related("user")
+    return (
+        task_models.TaskResult.objects.filter(**filters)
+        .order_by(*ordering)
+        .select_related("user")
+    )

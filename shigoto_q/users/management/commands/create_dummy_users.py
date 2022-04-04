@@ -20,7 +20,7 @@ class Command(BaseCommand):
         for _ in range(self._number_of_users):
             user = users_factory.UserFactory()
             self.stdout.write(
-                f"Creating User(id={user.id}, username={user.username}, password={self._password})"
+                f"Creating User(id={user.id}, email={user.email}, password={self._password})"
             )
             users.append(user)
             user.save()
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         for _ in range(self._number_of_admins):
             admin = users_factory.UserFactory(flag_is_superuser=True)
             self.stdout.write(
-                f"Creating User(id={admin.id}, username={admin.username}, password={self._password})"
+                f"Creating User(id={admin.id}, email={admin.email}, password={self._password})"
             )
             admins.append(admin)
             admin.save()
