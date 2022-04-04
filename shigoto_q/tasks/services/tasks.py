@@ -116,4 +116,8 @@ def list_task_results(
     filters: dict,
     ordering: list = None,
 ):
-    return task_models.TaskResult.objects.filter(**filters).order_by(*ordering).select_related("user")
+    return (
+        task_models.TaskResult.objects.filter(**filters)
+        .order_by(*ordering)
+        .select_related("user")
+    )

@@ -114,8 +114,8 @@ class BaseView(APIView):
     def _process_get_params(self):
         self.get_data = self.request.GET.dict()
         self.page = Page(
-            page=self.get_data.get('page', 1),
-            size=self.get_data.get('perPage', 10),
+            page=self.get_data.get("page", 1),
+            size=self.get_data.get("perPage", 10),
         )
         load_serializer = self.get_load_serializer(data=self.post_data)
         load_serializer.is_valid(raise_exception=True)

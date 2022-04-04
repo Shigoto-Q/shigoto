@@ -16,5 +16,5 @@ class DockerImageListView(ResourceListView):
             func=docker_services.list_docker_images,
             filters=filters,
             pagination=pagination,
-            serializer_func=DockerImage.from_dict
+            serializer_func=DockerImage.from_dict,
         )

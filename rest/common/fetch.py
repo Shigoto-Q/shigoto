@@ -11,7 +11,7 @@ def fetch_and_paginate(
     func: typing.Callable,
     filters: dict,
     pagination: Page,
-    serializer_func:  typing.Union[dataclass, typing.Callable],
+    serializer_func: typing.Union[dataclass, typing.Callable],
 ):
     qs = func(filters)
     if isinstance(qs, QuerySet):
@@ -20,9 +20,13 @@ def fetch_and_paginate(
         count = len(qs)
     if int(pagination.size) < 1:
         if isinstance(serializer_func, typing.Callable):
-            data = _handle_namedtuple_response(serializer_func=serializer_func, qs=qs, pagination=False)
+            data = _handle_namedtuple_response(
+                serializer_func=serializer_func, qs=qs, pagination=False
+            )
         else:
-            data = _handle_dataclass_serializer(serializer_func=serializer_func, qs=qs, pagination=False)
+            data = _handle_dataclass_serializer(
+                serializer_func=serializer_func, qs=qs, pagination=False
+            )
 
         return Response(
             data=data,
@@ -32,9 +36,13 @@ def fetch_and_paginate(
 
     pages = Paginator(object_list=qs, per_page=pagination.size)
     if isinstance(serializer_func, typing.Callable):
-        data = _handle_namedtuple_response(serializer_func=serializer_func, pages=pages, page=pagination.page)
+        data = _handle_namedtuple_response(
+            serializer_func=serializer_func, pages=pages, page=pagination.page
+        )
     else:
-        data = _handle_dataclass_serializer(serializer_func=serializer_func, pages=pages, page=pagination.page)
+        data = _handle_dataclass_serializer(
+            serializer_func=serializer_func, pages=pages, page=pagination.page
+        )
     return Response(
         data=data,
         count=count,
@@ -42,14 +50,18 @@ def fetch_and_paginate(
     )
 
 
-def _handle_dataclass_serializer(serializer_func, page=None, pagination=True, qs=None, pages=None):
+def _handle_dataclass_serializer(
+    serializer_func, page=None, pagination=True, qs=None, pages=None
+):
     if pagination:
         return [serializer_func(obj).__dict__ for obj in pages.get_page(page)]
     else:
         return [serializer_func(obj).__dict__ for obj in qs]
 
 
-def _handle_namedtuple_response(serializer_func, page=None, pagination=True, qs=None, pages=None):
+def _handle_namedtuple_response(
+    serializer_func, page=None, pagination=True, qs=None, pages=None
+):
     if pagination:
         return [serializer_func(obj)._asdict() for obj in pages.get_page(page)]
     else:
