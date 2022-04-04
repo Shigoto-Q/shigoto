@@ -34,7 +34,7 @@ class TaskResultListView(ResourceListView):
             func=task_services.list_task_results,
             filters=filters,
             pagination=pagination,
-            serializer_func=TaskResult.from_model
+            serializer_func=TaskResult.from_model,
         )
 
 
