@@ -18,7 +18,6 @@ def fetch_and_paginate(
         count = qs.count()
     else:
         count = len(qs)
-
     if int(pagination.size) < 1:
         if isinstance(serializer_func, typing.Callable):
             data = _handle_namedtuple_response(serializer_func=serializer_func, qs=qs, pagination=False)
