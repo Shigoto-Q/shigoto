@@ -1,0 +1,22 @@
+version: '3'
+
+volumes:
+  dind-certs-ca:
+  dind-certs-client:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  shigoto_docker: &shigoto_docker
+    container_name: shigoto_dind
+    image: docker:dind
+    privileged: true
+    volumes:
+      - dind-certs-ca:/certs/ca
+      - dind-certs-client:/certs/client
+    expose:
+      - 2375
+    networks:
+      - shigoto
+    environment:
+      - DOCKER_TLS_CERTDIR=
