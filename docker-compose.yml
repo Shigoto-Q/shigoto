@@ -15,7 +15,6 @@ services:
     container_name: django
     depends_on:
       - postgres
-      - shigoto_docker
       - redis
     volumes:
       - ./var/run/docker.sock:/var/run/docker.sock
@@ -28,7 +27,6 @@ services:
     command: /start
     links:
       - redis
-      - shigoto_docker
     networks:
       - shigoto
   mailhog:
@@ -68,7 +66,6 @@ services:
     depends_on:
       - redis
       - postgres
-      - shigoto_docker
     ports: []
     command: /start-celeryworker
     networks:
@@ -81,26 +78,10 @@ services:
     depends_on:
       - redis
       - postgres
-      - shigoto_docker
     ports: []
     command: /start-celerybeat
     networks:
       - shigoto
-
-  shigoto_docker: &shigoto_docker
-    container_name: shigoto_dind
-    image: docker:dind
-    privileged: true
-    volumes:
-      - dind-certs-ca:/certs/ca
-      - dind-certs-client:/certs/client
-    expose:
-      - 2375
-    networks:
-      - shigoto
-    environment:
-      - DOCKER_TLS_CERTDIR=
-
 
 networks:
   shigoto:
