@@ -69,7 +69,7 @@ class UserImageListView(ResourceListView):
             func=task_services.get_user_docker_images,
             filters=filters,
             pagination=pagination,
-            serializer_func=UserDockerImage.from_model
+            serializer_func=UserDockerImage.from_model,
         )
 
 
