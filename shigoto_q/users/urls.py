@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from shigoto_q.users.api import views as api_views
-from shigoto_q.users.views import SubscriberCreateView, UserLogoutView
+from shigoto_q.users.views import UserLogoutView
 
 app_name = "users"
 
@@ -32,5 +32,10 @@ urlpatterns = [
         "token/refresh/",
         TokenRefreshView.as_view(),
         name="shigoto_q.users.token_refresh",
+    ),
+    path(
+        "users/subscribe/",
+        api_views.SubscriberView.as_view(),
+        name="shigoto_q.user.subscribe",
     ),
 ]

@@ -35,7 +35,7 @@ class UserDumpSerializer(UserListSerializer):
 
 
 class SubscriberSerializer(CamelCaseSerializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(required=False)
 
 
 class UserLogoutSerializer(CamelCaseSerializer):

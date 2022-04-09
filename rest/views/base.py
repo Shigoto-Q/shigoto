@@ -4,6 +4,7 @@ import json
 import logging
 
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest.common.types import Page
 from rest.serializers import BadResponseSerializer
@@ -48,6 +49,7 @@ class BaseView(APIView):
     def dispatch(self, request, *args, **kwargs):
         self._process_request_pk_param(kwargs)
         self._process_post_params()
+        print(self.permission_classes)
         return super().dispatch(request, *args, **kwargs)
 
     def _ownership_check(self, data: collections.OrderedDict, fields):

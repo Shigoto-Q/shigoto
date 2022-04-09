@@ -12,8 +12,10 @@ from shigoto_q.users.api.serializers import (
     UserDumpSerializer,
     UserListSerializer,
     UserLoadSerializer,
+    SubscriberSerializer,
 )
 from shigoto_q.users.services import users as user_services
+from shigoto_q.users.services import subscribers as subscriber_services
 
 User = get_user_model()
 
@@ -46,6 +48,17 @@ class UserCreateView(ResourceView):
 
     def execute(self, data):
         return user_services.create_user(data=data)
+
+
+class SubscriberView(ResourceView):
+    serializer_dump_class = SubscriberSerializer
+    serializer_load_class = SubscriberSerializer
+    http_method_names = ["post"]
+    permission_classes = []
+
+    def execute(self, data):
+        print(' FUCCCCCCCCCK')
+        return subscriber_services.create_subscriber(data)
 
 
 class ProductView(APIView):

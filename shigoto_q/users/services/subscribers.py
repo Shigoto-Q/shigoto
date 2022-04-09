@@ -5,6 +5,7 @@ from shigoto_q.users.models import Subscriber
 
 
 def create_subscriber(data):
+    print(data)
     subscriber = Subscriber.objects.create(**data)
     return subscriber.__dict__
 
