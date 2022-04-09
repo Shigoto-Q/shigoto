@@ -5,6 +5,7 @@ from django.http import Http404
 from djstripe.models import Product
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 from rest.views import ResourceListView, ResourceView
 from shigoto_q.users.api.serializers import (
@@ -54,10 +55,9 @@ class SubscriberView(ResourceView):
     serializer_dump_class = SubscriberSerializer
     serializer_load_class = SubscriberSerializer
     http_method_names = ["post"]
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def execute(self, data):
-        print(" FUCCCCCCCCCK")
         return subscriber_services.create_subscriber(data)
 
 

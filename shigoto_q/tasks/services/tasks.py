@@ -79,7 +79,6 @@ def update_task_result(kwargs: dict, task_id: int) -> task_models.TaskResult:
 
 def list_user_tasks(filters: dict = None):
     filters = filters or {}
-    print(filters)
     return task_models.UserTask.objects.filter(**filters)
 
 
@@ -90,14 +89,9 @@ def parse_params(kwargs: dict) -> dict:
     return {k: v for k, v in kwargs.items() if k in accepted_fields}
 
 
-def get_user_docker_images(filters: dict, user_id: int) -> list:
+def get_user_docker_images(filters: dict) -> list:
     filters = filters or {}
-    return [
-        task_messages.UserDockerImage.from_model(obj)._asdict()
-        for obj in docker_models.DockerImage.objects.filter(user_id=user_id).filter(
-            **filters
-        )
-    ]
+    return docker_models.DockerImage.objects.filter(**filters)
 
 
 def create_docker_image(data):

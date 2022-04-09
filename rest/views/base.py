@@ -26,6 +26,7 @@ class BaseView(APIView):
     serializer_load_class = None
     exception_serializer = BadResponseSerializer
     owner_check = None
+    permission_classes = [IsAuthenticated]
     request_param = "pk"
     post_data = {}
     get_data = {}
@@ -49,7 +50,6 @@ class BaseView(APIView):
     def dispatch(self, request, *args, **kwargs):
         self._process_request_pk_param(kwargs)
         self._process_post_params()
-        print(self.permission_classes)
         return super().dispatch(request, *args, **kwargs)
 
     def _ownership_check(self, data: collections.OrderedDict, fields):
