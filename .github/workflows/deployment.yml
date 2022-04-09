@@ -11,14 +11,14 @@ jobs:
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v2
-        
+
       - name: Declare variables
         id: vars
         shell: bash
         run: |
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        
+
       - name: login to dockerhub
         uses: docker/login-action@v1
         with:
@@ -28,25 +28,17 @@ jobs:
       - name: Build the stack
         run: docker-compose -f production.yml build
 
-      - name: Tag Docker images 
-        run: | 
-          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:${{ steps.vars.outputs.sha_short }}
-
-      - name: Push Docker images 
+      - name: Tag Docker images
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_postgres:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_django:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celerybeat:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/shigoto_q_production_celeryworker:${{ steps.vars.outputs.sha_short }}
-          export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
+          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend:${{ steps.vars.outputs.sha_short }}
+          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db:${{ steps.vars.outputs.sha_short }}
+          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat:${{ steps.vars.outputs.sha_short }}
+          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker:${{ steps.vars.outputs.sha_short }}
 
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          repository: Shigoto-Q/sgt-infrastructure 
-          event-type: build-successful
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ steps.vars.outputs.sha_short }}"}'
+      - name: Push Docker images
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend:${{ steps.vars.outputs.sha_short }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db:${{ steps.vars.outputs.sha_short }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat:${{ steps.vars.outputs.sha_short }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker:${{ steps.vars.outputs.sha_short }}
+          export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
