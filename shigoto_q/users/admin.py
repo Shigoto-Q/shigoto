@@ -7,7 +7,5 @@ User = get_user_model()
 
 @admin.register(Subscriber)
 class TaskResultAdmin(admin.ModelAdmin):
-    list_display = (
-        "email",
-    )
+    list_display = ("email",)
     list_filter = ("email",)

@@ -57,7 +57,7 @@ class SubscriberView(ResourceView):
     permission_classes = []
 
     def execute(self, data):
-        print(' FUCCCCCCCCCK')
+        print(" FUCCCCCCCCCK")
         return subscriber_services.create_subscriber(data)
 
 
