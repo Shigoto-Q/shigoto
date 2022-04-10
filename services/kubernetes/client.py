@@ -8,7 +8,6 @@ from services.kubernetes.constants import (
     KubernetesKindTypes,
     LABELS,
     METADATA_NAME,
-    API_VERSION,
     NAMESPACE,
     DEFAULT_PORT,
     KubernetesApiVersions,
@@ -94,7 +93,7 @@ class KubernetesService:
                 .metadata.name
             )
             w = watch.Watch()
-            for event in w.stream(
+            for _ in w.stream(
                 func=core_v1.read_namespaced_pod_log,
                 name=pod_name,
                 namespace=namespace,
@@ -129,6 +128,9 @@ class KubernetesService:
         image: str,
         pull_policy: str = "Never",
     ):
+        logger.info(
+            f"{_LOG_PREFIX} Creating kubernetes deployment with name={name} and image={image}"
+        )
         container = client.V1Container(
             name=name,
             image=image,
@@ -157,6 +159,9 @@ class KubernetesService:
 
     @classmethod
     def _create_service(cls, service_name: str, namespace: str = NAMESPACE):
+        logger.info(
+            f"{_LOG_PREFIX} Creating kubernetes service(name={service_name}, namespace={NAMESPACE})."
+        )
         core_v1_api = client.CoreV1Api()
         body = client.V1Service(
             api_version=KubernetesApiVersions.API_VERSION.value,
@@ -185,6 +190,7 @@ class KubernetesService:
         host: str = DEFAULT_HOST,
         namespace: str = NAMESPACE,
     ):
+        logger.info(f"{_LOG_PREFIX} Creating Ingress for host={host}")
         body = client.V1Ingress(
             api_version=KubernetesApiVersions.INGRESS_API_VERSION.value,
             kind=KubernetesKindTypes.INGRESS.value,
@@ -233,7 +239,11 @@ class KubernetesService:
         image: str,
         service_name: str,
         host: str,
+        user_id: int,
     ):
+        logger.info(
+            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes deployment."
+        )
         apps_v1_api = client.AppsV1Api()
         networking_v1_api = client.NetworkingV1Api()
 

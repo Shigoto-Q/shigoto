@@ -24,9 +24,7 @@ class ResourceView(BaseView):
     def post(self, request, *args, **kwargs):
         try:
             load_serializer = self._process_request_data()
-            print(load_serializer)
             resource = self.execute(load_serializer)
-            print(resource)
             if resource is None:
                 return NoContentResponse()
             _response_data = self._process_post_response_data(resource)
