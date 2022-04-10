@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -9,6 +8,7 @@ from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "shigoto_q"
@@ -64,6 +64,10 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "djstripe",
     "django_elasticsearch_dsl",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "mjml",
+    "post_office",
 ]
 
 ELASTICSEARCH_DSL = {
@@ -77,6 +81,9 @@ LOCAL_APPS = [
     "shigoto_q.schedule.apps.ScheduleConfig",
     "shigoto_q.kubernetes.apps.KubernetesConfig",
     "shigoto_q.docker.apps.DockerConfig",
+    "shigoto_q.emails.apps.EmailsConfig",
+    "shigoto_q.integrations.apps.IntegrationsConfig",
+    "shigoto_q.products.apps.ProductsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -131,7 +138,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR / "templates")],
+        "DIRS": [str(APPS_DIR / "emails/templates/")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -148,7 +155,22 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-    }
+    },
+    {
+        "BACKEND": "post_office.template.backends.post_office.PostOfficeTemplates",
+        "DIRS": [str(APPS_DIR / "emails/templates/")],
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.template.context_processors.request",
+            ]
+        },
+    },
 ]
 
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
@@ -164,7 +186,7 @@ EMAIL_BACKEND = env(
 )
 EMAIL_TIMEOUT = 5
 ADMIN_URL = "admin/"
-ADMINS = [("""Simeon Aleksov""", "simeon-aleksov@example.com")]
+ADMINS = [("""Simeon Aleksov""", "simeon.aleksov@shigo.to")]
 MANAGERS = ADMINS
 
 
@@ -237,28 +259,20 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DATETIME_FORMAT": "%Y-%m-%d - %H:%M:%S",
+    "LAST_LOGIN": True,
 }
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
     "AUTH_HEADER_TYPES": ("Bearer",),
-}
-DJOSER = {
-    "LOGIN_FIELD": "email",
-    "PASSWORD_RESET_CONFIRM_URL": "auth/users/reset_password_confirm/{uid}/{token}/",
-    "SERIALIZERS": {
-        "current_user": "shigoto_q.users.api.serializers.UserSerializerDAB",
-        "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
-    },
-    "PERMISSIONS": {
-        "user_create": ["rest_framework.permissions.AllowAny"],
-        "token_create": ["rest_framework.permissions.AllowAny"],
-    },
+    "UPDATE_LAST_LOGIN": True,
 }
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://shigo.to",
+    "https://shigo.to",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -270,7 +284,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-SENTRY_DSN = "https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/5745020"
+SENTRY_DSN = env("SENTRY_DSN")
 SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
 sentry_logging = LoggingIntegration(
@@ -290,22 +304,42 @@ sentry_sdk.init(
     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
 )
 
-# TODO Add these to env
-INFLUXDB_HOST = "influxdb"
-INFLUXDB_PORT = 8086
-INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
+INFLUXDB_HOST = env("INFLUXDB_HOST")
+INFLUXDB_PORT = env("INFLUXDB_PORT")
+
+INFLUXDB_TOKEN = env("INFLUXDB_TOKEN")
 INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
 
 
-# TODO Read from env
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
 
-DIND_HOST = "shigoto_docker"
-DIND_PORT = 2375
+DIND_HOST = env("DIND_HOST")
+DIND_PORT = env("DIND_PORT", default=2375)
 
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
+DOCKER_IMAGE_PREFIX = env("DOCKER_IMAGE_PREFIX", default="shigoto")
+
+UPDATE_LAST_LOGIN = True
 
 TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"
+
+MJML_EXEC_CMD = "./node_modules/mjml/bin/mjml"
+MJML_CHECK_CMD_ON_STARTUP = False
+
+DEFAULT_INFO_EMAIL = "info@shigo.to"
+DEFAULT_SUPPORT_EMAIL = "support@shigo.to"
+
+POST_OFFICE = {
+    "LOG_LEVEL": 2,
+    "SENDING_ORDER": ["created"],
+    "CELERY_ENABLED": True,
+}
+
+STATSD_HOST = env("TELEGRAF_HOST")
+STATSD_PORT = env("TELEGRAF_PORT")
+STATSD_PREFIX = None
+STATSD_MAXUDPSIZE = 512
+STATSD_IPV6 = False
+
+STRIPE_API_KEY = ""

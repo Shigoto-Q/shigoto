@@ -8,13 +8,16 @@ from services.kubernetes.constants import (
     KubernetesKindTypes,
     LABELS,
     METADATA_NAME,
-    API_VERSION,
     NAMESPACE,
     DEFAULT_PORT,
     KubernetesApiVersions,
     DEFAULT_HOST,
+    KubernetesImagePullPolicy,
 )
-from services.kubernetes.exceptions import KubernetesJobNotFoundError
+from services.kubernetes.exceptions import (
+    KubernetesJobNotFoundError,
+    KubernetesServiceError,
+)
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[KUBERNETES-SERVICE]"
@@ -22,6 +25,12 @@ _LOG_PREFIX = "[KUBERNETES-SERVICE]"
 
 class KubernetesService:
     created_job = None
+
+    def __init__(self):
+        config.load_kube_config()
+        self.core_v1_api = client.CoreV1Api()
+        self.apps_v1_api = client.AppsV1Api()
+        self.networking_v1_api = client.NetworkingV1Api()
 
     @classmethod
     def create_job(cls, task_name: str, image_name: str, command: str):
@@ -94,7 +103,7 @@ class KubernetesService:
                 .metadata.name
             )
             w = watch.Watch()
-            for event in w.stream(
+            for _ in w.stream(
                 func=core_v1.read_namespaced_pod_log,
                 name=pod_name,
                 namespace=namespace,
@@ -121,74 +130,130 @@ class KubernetesService:
             **kwargs,
         )
 
+    def create_namespace(self, name: str):
+        return self.core_v1_api.create_namespace(
+            body={
+                "apiVersion": KubernetesApiVersions.API_VERSION.value,
+                "kind": KubernetesKindTypes.NAMESPACE.value,
+                "metadata": {
+                    "name": name,
+                    "resourceversion": KubernetesApiVersions.API_VERSION.value,
+                },
+            }
+        )
+
     @classmethod
     def _create_deployment(
         cls,
         apps_v1_api: client.AppsV1Api,
         name: str,
         image: str,
-        pull_policy: str = "Never",
+        port: int,
+        pull_policy: str = KubernetesImagePullPolicy.ALWAYS.value,
+        replicas: int = 1,
+        label_selector: dict = LABELS,
+        namespace: str = "default",
     ):
+        logger.info(
+            f"{_LOG_PREFIX} Creating kubernetes deployment with name={name} and image={image}"
+        )
         container = client.V1Container(
             name=name,
             image=image,
             image_pull_policy=pull_policy,
-            ports=[client.V1ContainerPort(container_port=DEFAULT_PORT)],
+            ports=[client.V1ContainerPort(container_port=port)],
         )
         template = client.V1PodTemplateSpec(
-            metadata=cls._create_kubernetes_object_meta(**dict(labels=LABELS)),
+            metadata=cls._create_kubernetes_object_meta(**dict(labels=label_selector)),
             spec=client.V1PodSpec(containers=[container]),
         )
         spec = client.V1DeploymentSpec(
-            replicas=1,
-            selector=client.V1LabelSelector(match_labels=LABELS),
+            replicas=replicas,
+            selector=client.V1LabelSelector(match_labels=label_selector),
             template=template,
         )
         deployment = client.V1Deployment(
             api_version=KubernetesApiVersions.APPS_API_VERSION.value,
             kind=KubernetesKindTypes.DEPLOYMENT.value,
-            metadata=cls._create_kubernetes_object_meta(service_name=METADATA_NAME),
+            metadata=cls._create_kubernetes_object_meta(service_name=name),
             spec=spec,
         )
-        apps_v1_api.create_namespaced_deployment(
-            namespace=NAMESPACE,
+        resp = apps_v1_api.create_namespaced_deployment(
+            namespace=namespace,
             body=deployment,
+        )
+        return resp
+
+    @classmethod
+    def _create_spec_ports(cls, port: int, target_port: int):
+        return client.V1ServicePort(
+            port=port,
+            target_port=target_port,
         )
 
     @classmethod
-    def _create_service(cls, service_name: str, namespace: str = NAMESPACE):
-        core_v1_api = client.CoreV1Api()
+    def create_load_balancer(
+        cls,
+        core_v1_api: client.CoreV1Api,
+        port: int,
+        target_port: int,
+        name: str,
+        selector_label: dict = LABELS,
+    ):
+        service = client.V1Service(
+            api_version=KubernetesApiVersions.API_VERSION.value,
+            kind=KubernetesKindTypes.SERVICE.value,
+            metadata=cls._create_kubernetes_object_meta(name),
+            spec=client.V1ServiceSpec(
+                selector=selector_label,
+                ports=[cls._create_spec_ports(port, target_port)],
+                type="",
+            ),
+        )
+        return service
+
+    def _create_service(
+        self,
+        service_name: str,
+        port: int,
+        target_port: int,
+        namespace,
+        label_selector: dict = LABELS,
+    ):
+        logger.info(
+            f"{_LOG_PREFIX} Creating kubernetes service(name={service_name}, namespace={NAMESPACE})."
+        )
         body = client.V1Service(
             api_version=KubernetesApiVersions.API_VERSION.value,
             kind=KubernetesKindTypes.SERVICE.value,
-            metadata=cls._create_kubernetes_object_meta(service_name),
+            metadata=self._create_kubernetes_object_meta(service_name),
             spec=client.V1ServiceSpec(
-                selector=LABELS,
+                selector=label_selector,
                 ports=[
                     client.V1ServicePort(
-                        port=DEFAULT_PORT,
-                        target_port=DEFAULT_PORT,
+                        port=port,
+                        target_port=target_port,
                     )
                 ],
             ),
         )
-        core_v1_api.create_namespaced_service(
+        return self.core_v1_api.create_namespaced_service(
             namespace=namespace,
             body=body,
         )
 
-    @classmethod
     def _create_ingress(
-        cls,
-        networking_v1_api: client.NetworkingV1Api,
+        self,
         name: str,
-        host: str = DEFAULT_HOST,
-        namespace: str = NAMESPACE,
+        namespace: str,
+        host: str,
+        port: int,
     ):
+        logger.info(f"{_LOG_PREFIX} Creating Ingress for host={host}")
         body = client.V1Ingress(
             api_version=KubernetesApiVersions.INGRESS_API_VERSION.value,
             kind=KubernetesKindTypes.INGRESS.value,
-            metadata=cls._create_kubernetes_object_meta(
+            metadata=self._create_kubernetes_object_meta(
                 service_name=name,
                 **{
                     "annotations": {
@@ -208,7 +273,7 @@ class KubernetesService:
                                     backend=client.V1IngressBackend(
                                         service=client.V1IngressServiceBackend(
                                             port=client.V1ServiceBackendPort(
-                                                number=DEFAULT_PORT,
+                                                number=port,
                                             ),
                                             name=name,
                                         )
@@ -221,30 +286,59 @@ class KubernetesService:
             ),
         )
 
-        networking_v1_api.create_namespaced_ingress(
+        self.networking_v1_api.create_namespaced_ingress(
             namespace=namespace,
             body=body,
         )
 
-    @classmethod
-    def create_deployment_and_ingress(
-        cls,
-        name: str,
-        image: str,
-        service_name: str,
-        host: str,
-    ):
-        apps_v1_api = client.AppsV1Api()
-        networking_v1_api = client.NetworkingV1Api()
-
-        cls._create_deployment(
-            apps_v1_api=apps_v1_api,
-            name=name,
-            image=image,
+    def create_service(self, service_name, port, target_port, namespace, user_id):
+        logger.info(
+            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes service."
         )
-        cls._create_service(service_name=service_name)
-        cls._create_ingress(
-            networking_v1_api=networking_v1_api,
+        return self._create_service(
+            service_name=service_name,
+            port=port,
+            target_port=target_port,
+            namespace=namespace,
+        )
+
+    def delete_deployment(self, name: str, namespace: str):
+        return self.apps_v1_api.delete_namespaced_deployment(
+            name=name,
+            namespace=namespace,
+        )
+
+    def delete_service(self, name: str, namespace: str):
+        return self.core_v1_api.delete_namespaced_service(
+            name=name,
+            namespace=namespace,
+        )
+
+    @classmethod
+    def create_deployment(cls, user_id, name, image, namespace, port):
+        config.load_kube_config()
+        logger.info(
+            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes deployment."
+        )
+        apps_v1_api = client.AppsV1Api()
+        try:
+            return cls._create_deployment(
+                apps_v1_api=apps_v1_api,
+                name=name,
+                image=image,
+                namespace=namespace,
+                port=port,
+            )
+        except Exception as e:
+            raise KubernetesServiceError(f"{_LOG_PREFIX} {str(e)}")
+
+    def delete_namespace(self, name: str):
+        self.core_v1_api.delete_namespace(name=name)
+
+    def create_ingress(self, name: str, host: str, namespace: str, port: int):
+        return self._create_ingress(
             name=name,
             host=host,
+            namespace=namespace,
+            port=port,
         )

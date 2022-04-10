@@ -21,24 +21,6 @@ class DockerImageDeleteSerializer(CamelCaseSerializer):
     id = serializers.IntegerField()
 
 
-class UserImageCreateDumpSerializer(CamelCaseSerializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    repository = serializers.CharField()
-    image_name = serializers.CharField()
-    command = serializers.CharField()
-    user_id = serializers.IntegerField(required=False)
-    secret_key = serializers.CharField(required=False)
-
-
-class UserImageCreateLoadSerializer(CamelCaseSerializer):
-    name = serializers.CharField()
-    repository = serializers.CharField()
-    image_name = serializers.CharField()
-    command = serializers.CharField()
-    user_id = serializers.IntegerField(required=False)
-
-
 class UserTaskImageSerializer(CamelCaseSerializer):
     id = serializers.IntegerField(required=False)
     name = serializers.CharField(required=False)

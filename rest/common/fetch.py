@@ -12,6 +12,7 @@ def fetch_and_paginate(
     filters: dict,
     pagination: Page,
     serializer_func: typing.Union[dataclass, typing.Callable],
+    is_serializer_dataclass=False,
 ):
     qs = func(filters)
     if isinstance(qs, QuerySet):
@@ -19,7 +20,7 @@ def fetch_and_paginate(
     else:
         count = len(qs)
     if int(pagination.size) < 1:
-        if isinstance(serializer_func, typing.Callable):
+        if not is_serializer_dataclass:
             data = _handle_namedtuple_response(
                 serializer_func=serializer_func, qs=qs, pagination=False
             )
@@ -35,7 +36,7 @@ def fetch_and_paginate(
         )
 
     pages = Paginator(object_list=qs, per_page=pagination.size)
-    if isinstance(serializer_func, typing.Callable):
+    if not is_serializer_dataclass:
         data = _handle_namedtuple_response(
             serializer_func=serializer_func, pages=pages, page=pagination.page
         )

@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import json
 import logging
 
-from django.core.paginator import Paginator
 from django.db import transaction
 from kombu.utils.json import loads
 
@@ -14,7 +13,7 @@ from shigoto_q.tasks.enums import TaskType, TaskTypeEnum
 from shigoto_q.tasks.services import messages as task_messages
 
 logger = logging.getLogger(__name__)
-_LOG_PREFIX = "[TASK_SERVICES]"
+_LOG_PREFIX = "[TASK-SERVICES]"
 
 
 def run_task(app, external_task_id: int, user) -> dict:
@@ -112,6 +111,10 @@ def list_task_results(
 ):
     return (
         task_models.TaskResult.objects.filter(**filters)
-        .order_by(*ordering)
+        .order_by(ordering if ordering else "id")
         .select_related("user")
     )
+
+
+def get_total_task_results() -> int:
+    return task_models.TaskResult.objects.count()

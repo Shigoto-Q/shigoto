@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     AbstractUser,
@@ -62,6 +64,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
     is_staff = models.BooleanField(default=False)
+    two_factor_auth_enabled = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
+    total_active_deployments = models.IntegerField(default=0)
+    total_active_services = models.IntegerField(default=0)
+    total_active_namespaces = models.IntegerField(default=0)
+    active_ingress = models.BooleanField(default=False)
+
     USERNAME_FIELD = "email"
 
     objects = UserManager()
@@ -69,6 +78,34 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.first_name
 
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
+
 
 class Subscriber(models.Model):
     email = models.EmailField()
+
+
+class Team(models.Model):
+    team_name = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name="teams", through="Membership")
+    subscription = models.ForeignKey(
+        "djstripe.Subscription",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text="The team's Stripe Subscription object, if it exists",
+    )
+
+
+class Membership(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        "djstripe.Customer",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text="The member's Stripe Customer object for this team, if it exists",
+    )

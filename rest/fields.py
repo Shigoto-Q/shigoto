@@ -14,3 +14,15 @@ class JSONField(serializers.DictField):
 
     def to_internal_value(self, data):
         return json.dumps(data)
+
+
+class TimezoneField(serializers.Field):
+    """
+    Serializing TimeZoneFild
+    """
+
+    def to_representation(self, obj):
+        return obj.zone
+
+    def to_internal_value(self, data):
+        return data

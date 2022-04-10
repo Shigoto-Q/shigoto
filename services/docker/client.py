@@ -13,9 +13,14 @@ _DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class DockerClient:
-    client = docker.APIClient(
-        base_url=f"tcp://{settings.DIND_HOST}:{settings.DIND_PORT}"
-    )
+    try:
+        client = docker.APIClient(
+            base_url=f"tcp://{settings.DIND_HOST}:{settings.DIND_PORT}"
+        )
+    except Exception:
+        logger.exception(
+            f"{_LOG_PREFIX} Caught exception while trying to initialize docker client."
+        )
 
     @classmethod
     def build_image(cls, internal_path: str, image_tag: str):
