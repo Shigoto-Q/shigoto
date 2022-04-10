@@ -149,14 +149,19 @@ class KubernetesService:
         )
 
     @classmethod
+    def _create_kubernetes_object_meta(cls, cluster_name: str, **kwargs: dict):
+        return client.V1ObjectMeta(
+            name=cluster_name,
+            **kwargs,
+        )
+
+    @classmethod
     def _create_service(cls, service_name: str, namespace: str = NAMESPACE):
         core_v1_api = client.CoreV1Api()
         body = client.V1Service(
             api_version=KubernetesApiVersions.API_VERSION.value,
             kind=KubernetesKindTypes.SERVICE.value,
-            metadata=client.V1ObjectMeta(
-                name=service_name,
-            ),
+            metadata=cls._create_kubernetes_object_meta(service_name),
             spec=client.V1ServiceSpec(
                 selector=LABELS,
                 ports=[
@@ -183,10 +188,12 @@ class KubernetesService:
         body = client.V1Ingress(
             api_version=KubernetesApiVersions.INGRESS_API_VERSION.value,
             kind=KubernetesKindTypes.INGRESS.value,
-            metadata=client.V1ObjectMeta(
-                name=name,
-                annotations={
-                    "nginx.ingress.kubernetes.io/rewrite-target": "/",
+            metadata=cls._create_kubernetes_object_meta(
+                cluster_name=name,
+                **{
+                    "annotations": {
+                        "nginx.ingress.kubernetes.io/rewrite-target": "/",
+                    }
                 },
             ),
             spec=client.V1IngressSpec(
