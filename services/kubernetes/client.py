@@ -115,7 +115,7 @@ class KubernetesService:
                 break
 
     @classmethod
-    def create_deployment(
+    def _create_deployment(
         cls,
         apps_v1_api: client.AppsV1Api,
         name: str,
@@ -149,7 +149,7 @@ class KubernetesService:
         )
 
     @classmethod
-    def create_service(cls, service_name: str, namespace: str = NAMESPACE):
+    def _create_service(cls, service_name: str, namespace: str = NAMESPACE):
         core_v1_api = client.CoreV1Api()
         body = client.V1Service(
             api_version=KubernetesApiVersions.API_VERSION.value,
@@ -173,7 +173,7 @@ class KubernetesService:
         )
 
     @classmethod
-    def create_ingress(
+    def _create_ingress(
         cls,
         networking_v1_api: client.NetworkingV1Api,
         name: str,
@@ -230,13 +230,13 @@ class KubernetesService:
         apps_v1_api = client.AppsV1Api()
         networking_v1_api = client.NetworkingV1Api()
 
-        cls.create_deployment(
+        cls._create_deployment(
             apps_v1_api=apps_v1_api,
             name=name,
             image=image,
         )
-        cls.create_service(service_name=service_name)
-        cls.create_ingress(
+        cls._create_service(service_name=service_name)
+        cls._create_ingress(
             networking_v1_api=networking_v1_api,
             name=name,
             host=host,
