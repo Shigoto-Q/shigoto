@@ -115,6 +115,13 @@ class KubernetesService:
                 break
 
     @classmethod
+    def _create_kubernetes_object_meta(cls, service_name: str = None, **kwargs: dict):
+        return client.V1ObjectMeta(
+            name=service_name,
+            **kwargs,
+        )
+
+    @classmethod
     def _create_deployment(
         cls,
         apps_v1_api: client.AppsV1Api,
@@ -129,7 +136,7 @@ class KubernetesService:
             ports=[client.V1ContainerPort(container_port=DEFAULT_PORT)],
         )
         template = client.V1PodTemplateSpec(
-            metadata=client.V1ObjectMeta(labels=LABELS),
+            metadata=cls._create_kubernetes_object_meta(**dict(labels=LABELS)),
             spec=client.V1PodSpec(containers=[container]),
         )
         spec = client.V1DeploymentSpec(
@@ -140,19 +147,12 @@ class KubernetesService:
         deployment = client.V1Deployment(
             api_version=KubernetesApiVersions.APPS_API_VERSION.value,
             kind=KubernetesKindTypes.DEPLOYMENT.value,
-            metadata=client.V1ObjectMeta(name=METADATA_NAME),
+            metadata=cls._create_kubernetes_object_meta(service_name=METADATA_NAME),
             spec=spec,
         )
         apps_v1_api.create_namespaced_deployment(
             namespace=NAMESPACE,
             body=deployment,
-        )
-
-    @classmethod
-    def _create_kubernetes_object_meta(cls, cluster_name: str, **kwargs: dict):
-        return client.V1ObjectMeta(
-            name=cluster_name,
-            **kwargs,
         )
 
     @classmethod
@@ -189,7 +189,7 @@ class KubernetesService:
             api_version=KubernetesApiVersions.INGRESS_API_VERSION.value,
             kind=KubernetesKindTypes.INGRESS.value,
             metadata=cls._create_kubernetes_object_meta(
-                cluster_name=name,
+                service_name=name,
                 **{
                     "annotations": {
                         "nginx.ingress.kubernetes.io/rewrite-target": "/",
