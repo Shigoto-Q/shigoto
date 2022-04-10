@@ -19,7 +19,7 @@ from shigoto_q.tasks.api.serializers import (
     UserTaskImageSerializer,
 )
 from shigoto_q.tasks.services import tasks as task_services
-from shigoto_q.tasks.services.messages import TaskResult, UserTask
+from shigoto_q.tasks.services.messages import TaskResult, UserTask, UserDockerImage
 
 User = get_user_model()
 
@@ -64,10 +64,12 @@ class UserImageListView(ResourceListView):
     serializer_dump_class = UserTaskImageSerializer
     serializer_load_class = UserTaskImageSerializer
 
-    def fetch(self, filters):
-        return task_services.get_user_docker_images(
+    def fetch(self, filters, pagination):
+        return fetch_and_paginate(
+            func=task_services.get_user_docker_images,
             filters=filters,
-            user_id=self.request.user.id,
+            pagination=pagination,
+            serializer_func=UserDockerImage.from_model,
         )
 
 

@@ -40,11 +40,11 @@ class UserImageCreateLoadSerializer(CamelCaseSerializer):
 
 
 class UserTaskImageSerializer(CamelCaseSerializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    repository = serializers.CharField()
-    image_name = serializers.CharField()
-    command = serializers.CharField()
+    id = serializers.IntegerField(required=False)
+    name = serializers.CharField(required=False)
+    repository = serializers.CharField(required=False)
+    image_name = serializers.CharField(required=False)
+    command = serializers.CharField(required=False)
 
 
 class SimpleHttpOperatorSerializer(CamelCaseSerializer):
