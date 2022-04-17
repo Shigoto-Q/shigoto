@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     "django_elasticsearch_dsl",
     "django_otp",
     "django_otp.plugins.otp_totp",
+    'mjml',
 ]
 
 ELASTICSEARCH_DSL = {
@@ -133,7 +134,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR / "templates")],
+        "DIRS": [str(ROOT_DIR / "emails/templates/")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -312,3 +313,5 @@ UPDATE_LAST_LOGIN = True
 
 TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"
+
+MJML_EXEC_CMD = './node_modules/.bin/mjml'

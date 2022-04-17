@@ -1,0 +1,28 @@
+{% load mjml %}
+
+{% mjml %}
+<mjml owa="desktop" version="4.3.0">
+   <mj-body background-color="#f8f8f8" color="#797e82" font-family="Open Sans, Helvetica, Arial, sans-serif">
+      <mj-include path="../header.mjml" />
+          <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding-bottom="0px" padding-left="0px" padding-right="0px" padding="20px 0px 0px 0px" text-align="center" vertical-align="top">
+      <mj-column>
+        <mj-text align="left" color="#000000" font-family="Arial, sans-serif" font-size="13px" letter-spacing="normal" padding-bottom="0px" padding-top="0px" padding="0px 25px 0px 25px">
+                  <h1 class="text-build-content" style="text-align:center;; margin-top: 10px; margin-bottom: 10px" data-testid="K_xfG0wbVNZX"><span style="color:#55575d;font-family:Open Sans;font-size:20px;line-height:22px;"><b>Hello there!</b></span></h1>
+        </mj-text>
+        <mj-text align="left" color="#000000" font-size="13px" letter-spacing="normal" padding-bottom="0px" padding-top="0px" padding="0px 25px 0px 25px">
+          <p class="text-build-content" data-testid="CM2CEEpoRrBj" style="margin: 10px 0;; margin-top: 10px; margin-bottom: 10px"><span style="color:#55575d;font-family:Open Sans, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;">We just wanted to let you know that you have been successfully subscribed and as soon as our features go live you will be notified!</span></p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding-left="0px" padding-right="0px" padding-top="5px" padding="5px 0px 20px 0px" text-align="center" vertical-align="top">
+      <mj-column>
+        <mj-divider border-color="#5576f9" border-style="solid" border-width="1px" container-background-color="transparent" padding-left="25px" padding-right="25px" padding="10px 25px 10px 25px" width="100%"></mj-divider>
+        <mj-text align="left" color="#000000" font-family="Arial, sans-serif" font-size="13px" letter-spacing="normal" padding-bottom="0px" padding-top="0px" padding="10px 25px">
+          <p class="text-build-content" style="text-align: center; margin: 10px 0; margin-top: 10px;" data-testid="qrq42F-uYzJlQ"><span style="color:#55575d;font-family:Open Sans, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;">Our developers are working hard to release our features and products as soon as possible.</span></p><p class="text-build-content" style="text-align: center; margin: 10px 0; margin-bottom: 10px;" data-testid="qrq42F-uYzJlQ"><span style="color:#55575d;font-family:Open Sans, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;">Stay tuned!</span></p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+      <mj-include path="../footer.mjml" />
+   </mj-body>
+</mjml>
+{% endmjml %}
