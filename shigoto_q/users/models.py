@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     AbstractUser,
@@ -62,6 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
     is_staff = models.BooleanField(default=False)
+    two_factor_auth_enabled = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
+
     USERNAME_FIELD = "email"
 
     objects = UserManager()

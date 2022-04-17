@@ -39,7 +39,7 @@ COPY ./compose/local/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
 
-COPY ./keyfiles/config /root/.kube/config
+COPY ./keyfiles/config.yaml /root/.kube/config
 
 WORKDIR /app
 

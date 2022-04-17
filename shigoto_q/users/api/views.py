@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 from django.contrib.auth import get_user_model
 from django.http import Http404
-from djstripe.models import Product
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny

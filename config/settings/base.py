@@ -64,6 +64,8 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "djstripe",
     "django_elasticsearch_dsl",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
 ]
 
 ELASTICSEARCH_DSL = {
@@ -237,11 +239,13 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DATETIME_FORMAT": "%Y-%m-%d - %H:%M:%S",
+    "LAST_LOGIN": True,
 }
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "UPDATE_LAST_LOGIN": True,
 }
 DJOSER = {
     "LOGIN_FIELD": "email",
@@ -304,8 +308,7 @@ REDIS_PORT = 6379
 DIND_HOST = "shigoto_docker"
 DIND_PORT = 2375
 
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
+UPDATE_LAST_LOGIN = True
 
 TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"

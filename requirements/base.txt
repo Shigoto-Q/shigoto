@@ -23,6 +23,8 @@ channels_redis
 djangochannelsrestframework
 docker
 influxdb-client
+django_otp
+qrcode
 # Django
 # ------------------------------------------------------------------------------
 django==3.1.7  # pyup: < 3.2  # https://www.djangoproject.com/

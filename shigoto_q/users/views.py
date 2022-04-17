@@ -1,12 +1,10 @@
-import stripe
-from djstripe.settings import STRIPE_SECRET_KEY
-from rest_framework.permissions import AllowAny
+from django.contrib.auth import get_user_model
 
 from rest.views import ResourceView
-from shigoto_q.users.api.serializers import SubscriberSerializer, UserLogoutSerializer
-from shigoto_q.users.services import subscribers
+from shigoto_q.users.api.serializers import UserLogoutSerializer, OTPSerializer
+from shigoto_q.users.services import two_factor_auth
 
-stripe.api_key = STRIPE_SECRET_KEY
+User = get_user_model()
 
 
 class UserLogoutView(ResourceView):
@@ -14,4 +12,17 @@ class UserLogoutView(ResourceView):
     serializer_load_class = UserLogoutSerializer
 
     def execute(self, data):
-        return subscribers.blacklist_token(data)
+        return
+
+
+class CreateOTPView(ResourceView):
+    serializer_dump_class = OTPSerializer
+    serializer_load_class = OTPSerializer
+    owner_check = True
+
+    def execute(self, data):
+        user = User.objects.get(id=data.get("user_id"))
+        print(user)
+        url = two_factor_auth.create_device_topt_for_user(user=user)
+        print(url)
+        return dict(url=url)

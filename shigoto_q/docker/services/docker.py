@@ -22,3 +22,7 @@ def list_docker_images(filters: dict = None):
             )
         )
     return data
+
+
+def get_total_docker_images() -> int:
+    return docker_models.DockerImage.objects.count()

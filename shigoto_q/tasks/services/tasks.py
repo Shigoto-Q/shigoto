@@ -112,6 +112,10 @@ def list_task_results(
 ):
     return (
         task_models.TaskResult.objects.filter(**filters)
-        .order_by(*ordering)
+        .order_by(ordering if ordering else "id")
         .select_related("user")
     )
+
+
+def get_total_task_results() -> int:
+    return task_models.TaskResult.objects.count()

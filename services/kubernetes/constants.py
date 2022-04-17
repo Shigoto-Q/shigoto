@@ -21,8 +21,20 @@ class KubernetesApiVersions(enum.Enum):
     INGRESS_API_VERSION = "networking.k8s.io/v1"
 
 
+class KubernetesImagePullPolicy(enum.Enum):
+    ALWAYS = "Always"
+    Never = "Never"
+    IF_NOT_PRESENT = "IfNotPresent"
+
+
+class KubernetesServiceTypes(enum.Enum):
+    CLUSTER_IP = "ClusterIP"
+    LOAD_BALANCER = "LoadBalancer"
+    NODE_PORT = "NodePort"
+
+
 LABELS = {
-    "app": "deployment",
+    "component": "deployment",
 }
 METADATA_NAME = "deployment"
 API_VERSION = "apps/v1"

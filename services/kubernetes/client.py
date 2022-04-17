@@ -12,6 +12,7 @@ from services.kubernetes.constants import (
     DEFAULT_PORT,
     KubernetesApiVersions,
     DEFAULT_HOST,
+    KubernetesImagePullPolicy,
 )
 from services.kubernetes.exceptions import KubernetesJobNotFoundError
 
@@ -126,7 +127,9 @@ class KubernetesService:
         apps_v1_api: client.AppsV1Api,
         name: str,
         image: str,
-        pull_policy: str = "Never",
+        pull_policy: str = KubernetesImagePullPolicy.ALWAYS.value,
+        replicas: int = 1,
+        label_selector: dict = LABELS,
     ):
         logger.info(
             f"{_LOG_PREFIX} Creating kubernetes deployment with name={name} and image={image}"
@@ -138,12 +141,12 @@ class KubernetesService:
             ports=[client.V1ContainerPort(container_port=DEFAULT_PORT)],
         )
         template = client.V1PodTemplateSpec(
-            metadata=cls._create_kubernetes_object_meta(**dict(labels=LABELS)),
+            metadata=cls._create_kubernetes_object_meta(**dict(labels=label_selector)),
             spec=client.V1PodSpec(containers=[container]),
         )
         spec = client.V1DeploymentSpec(
-            replicas=1,
-            selector=client.V1LabelSelector(match_labels=LABELS),
+            replicas=replicas,
+            selector=client.V1LabelSelector(match_labels=label_selector),
             template=template,
         )
         deployment = client.V1Deployment(
@@ -158,7 +161,41 @@ class KubernetesService:
         )
 
     @classmethod
-    def _create_service(cls, service_name: str, namespace: str = NAMESPACE):
+    def _create_spec_ports(cls, port: int, target_port: int):
+        return client.V1ServicePort(
+            port=port,
+            target_port=target_port,
+        )
+
+    @classmethod
+    def create_load_balancer(
+        cls,
+        core_v1_api: client.CoreV1Api,
+        port: int,
+        target_port: int,
+        name: str,
+        selector_label: dict = LABELS,
+    ):
+        service = client.V1Service(
+            api_version=KubernetesApiVersions.API_VERSION.value,
+            kind=KubernetesKindTypes.SERVICE.value,
+            metadata=cls._create_kubernetes_object_meta(name),
+            spec=client.V1ServiceSpec(
+                selector=selector_label,
+                ports=[cls._create_spec_ports(port, target_port)],
+                type="",
+            ),
+        )
+
+    @classmethod
+    def _create_service(
+        cls,
+        service_name: str,
+        namespace: str = NAMESPACE,
+        port: int = DEFAULT_PORT,
+        target_port: int = DEFAULT_PORT,
+        label_selector: dict = LABELS,
+    ):
         logger.info(
             f"{_LOG_PREFIX} Creating kubernetes service(name={service_name}, namespace={NAMESPACE})."
         )
@@ -168,11 +205,11 @@ class KubernetesService:
             kind=KubernetesKindTypes.SERVICE.value,
             metadata=cls._create_kubernetes_object_meta(service_name),
             spec=client.V1ServiceSpec(
-                selector=LABELS,
+                selector=label_selector,
                 ports=[
                     client.V1ServicePort(
-                        port=DEFAULT_PORT,
-                        target_port=DEFAULT_PORT,
+                        port=port,
+                        target_port=target_port,
                     )
                 ],
             ),

@@ -31,7 +31,8 @@ class UserLoadSerializer(UserListSerializer):
 
 
 class UserDumpSerializer(UserListSerializer):
-    pass
+    is_first_login = serializers.BooleanField(required=False)
+    two_factor_enabled = serializers.BooleanField(required=False)
 
 
 class SubscriberSerializer(CamelCaseSerializer):
@@ -40,3 +41,11 @@ class SubscriberSerializer(CamelCaseSerializer):
 
 class UserLogoutSerializer(CamelCaseSerializer):
     refresh_token = serializers.CharField()
+
+
+class OTPSerializer(CamelCaseSerializer):
+    url = serializers.CharField(required=False)
+
+
+class TokenSerializer(serializers.Serializer):
+    token = serializers.IntegerField()

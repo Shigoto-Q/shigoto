@@ -15,6 +15,7 @@ class TaskResultAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "date_joined",
         "last_login",
         "is_superuser",
         "first_name",
@@ -31,6 +32,7 @@ class UserAdmin(admin.ModelAdmin):
         "is_staff",
     )
     list_filter = (
+        "date_joined",
         "last_login",
         "is_superuser",
         "customer",
