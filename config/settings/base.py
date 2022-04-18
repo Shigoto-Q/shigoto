@@ -66,7 +66,8 @@ THIRD_PARTY_APPS = [
     "django_elasticsearch_dsl",
     "django_otp",
     "django_otp.plugins.otp_totp",
-    'mjml',
+    "mjml",
+    "post_office",
 ]
 
 ELASTICSEARCH_DSL = {
@@ -80,6 +81,7 @@ LOCAL_APPS = [
     "shigoto_q.schedule.apps.ScheduleConfig",
     "shigoto_q.kubernetes.apps.KubernetesConfig",
     "shigoto_q.docker.apps.DockerConfig",
+    "shigoto_q.emails.apps.EmailsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -134,7 +136,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(ROOT_DIR / "emails/templates/")],
+        "DIRS": [str(APPS_DIR / "emails/templates/")],
         "OPTIONS": {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -151,7 +153,23 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-    }
+    },
+    {
+        "BACKEND": "post_office.template.backends.post_office.PostOfficeTemplates",
+        "APP_DIRS": True,
+        "DIRS": [str(APPS_DIR / "emails/templates/")],
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.template.context_processors.request",
+            ]
+        },
+    },
 ]
 
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
@@ -314,4 +332,14 @@ UPDATE_LAST_LOGIN = True
 TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"
 
-MJML_EXEC_CMD = './node_modules/.bin/mjml'
+MJML_EXEC_CMD = "./node_modules/.bin/mjml"
+
+DEFAULT_INFO_EMAIL = "info@shigo.to"
+DEFAULT_SUPPORT_EMAIL = "support@shigo.to"
+
+POST_OFFICE = {
+    "LOG_LEVEL": 2,
+    "SENDING_ORDER": ["created"],
+    "CELERY_ENABLED": True,
+    "TEMPLATE_ENGINE": "post_office",
+}

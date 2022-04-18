@@ -1,4 +1,5 @@
 {% load mjml %}
+{% load post_office %}
 
 {% mjml %}
 <mjml owa="desktop" version="4.3.0">
