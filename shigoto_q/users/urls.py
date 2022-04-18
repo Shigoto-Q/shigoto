@@ -39,6 +39,11 @@ urlpatterns = [
         name="shigoto_q.user.subscribe",
     ),
     path(
+        "users/unsubscribe/",
+        api_views.UnsubscribeView.as_view(),
+        name="shigoto_q.user.unsubscribe",
+    ),
+    path(
         "user/otp/create/",
         CreateOTPView.as_view(),
         name="shigoto_q.user.otp",

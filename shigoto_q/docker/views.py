@@ -17,4 +17,5 @@ class DockerImageListView(ResourceListView):
             filters=filters,
             pagination=pagination,
             serializer_func=DockerImage.from_dict,
+            is_serializer_dataclass=True,
         )

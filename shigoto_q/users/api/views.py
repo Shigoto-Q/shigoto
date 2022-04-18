@@ -13,6 +13,7 @@ from shigoto_q.users.api.serializers import (
     UserListSerializer,
     UserLoadSerializer,
     SubscriberSerializer,
+    UnSubscriberSerializer,
 )
 from shigoto_q.users.services import users as user_services
 from shigoto_q.users.services import subscribers as subscriber_services
@@ -59,21 +60,10 @@ class SubscriberView(ResourceView):
     def execute(self, data):
         return subscriber_services.create_subscriber(data)
 
+class UnsubscribeView(ResourceView):
+    serializer_dump_class = UnSubscriberSerializer
+    serializer_load_class = UnSubscriberSerializer
+    permission_classes = [AllowAny]
 
-class ProductView(APIView):
-    permission_classes = []
-
-    def get_objects(self, *args, **kwargs):
-        try:
-            return (
-                Product.objects.prefetch_related("plan_set")
-                .order_by("plan__amount")
-                .filter(plan__interval="month")
-            )
-        except Product.DoesNotExist:
-            return Http404
-
-    def get(self, request, *args, **kwargs):
-        products = self.get_objects()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+    def execute(self, data):
+        return subscriber_services.remove_subscriber(email=data.get('email'))

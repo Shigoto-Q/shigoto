@@ -23,4 +23,3 @@ class RedisClient:
     def publish(cls, channel: str, data: str) -> None:
         cls.client.publish(channel, data)
         logger.info(f"{_LOG_PREFIX} Published to channel {channel}, data: {data}")
-        print(f"{_LOG_PREFIX} Published to channel {channel}, data: {data}")

@@ -1,6 +1,7 @@
 from .base import *  # noqa
 from .base import env
 
+
 STRIPE_LIVE_SECRET_KEY = env("LIVE_SECRET_KEY", default=None)
 STRIPE_TEST_SECRET_KEY = env("TEST_SECRET_KEY", default=None)
 STRIPE_LIVE_MODE = env("LIVE_MODE", default=False)
@@ -38,4 +39,3 @@ CELERY_TASK_EAGER_PROPAGATES = True
 DOCKER_IMAGE_SERVICE = env(
     "DOCKER_IMAGE_SERVICE", default="http://localhost:5050/docker"
 )
-DOCKER_IMAGE_PREFIX = env("DOCKER_IMAGE_PREFIX", default="shigoto")

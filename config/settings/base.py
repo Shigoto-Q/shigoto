@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -9,6 +8,7 @@ from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "shigoto_q"
@@ -185,7 +185,7 @@ EMAIL_BACKEND = env(
 )
 EMAIL_TIMEOUT = 5
 ADMIN_URL = "admin/"
-ADMINS = [("""Simeon Aleksov""", "simeon-aleksov@example.com")]
+ADMINS = [("""Simeon Aleksov""", "simeon.aleksov@shigo.to")]
 MANAGERS = ADMINS
 
 
@@ -266,18 +266,6 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "UPDATE_LAST_LOGIN": True,
 }
-DJOSER = {
-    "LOGIN_FIELD": "email",
-    "PASSWORD_RESET_CONFIRM_URL": "auth/users/reset_password_confirm/{uid}/{token}/",
-    "SERIALIZERS": {
-        "current_user": "shigoto_q.users.api.serializers.UserSerializerDAB",
-        "user_create": "shigoto_q.users.api.serializers.UserCreateSerializer",
-    },
-    "PERMISSIONS": {
-        "user_create": ["rest_framework.permissions.AllowAny"],
-        "token_create": ["rest_framework.permissions.AllowAny"],
-    },
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -293,7 +281,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-SENTRY_DSN = "https://c60874f972884198b16cb0d4a576e94a@o408166.ingest.sentry.io/5745020"
+SENTRY_DSN = env("SENTRY_DSN")
 SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
 sentry_logging = LoggingIntegration(
@@ -313,19 +301,20 @@ sentry_sdk.init(
     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.25),
 )
 
-# TODO Add these to env
-INFLUXDB_HOST = "influxdb"
-INFLUXDB_PORT = 8086
-INFLUXDB_TOKEN = os.environ.get("INFLUXDB_TOKEN")
+INFLUXDB_HOST = env("INFLUXDB_HOST")
+INFLUXDB_PORT = env("INFLUXDB_PORT")
+
+INFLUXDB_TOKEN = env("INFLUXDB_TOKEN")
 INFLUXDB_URL = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
 
 
-# TODO Read from env
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
 
-DIND_HOST = "shigoto_docker"
-DIND_PORT = 2375
+DIND_HOST = env("DIND_HOST")
+DIND_PORT = env("DIND_PORT", default=2375)
+
+DOCKER_IMAGE_PREFIX = env("DOCKER_IMAGE_PREFIX", default="shigoto")
 
 UPDATE_LAST_LOGIN = True
 
@@ -341,5 +330,4 @@ POST_OFFICE = {
     "LOG_LEVEL": 2,
     "SENDING_ORDER": ["created"],
     "CELERY_ENABLED": True,
-    "TEMPLATE_ENGINE": "post_office",
 }

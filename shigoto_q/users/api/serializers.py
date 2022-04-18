@@ -49,3 +49,7 @@ class OTPSerializer(CamelCaseSerializer):
 
 class TokenSerializer(serializers.Serializer):
     token = serializers.IntegerField()
+
+
+class UnSubscriberSerializer(CamelCaseSerializer):
+    email = serializers.EmailField(required=False)

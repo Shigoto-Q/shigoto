@@ -22,7 +22,5 @@ class CreateOTPView(ResourceView):
 
     def execute(self, data):
         user = User.objects.get(id=data.get("user_id"))
-        print(user)
         url = two_factor_auth.create_device_topt_for_user(user=user)
-        print(url)
         return dict(url=url)

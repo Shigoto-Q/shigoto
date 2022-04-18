@@ -13,9 +13,9 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks()
 
-app.conf.beat_schedule = {
-    "send-queued-mail": {
-        "task": "post_office.tasks.send_queued_mail",
-        "schedule": 600.0,
-    },
-}
+# app.conf.beat_schedule = {
+#     "send-queued-mail": {
+#         "task": "post_office.tasks.send_queued_mail",
+#         "schedule": 600.0,
+#     },
+# }
