@@ -8,7 +8,7 @@ from shigoto_q.emails.constants import EmailTypes, EmailPriority
 from shigoto_q.users.models import Subscriber
 
 
-_LOG_PREFIX = '[SUBSCRIBER-SERVICES]'
+_LOG_PREFIX = "[SUBSCRIBER-SERVICES]"
 logger = logging.getLogger(__name__)
 
 

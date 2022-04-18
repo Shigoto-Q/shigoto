@@ -60,10 +60,11 @@ class SubscriberView(ResourceView):
     def execute(self, data):
         return subscriber_services.create_subscriber(data)
 
+
 class UnsubscribeView(ResourceView):
     serializer_dump_class = UnSubscriberSerializer
     serializer_load_class = UnSubscriberSerializer
     permission_classes = [AllowAny]
 
     def execute(self, data):
-        return subscriber_services.remove_subscriber(email=data.get('email'))
+        return subscriber_services.remove_subscriber(email=data.get("email"))
