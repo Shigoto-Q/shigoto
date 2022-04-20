@@ -320,7 +320,7 @@ UPDATE_LAST_LOGIN = True
 TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"
 
-MJML_EXEC_CMD = "./node_modules/.bin/mjml"
+MJML_EXEC_CMD = "./node_modules/mjml/bin/mjml"
 
 DEFAULT_INFO_EMAIL = "info@shigo.to"
 DEFAULT_SUPPORT_EMAIL = "support@shigo.to"
