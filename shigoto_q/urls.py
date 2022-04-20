@@ -7,4 +7,5 @@ urlpatterns = [
     path("v1/", include("shigoto_q.users.urls"), name="shigoto_q.users.urls"),
     path("v1/", include("shigoto_q.github.urls"), name="shigoto_q.github.urls"),
     path("v1/", include("shigoto_q.docker.urls"), name="shigoto_q.docker.urls"),
+    path("v1/", include("shigoto_q.schedule.urls"), name="shigoto_q.schedule.urls"),
 ]
