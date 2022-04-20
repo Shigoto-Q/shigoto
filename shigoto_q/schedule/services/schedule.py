@@ -14,19 +14,19 @@ _LOG_PREFIX = "[SCHEDULE-SERVICES]"
 
 def create_interval_schedule(data):
     logger.info(f"{_LOG_PREFIX} Creating new interval schedule(data={data}).")
-    return IntervalSchedule.objects.create(**data)
+    return IntervalSchedule.objects.create(**data).__dict__
 
 
 def create_crontab_schedule(data):
     logger.info(f"{_LOG_PREFIX} Creating new crontab schedule(data={data}).")
-    return CrontabSchedule.objects.create(**data)
+    return CrontabSchedule.objects.create(**data).__dict__
 
 
 def create_clocked_schedule(data):
     logger.info(f"{_LOG_PREFIX} Creating new clocked schedule(data={data}).")
-    return ClockedSchedule.objects.create(**data)
+    return ClockedSchedule.objects.create(**data).__dict__
 
 
 def create_solar_schedule(data):
     logger.info(f"{_LOG_PREFIX} Creating new solar schedule(data={data}).")
-    return SolarSchedule.objects.create(**data)
+    return SolarSchedule.objects.create(**data).__dict__
