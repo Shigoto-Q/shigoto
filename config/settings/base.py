@@ -156,7 +156,6 @@ TEMPLATES = [
     },
     {
         "BACKEND": "post_office.template.backends.post_office.PostOfficeTemplates",
-        "APP_DIRS": True,
         "DIRS": [str(APPS_DIR / "emails/templates/")],
         "OPTIONS": {
             "context_processors": [

@@ -51,6 +51,10 @@ class DockerImageDeleteView(ResourceView):
 
 
 class DockerImageCreateView(ResourceView):
+    """
+    View for creating, building images and pushing them to the docker registry.
+    """
+
     http_method_names = ["post"]
     serializer_dump_class = UserImageCreateDumpSerializer
     serializer_load_class = UserImageCreateLoadSerializer

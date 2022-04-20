@@ -24,9 +24,11 @@ jobs:
       - name: Build the Stack
         run:  docker-compose build
 
-#      Leaving until we fix DIND for CI builds
-#      - name: Run DB Migrations
-#        run:  docker-compose run --rm django python manage.py migrate
+      - name: Run DB Migrations
+        run:  docker-compose run --rm django python manage.py migrate
+
+      - name: Integraton tests
+        run:  docker-compose run --rm django pytest tests/integration/
 
       - name: Tear down the Stack
         run:  docker-compose down
