@@ -321,6 +321,7 @@ TEMP_REPOSITORY_DIR = "tmp/{user_id}/repositories/"
 DOCKER_TAG_PREFIX = "shigoto/"
 
 MJML_EXEC_CMD = "./node_modules/mjml/bin/mjml"
+MJML_CHECK_CMD_ON_STARTUP = False
 
 DEFAULT_INFO_EMAIL = "info@shigo.to"
 DEFAULT_SUPPORT_EMAIL = "support@shigo.to"
