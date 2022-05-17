@@ -18,7 +18,7 @@ spec:
       - name: regcred
       containers:
         - name: django
-          image: simeonaleksov/sgt-production-backend
+          image: simeonaleksov/sgt-production-backend:latest
           ports:
             - containerPort: 5000
           args:
