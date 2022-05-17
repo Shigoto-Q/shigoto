@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  CELERY_FLOWER_PASSWORD: "debug"
+  CELERY_FLOWER_USER: "debug"
+  REDIS_URL: "redis://redis:6379/0"
+  SENTRY_ENVIRONMENT: "local"
+  USE_DOCKER: "yes"
+  PYTHONUNBUFFERED: "0"
+  DJANGO_SETTINGS_MODULE: "config.settings.production"
+kind: ConfigMap
+metadata:
+  name: django-configmap
