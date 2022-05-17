@@ -1,5 +1,6 @@
 from typing import Union
 
+
 class ColourNotInRangeException(Exception):
     color: Union[str, int]
 

@@ -14,7 +14,10 @@ from services.kubernetes.constants import (
     DEFAULT_HOST,
     KubernetesImagePullPolicy,
 )
-from services.kubernetes.exceptions import KubernetesJobNotFoundError, KubernetesServiceError
+from services.kubernetes.exceptions import (
+    KubernetesJobNotFoundError,
+    KubernetesServiceError,
+)
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[KUBERNETES-SERVICE]"
@@ -312,4 +315,4 @@ class KubernetesService:
                 image=image,
             )
         except Exception as e:
-            raise KubernetesServiceError(f'{_LOG_PREFIX} {str(e)}')
+            raise KubernetesServiceError(f"{_LOG_PREFIX} {str(e)}")

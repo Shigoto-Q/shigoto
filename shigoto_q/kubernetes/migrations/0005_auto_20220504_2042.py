@@ -7,23 +7,23 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kubernetes', '0004_auto_20220504_2039'),
+        ("kubernetes", "0004_auto_20220504_2039"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='deployment',
-            name='external_id',
+            model_name="deployment",
+            name="external_id",
             field=models.UUIDField(default=uuid.uuid4, unique=True),
         ),
         migrations.AlterField(
-            model_name='ingress',
-            name='external_id',
+            model_name="ingress",
+            name="external_id",
             field=models.UUIDField(default=uuid.uuid4, unique=True),
         ),
         migrations.AlterField(
-            model_name='service',
-            name='external_id',
+            model_name="service",
+            name="external_id",
             field=models.UUIDField(default=uuid.uuid4, unique=True),
         ),
     ]

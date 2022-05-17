@@ -13,9 +13,7 @@ def execute_discord_webhook(
 ):
     webhook = discord_client.DiscordWebhook(url=url)
     embed = discord_client.DiscordEmbed(
-        title=title,
-        description=description,
-        color=color
+        title=title, description=description, color=color
     )
     embed.set_url(embed_url)
     embed.set_footer(text=footer)

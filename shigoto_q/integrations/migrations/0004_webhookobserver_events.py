@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('integrations', '0003_webhookevent_webhookobserver'),
+        ("integrations", "0003_webhookevent_webhookobserver"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='webhookobserver',
-            name='events',
-            field=models.ManyToManyField(to='integrations.WebhookEvent'),
+            model_name="webhookobserver",
+            name="events",
+            field=models.ManyToManyField(to="integrations.WebhookEvent"),
         ),
     ]

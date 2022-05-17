@@ -7,17 +7,29 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='WebhookIntegration',
+            name="WebhookIntegration",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('url', models.URLField()),
-                ('name', models.CharField(max_length=128)),
-                ('type', models.PositiveSmallIntegerField(choices=[(0, 'Discord'), (1, 'Slack')])),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("url", models.URLField()),
+                ("name", models.CharField(max_length=128)),
+                (
+                    "type",
+                    models.PositiveSmallIntegerField(
+                        choices=[(0, "Discord"), (1, "Slack")]
+                    ),
+                ),
             ],
         ),
     ]

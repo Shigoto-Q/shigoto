@@ -7,45 +7,84 @@ import shigoto_q.kubernetes.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kubernetes', '0002_auto_20220416_1451'),
+        ("kubernetes", "0002_auto_20220416_1451"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Ingress',
+            name="Ingress",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('external_id', models.CharField(default=shigoto_q.kubernetes.models.generate_secret, max_length=512, unique=True)),
-                ('name', models.CharField(max_length=256)),
-                ('host', models.CharField(max_length=256)),
-                ('metadata', models.TextField(null=True)),
-                ('path', models.CharField(max_length=100)),
-                ('path_type', models.CharField(max_length=100)),
-                ('yaml', models.TextField(null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "external_id",
+                    models.CharField(
+                        default=shigoto_q.kubernetes.models.generate_secret,
+                        max_length=512,
+                        unique=True,
+                    ),
+                ),
+                ("name", models.CharField(max_length=256)),
+                ("host", models.CharField(max_length=256)),
+                ("metadata", models.TextField(null=True)),
+                ("path", models.CharField(max_length=100)),
+                ("path_type", models.CharField(max_length=100)),
+                ("yaml", models.TextField(null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Service',
+            name="Service",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('external_id', models.CharField(default=shigoto_q.kubernetes.models.generate_secret, max_length=512, unique=True)),
-                ('type', models.PositiveSmallIntegerField(choices=[(0, 'Cluster Ip'), (1, 'Load Balancer'), (2, 'Node Port')])),
-                ('name', models.CharField(max_length=512)),
-                ('namespace', models.CharField(max_length=256)),
-                ('metadata', models.TextField(null=True)),
-                ('port', models.IntegerField()),
-                ('target_port', models.IntegerField()),
-                ('yaml', models.TextField(null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "external_id",
+                    models.CharField(
+                        default=shigoto_q.kubernetes.models.generate_secret,
+                        max_length=512,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "type",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (0, "Cluster Ip"),
+                            (1, "Load Balancer"),
+                            (2, "Node Port"),
+                        ]
+                    ),
+                ),
+                ("name", models.CharField(max_length=512)),
+                ("namespace", models.CharField(max_length=256)),
+                ("metadata", models.TextField(null=True)),
+                ("port", models.IntegerField()),
+                ("target_port", models.IntegerField()),
+                ("yaml", models.TextField(null=True)),
             ],
         ),
         migrations.AddField(
-            model_name='deployment',
-            name='yaml',
+            model_name="deployment",
+            name="yaml",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='kind',
+            model_name="deployment",
+            name="kind",
             field=models.PositiveSmallIntegerField(default=0),
         ),
     ]

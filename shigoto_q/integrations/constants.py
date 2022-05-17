@@ -1,17 +1,13 @@
 import enum
 
 
-from services.events.events import (
-    TaskSuccessEvent,
-    DeploymentEvent,
-    TaskFailureEvent
-)
+from services.events.events import TaskSuccessEvent, DeploymentEvent, TaskFailureEvent
 
 
 class Event(enum.Enum):
-    DEPLOYMENT = 'shigoto.kubernetes.deployment'
-    TASK_SUCCESS = 'shigoto.task.success'
-    TASK_FAILURE = 'shigoto.task.failure'
+    DEPLOYMENT = "shigoto.kubernetes.deployment"
+    TASK_SUCCESS = "shigoto.task.success"
+    TASK_FAILURE = "shigoto.task.failure"
 
 
 class EventMapping(enum.Enum):

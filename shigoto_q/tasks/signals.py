@@ -104,10 +104,10 @@ def send_task_count(sender, instance, **kwargs):
     for k, v in qs.items():
         stats.append(
             {
-                'status': k,
-                'count': v,
-                'userId': user_id,
-                'timestamp': int(datetime.datetime.now().timestamp())
+                "status": k,
+                "count": v,
+                "userId": user_id,
+                "timestamp": int(datetime.datetime.now().timestamp()),
             }
         )
     client.publish(LogEvent.TASK_COUNT.value, json.dumps(stats))

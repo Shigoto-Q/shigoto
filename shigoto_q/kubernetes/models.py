@@ -18,7 +18,9 @@ class Deployment(models.Model):
     name = models.CharField(max_length=512)
     metadata = models.TextField(null=True)
     yaml = models.TextField(null=True)  # TODO: Implement YamlField
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
+    )
 
 
 class Service(models.Model):

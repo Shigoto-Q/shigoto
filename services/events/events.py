@@ -14,16 +14,9 @@ class DeploymentEvent(Observer):
         footer: str,
     ):
         execute_discord_webhook.apply_async(
-            args=[
-                url,
-                title,
-                description,
-                color,
-                embed_url,
-                footer
-            ]
+            args=[url, title, description, color, embed_url, footer]
         )
-        print(f'Executing {url}')
+        print(f"Executing {url}")
 
 
 class TaskSuccessEvent(Observer):
@@ -37,14 +30,7 @@ class TaskSuccessEvent(Observer):
         footer: str,
     ):
         execute_discord_webhook.apply_async(
-            args=[
-                url,
-                title,
-                description,
-                color,
-                embed_url,
-                footer
-            ]
+            args=[url, title, description, color, embed_url, footer]
         )
 
 
@@ -59,12 +45,5 @@ class TaskFailureEvent(Observer):
         footer: str,
     ):
         execute_discord_webhook.apply_async(
-            args=[
-                url,
-                title,
-                description,
-                color,
-                embed_url,
-                footer
-            ]
+            args=[url, title, description, color, embed_url, footer]
         )
