@@ -30,15 +30,15 @@ jobs:
 
       - name: Tag Docker images
         run: |
-          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat:${{ steps.vars.outputs.sha_short }}
-          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker:${{ steps.vars.outputs.sha_short }}
+          docker tag shigoto_q_production_django ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend
+          docker tag shigoto_q_production_postgres ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db
+          docker tag shigoto_q_production_celerybeat ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat
+          docker tag shigoto_q_production_celeryworker ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker
 
       - name: Push Docker images
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat:${{ steps.vars.outputs.sha_short }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker:${{ steps.vars.outputs.sha_short }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-backend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-db
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celerybeat
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sgt-production-celeryworker
           export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
