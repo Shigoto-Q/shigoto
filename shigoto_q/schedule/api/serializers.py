@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from rest.fields import TimezoneField
 from rest.serializers import CamelCaseSerializer
+from django_celery_beat import models
 
 
 class CrontabScheduleSerializer(CamelCaseSerializer):

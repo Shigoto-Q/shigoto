@@ -33,11 +33,6 @@ urlpatterns = [
         name="docker.images-list",
     ),
     path(
-        "docker/images/create/",
-        views.DockerImageCreateView.as_view(),
-        name="docker.images-create",
-    ),
-    path(
         "docker/images/delete/",
         views.DockerImageDeleteView.as_view(),
         name="docker.images-delete",

@@ -6,7 +6,7 @@ app_name = "kubernetes"
 
 urlpatterns = [
     path(
-        "/kubernetes/deploy/",
+        "kubernetes/deploy/",
         views.KubernetesDeployView.as_view(),
         name="shigoto_q.kubernetes.deploy",
     ),

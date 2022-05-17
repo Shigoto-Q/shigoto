@@ -1,5 +1,7 @@
+import datetime
 import json
 import logging
+import time
 
 from celery.signals import (
     before_task_publish,
@@ -98,8 +100,17 @@ def send_task_count(sender, instance, **kwargs):
         ignored=Count("pk", filter=Q(status=TaskStatus.IGNORED)),
         rejected=Count("pk", filter=Q(status=TaskStatus.REJECTED)),
     )
-    qs["userId"] = user_id
-    client.publish(LogEvent.TASK_COUNT.value, json.dumps(qs))
+    stats = []
+    for k, v in qs.items():
+        stats.append(
+            {
+                'status': k,
+                'count': v,
+                'userId': user_id,
+                'timestamp': int(datetime.datetime.now().timestamp())
+            }
+        )
+    client.publish(LogEvent.TASK_COUNT.value, json.dumps(stats))
 
 
 @receiver(pre_save, sender=TaskResult)

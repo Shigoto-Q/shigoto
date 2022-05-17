@@ -9,4 +9,5 @@ class KubernetesDeployView(ResourceView):
     owner_check = True
 
     def execute(self, data):
-        return kubernetes.deploy(data)
+        print(data)
+        return kubernetes.create_kubernetes_deployment(data)

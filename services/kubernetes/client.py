@@ -14,7 +14,7 @@ from services.kubernetes.constants import (
     DEFAULT_HOST,
     KubernetesImagePullPolicy,
 )
-from services.kubernetes.exceptions import KubernetesJobNotFoundError
+from services.kubernetes.exceptions import KubernetesJobNotFoundError, KubernetesServiceError
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[KUBERNETES-SERVICE]"
@@ -152,13 +152,14 @@ class KubernetesService:
         deployment = client.V1Deployment(
             api_version=KubernetesApiVersions.APPS_API_VERSION.value,
             kind=KubernetesKindTypes.DEPLOYMENT.value,
-            metadata=cls._create_kubernetes_object_meta(service_name=METADATA_NAME),
+            metadata=cls._create_kubernetes_object_meta(service_name=name),
             spec=spec,
         )
-        apps_v1_api.create_namespaced_deployment(
+        resp = apps_v1_api.create_namespaced_deployment(
             namespace=NAMESPACE,
             body=deployment,
         )
+        return resp
 
     @classmethod
     def _create_spec_ports(cls, port: int, target_port: int):
@@ -186,6 +187,7 @@ class KubernetesService:
                 type="",
             ),
         )
+        return service
 
     @classmethod
     def _create_service(
@@ -295,3 +297,19 @@ class KubernetesService:
             name=name,
             host=host,
         )
+
+    @classmethod
+    def create_deployment(cls, user_id, name, image):
+        config.load_kube_config()
+        logger.info(
+            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes deployment."
+        )
+        apps_v1_api = client.AppsV1Api()
+        try:
+            return cls._create_deployment(
+                apps_v1_api=apps_v1_api,
+                name=name,
+                image=image,
+            )
+        except Exception as e:
+            raise KubernetesServiceError(f'{_LOG_PREFIX} {str(e)}')

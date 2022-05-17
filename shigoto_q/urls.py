@@ -8,4 +8,6 @@ urlpatterns = [
     path("v1/", include("shigoto_q.github.urls"), name="shigoto_q.github.urls"),
     path("v1/", include("shigoto_q.docker.urls"), name="shigoto_q.docker.urls"),
     path("v1/", include("shigoto_q.schedule.urls"), name="shigoto_q.schedule.urls"),
+    path("v1/", include("shigoto_q.kubernetes.urls"), name="shigoto_q.kubernetes.urls"),
+    path("v1/", include("shigoto_q.integrations.urls"), name="shigoto_q.integrations.urls"),
 ]

@@ -1,8 +1,13 @@
 import datetime
+import logging
 
+from django.db import transaction
 from services.docker.client import DockerClient
 
 from shigoto_q.docker import models as docker_models
+
+logger = logging.getLogger(__name__)
+_LOG_PREFIX = "[DOCKER-SERVICES]"
 
 
 def list_docker_images(filters: dict = None):
@@ -26,3 +31,10 @@ def list_docker_images(filters: dict = None):
 
 def get_total_docker_images() -> int:
     return docker_models.DockerImage.objects.count()
+
+
+def create_docker_image(data):
+    with transaction.atomic():
+        image = docker_models.DockerImage.objects.create(**data)
+        logger.info(f"{_LOG_PREFIX} Creating new docker image with data - {data}")
+    return image.__dict__

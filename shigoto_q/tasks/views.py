@@ -14,8 +14,6 @@ from shigoto_q.tasks.api.serializers import (
     TaskResultSerializer,
     TaskRunSerializer,
     TasksListSerializer,
-    UserImageCreateDumpSerializer,
-    UserImageCreateLoadSerializer,
     UserTaskImageSerializer,
 )
 from shigoto_q.tasks.services import tasks as task_services
@@ -48,20 +46,6 @@ class DockerImageDeleteView(ResourceView):
             task_id=data.get("id"),
             user_id=data.get("user_id"),
         )
-
-
-class DockerImageCreateView(ResourceView):
-    """
-    View for creating, building images and pushing them to the docker registry.
-    """
-
-    http_method_names = ["post"]
-    serializer_dump_class = UserImageCreateDumpSerializer
-    serializer_load_class = UserImageCreateLoadSerializer
-    owner_check = True
-
-    def execute(self, data):
-        return task_services.create_docker_image(data=data)
 
 
 class UserImageListView(ResourceListView):
