@@ -28,7 +28,10 @@ logger = logging.getLogger(__name__)
 
 
 def get_user(user_id: int) -> User:
-    return User.objects.get(id=user_id)
+    try:
+        return User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return
 
 
 @before_task_publish.connect
