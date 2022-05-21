@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 services:
   influxdb:
     image: influxdb:latest
@@ -11,21 +11,7 @@ services:
       - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
     networks:
-      - shigoto
-  chronograf:
-    image: chronograf:latest
-    ports:
-      - '127.0.0.1:8888:8888'
-    volumes:
-      - chronograf-storage:/var/lib/chronograf
-    depends_on:
-      - influxdb
-    environment:
-      - INFLUXDB_URL=http://influxdb:8086
-      - INFLUXDB_USERNAME=${INFLUXDB_USERNAME}
-      - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD}
-    networks:
-      - shigoto
+      - shigotoproxynetwork
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -39,12 +25,25 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     networks:
-      - shigoto
+      - shigotoproxynetwork
+  telegraf:
+    image: telegraf:1.18-alpine
+    volumes:
+      - ./telegraf/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
+    ports:
+      - '127.0.0.1:8125:8125/udp'
+    networks:
+      - shigotoproxynetwork
 volumes:
   influxdb-storage:
   chronograf-storage:
   grafana-storage:
 
 networks:
-  shigoto:
-    driver: bridge
+  shigotoproxynetwork:
+    external:
+      name: shigoto
