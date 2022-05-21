@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from shigoto_q.kubernetes.models import Deployment, Ingress, Service
+from shigoto_q.kubernetes.models import Deployment, Ingress, Service, Namespace, Config
 
 
 @admin.register(Deployment)
@@ -47,3 +47,17 @@ class IngressAdmin(admin.ModelAdmin):
         "yaml",
     )
     search_fields = ("name",)
+
+
+@admin.register(Namespace)
+class NamespaceAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "ingress", "user")
+    list_filter = ("ingress", "user")
+    raw_id_fields = ("deployments", "services")
+    search_fields = ("name",)
+
+
+@admin.register(Config)
+class ConfigAdmin(admin.ModelAdmin):
+    list_display = ("id", "file", "user")
+    list_filter = ("user",)
