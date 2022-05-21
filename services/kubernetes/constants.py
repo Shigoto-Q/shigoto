@@ -13,6 +13,7 @@ class KubernetesKindTypes(enum.Enum):
     DEPLOYMENT = "Deployment"
     SERVICE = "Service"
     INGRESS = "Ingress"
+    NAMESPACE = "Namespace"
 
 
 class KubernetesApiVersions(enum.Enum):

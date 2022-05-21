@@ -12,3 +12,7 @@ class DockerImageSerializer(CamelCaseSerializer):
 class KubernetesDeployment(CamelCaseSerializer):
     name = serializers.CharField(required=False)
     image = serializers.CharField(required=False)
+
+
+class KubernetesNamespaceSerializer(CamelCaseSerializer):
+    name = serializers.CharField(required=True)

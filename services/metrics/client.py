@@ -6,7 +6,12 @@ class Telegraf:
     c = None
 
     def __init__(self, prefix):
-        self.c = statsd.StatsClient(settings.STATSD_HOST, settings.STATSD_PORT, prefix=prefix)
+        try:
+            self.c = statsd.StatsClient(
+                settings.STATSD_HOST, settings.STATSD_PORT, prefix=prefix
+            )
+        except Exception:
+            pass
 
     def incr(self, metric_name):
         self.c.incr(metric_name, 1)

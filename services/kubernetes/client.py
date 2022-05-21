@@ -26,6 +26,10 @@ _LOG_PREFIX = "[KUBERNETES-SERVICE]"
 class KubernetesService:
     created_job = None
 
+    def __init__(self):
+        config.load_kube_config()
+        self.core_v1_api = client.CoreV1Api()
+
     @classmethod
     def create_job(cls, task_name: str, image_name: str, command: str):
         logger.info(
@@ -122,6 +126,18 @@ class KubernetesService:
         return client.V1ObjectMeta(
             name=service_name,
             **kwargs,
+        )
+
+    def create_namespace(self, name: str):
+        return self.core_v1_api.create_namespace(
+            body={
+                "apiVersion": KubernetesApiVersions.API_VERSION.value,
+                "kind": KubernetesKindTypes.NAMESPACE.value,
+                "metadata": {
+                    "name": name,
+                    "resourceversion": KubernetesApiVersions.API_VERSION.value,
+                },
+            }
         )
 
     @classmethod
@@ -316,3 +332,6 @@ class KubernetesService:
             )
         except Exception as e:
             raise KubernetesServiceError(f"{_LOG_PREFIX} {str(e)}")
+
+    def delete_namespace(self, name: str):
+        self.core_v1_api.delete_namespace(name=name)

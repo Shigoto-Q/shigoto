@@ -24,7 +24,7 @@ CACHES = {
     }
 }
 EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
-EMAIL_PORT = 1025
+EMAIL_PORT = env("EMAIL_PORT", default=8025)
 NSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 

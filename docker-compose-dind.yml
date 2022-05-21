@@ -17,6 +17,12 @@ services:
     expose:
       - 2375
     networks:
-      - shigoto
+      - shigotoproxynetwork
     environment:
       - DOCKER_TLS_CERTDIR=
+
+
+networks:
+  shigotoproxynetwork:
+    external:
+      name: shigoto
