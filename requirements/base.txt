@@ -50,4 +50,4 @@ requests~=2.25.1
 chardet~=4.0.0
 idna~=2.10
 django-anymail[mailgun]==8.2  # https://github.com/anymail/django-anymail
-statsd==3.3.0
+

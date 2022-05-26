@@ -24,13 +24,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         first_name, last_name = options.get("name").split(" ")
         email = options.get("email")
+
         if settings.DEBUG:
-            User.objects.create(
+            user = User.objects.create(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
                 is_staff=True,
             )
+            user.set_password('123')
+            user.save()
             logger.info(
                 f"{_LOG_PREFIX} Creating User(first_name={first_name}, last_name={last_name}, email={email})."
             )

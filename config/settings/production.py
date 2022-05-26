@@ -99,3 +99,6 @@ LOGGING = {
         },
     },
 }
+
+STRIPE_SUCCESS_URL = 'https://shigo.to'
+STRIPE_CANCEL_URL = 'https://shigo.to'

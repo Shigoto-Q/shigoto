@@ -14,4 +14,9 @@ urlpatterns = [
         include("shigoto_q.integrations.urls"),
         name="shigoto_q.integrations.urls",
     ),
+    path(
+        "v1/",
+        include("shigoto_q.products.urls"),
+        name="shigoto_q.products.urls",
+    ),
 ]

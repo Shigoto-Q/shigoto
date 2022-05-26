@@ -83,6 +83,7 @@ LOCAL_APPS = [
     "shigoto_q.docker.apps.DockerConfig",
     "shigoto_q.emails.apps.EmailsConfig",
     "shigoto_q.integrations.apps.IntegrationsConfig",
+    "shigoto_q.products.apps.ProductsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -340,3 +341,5 @@ STATSD_PORT = env("TELEGRAF_PORT")
 STATSD_PREFIX = None
 STATSD_MAXUDPSIZE = 512
 STATSD_IPV6 = False
+
+STRIPE_API_KEY = ""

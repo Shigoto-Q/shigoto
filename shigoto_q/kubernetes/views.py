@@ -4,11 +4,13 @@ from shigoto_q.kubernetes.api.serializers import (
     KubernetesNamespaceSerializer,
 )
 from shigoto_q.kubernetes.services import kubernetes
+from shigoto_q.users.permissions import ProfessionalPlanPermission, PersonalPlanPermission, BusinessPlanPermission
 
 
 class KubernetesDeployView(ResourceView):
     serializer_load_class = KubernetesDeployment
     serializer_dump_class = KubernetesDeployment
+    permission_classes = [ProfessionalPlanPermission, PersonalPlanPermission]
     owner_check = True
 
     def execute(self, data):
@@ -18,6 +20,7 @@ class KubernetesDeployView(ResourceView):
 class KubernetesCreateNamespaceView(ResourceView):
     serializer_load_class = KubernetesNamespaceSerializer
     serializer_dump_class = KubernetesNamespaceSerializer
+    permission_classes = [ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission]
     owner_check = True
 
     def execute(self, data):

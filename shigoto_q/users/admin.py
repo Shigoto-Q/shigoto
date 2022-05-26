@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from shigoto_q.users.models import Subscriber
+from shigoto_q.users.models import Subscriber, Team, Membership
 
 User = get_user_model()
 
@@ -48,3 +48,16 @@ class UserAdmin(admin.ModelAdmin):
         "clocked",
         "solar",
     )
+
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ('id', 'team_name', 'subscription')
+    list_filter = ('subscription',)
+    raw_id_fields = ('members',)
+
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ('id', 'team', 'user', 'customer')
+    list_filter = ('team', 'user', 'customer')
