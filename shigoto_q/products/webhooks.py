@@ -7,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
 
-endpoint_secret = "whsec_d56e412327d8fcff066ac5203a614affc6953c579a2ba25a852b705907e7819b"
+endpoint_secret = (
+    "whsec_d56e412327d8fcff066ac5203a614affc6953c579a2ba25a852b705907e7819b"
+)
 
 
 @csrf_exempt
@@ -24,12 +26,8 @@ def subscription(request):
         return HttpResponse(status=400)
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
-        sub_obj = dict(
-            id=session["subscription"]
-        )
-        customer_obj = dict(
-            id=session["customer"]
-        )
+        sub_obj = dict(id=session["subscription"])
+        customer_obj = dict(id=session["customer"])
         stripe_models.Subscription.sync_from_stripe_data(sub_obj)
         stripe_models.Customer.sync_from_stripe_data(customer_obj)
         if session.payment_status == "paid":

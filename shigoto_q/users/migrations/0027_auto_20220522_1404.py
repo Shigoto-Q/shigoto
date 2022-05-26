@@ -8,35 +8,80 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djstripe', '0008_2_5'),
-        ('users', '0026_user_date_joined'),
+        ("djstripe", "0008_2_5"),
+        ("users", "0026_user_date_joined"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Membership',
+            name="Membership",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('customer', models.ForeignKey(blank=True, help_text="The member's Stripe Customer object for this team, if it exists", null=True, on_delete=django.db.models.deletion.SET_NULL, to='djstripe.customer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "customer",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="The member's Stripe Customer object for this team, if it exists",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="djstripe.customer",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Team',
+            name="Team",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('team_name', models.CharField(max_length=100)),
-                ('members', models.ManyToManyField(related_name='teams', through='users.Membership', to=settings.AUTH_USER_MODEL)),
-                ('subscription', models.ForeignKey(blank=True, help_text="The team's Stripe Subscription object, if it exists", null=True, on_delete=django.db.models.deletion.SET_NULL, to='djstripe.subscription')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("team_name", models.CharField(max_length=100)),
+                (
+                    "members",
+                    models.ManyToManyField(
+                        related_name="teams",
+                        through="users.Membership",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "subscription",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="The team's Stripe Subscription object, if it exists",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="djstripe.subscription",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='membership',
-            name='team',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.team'),
+            model_name="membership",
+            name="team",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="users.team"
+            ),
         ),
         migrations.AddField(
-            model_name='membership',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="membership",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

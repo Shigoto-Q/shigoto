@@ -52,12 +52,12 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('id', 'team_name', 'subscription')
-    list_filter = ('subscription',)
-    raw_id_fields = ('members',)
+    list_display = ("id", "team_name", "subscription")
+    list_filter = ("subscription",)
+    raw_id_fields = ("members",)
 
 
 @admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'team', 'user', 'customer')
-    list_filter = ('team', 'user', 'customer')
+    list_display = ("id", "team", "user", "customer")
+    list_filter = ("team", "user", "customer")

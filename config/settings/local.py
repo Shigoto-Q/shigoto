@@ -40,10 +40,10 @@ DOCKER_IMAGE_SERVICE = env(
     "DOCKER_IMAGE_SERVICE", default="http://localhost:5050/docker"
 )
 
-PERSONAL_PLAN = 'prod_Lkw53cNqzIloTv'
-PROFESSIONAL_PLAN = 'prod_Lkw5PC0FKzB1m3'
-BUSINESS_PLAN = 'prod_Lkw5I6W0lbmuyI'
+PERSONAL_PLAN = "prod_Lkw53cNqzIloTv"
+PROFESSIONAL_PLAN = "prod_Lkw5PC0FKzB1m3"
+BUSINESS_PLAN = "prod_Lkw5I6W0lbmuyI"
 
 
-STRIPE_SUCCESS_URL = 'http://localhost:3000'
-STRIPE_CANCEL_URL = 'http://localhost:3000'
+STRIPE_SUCCESS_URL = "http://localhost:3000"
+STRIPE_CANCEL_URL = "http://localhost:3000"

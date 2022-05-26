@@ -9,10 +9,10 @@ User = get_user_model()
 def create_subscription(plan_id, user_id):
     user = User.objects.get(id=user_id)
 
-    payment_method_obj = stripe.PaymentMethod.retrieve('card')
+    payment_method_obj = stripe.PaymentMethod.retrieve("card")
     stripe_models.PaymentMethod.sync_from_stripe_data(payment_method_obj)
 
-    user.customer.add_payment_method(payment_method='card')
+    user.customer.add_payment_method(payment_method="card")
     subscription = stripe.Subscription.create(
         customer=user.customer.id,
         items=[
@@ -20,6 +20,4 @@ def create_subscription(plan_id, user_id):
         ],
         expand=["latest_invoice.payment_intent"],
     )
-    return stripe_models.Subscription.sync_from_stripe_data(
-        subscription
-    )
+    return stripe_models.Subscription.sync_from_stripe_data(subscription)

@@ -4,21 +4,21 @@ from django.conf import settings
 
 
 class DockerFeatureEnum(enum.Enum):
-    IMAGE_BUILD = 'Image building'
-    IMAGE_PUSH = 'Image push to docker registry'
+    IMAGE_BUILD = "Image building"
+    IMAGE_PUSH = "Image push to docker registry"
 
 
 class KubernetesFeatureEnum(enum.Enum):
-    DEPLOYMENT = 'Kubernetes deployments'
-    INGRESS = 'Kubernetes Ingress'
-    NAMESPACE = 'Namespace'
+    DEPLOYMENT = "Kubernetes deployments"
+    INGRESS = "Kubernetes Ingress"
+    NAMESPACE = "Namespace"
 
 
 class TaskFeatureEnum(enum.Enum):
-    SIMPLE_HTTP_OPERATOR = 'Simple HTTP Operator cron jobs'
-    KUBERNETES_JOB = 'Kubernetes cron job'
-    DOCKER_JOB = 'Docker job'
-    SCHEDULER = 'Scheduler'
+    SIMPLE_HTTP_OPERATOR = "Simple HTTP Operator cron jobs"
+    KUBERNETES_JOB = "Kubernetes cron job"
+    DOCKER_JOB = "Docker job"
+    SCHEDULER = "Scheduler"
 
 
 PERSONAL_PLAN_DEPLOYMENT_LIMITS = 1

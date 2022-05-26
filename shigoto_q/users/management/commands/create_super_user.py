@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 email=email,
                 is_staff=True,
             )
-            user.set_password('123')
+            user.set_password("123")
             user.save()
             logger.info(
                 f"{_LOG_PREFIX} Creating User(first_name={first_name}, last_name={last_name}, email={email})."

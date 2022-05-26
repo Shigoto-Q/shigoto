@@ -67,7 +67,9 @@ def get_total_deployments() -> int:
     return Deployment.objects.count()
 
 
-@subscription_check(prerequisites=[product_features.KubernetesFeatureEnum.NAMESPACE.value])
+@subscription_check(
+    prerequisites=[product_features.KubernetesFeatureEnum.NAMESPACE.value]
+)
 def create_namespace(name: str, user_id: int) -> dict:
     client = kubernetes_client.KubernetesService()
     user = User.objects.get(id=user_id)

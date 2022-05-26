@@ -7,7 +7,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from rest.views.resource import ResourceView
-from shigoto_q.products.api.serializers import CustomerSubscriptionSerializer, SessionSerializer, SessionDumpSerializer
+from shigoto_q.products.api.serializers import (
+    CustomerSubscriptionSerializer,
+    SessionSerializer,
+    SessionDumpSerializer,
+)
 from shigoto_q.products.services import subscription as subscription_services
 
 
@@ -23,8 +27,8 @@ class CustomerSubscriptionView(ResourceView):
 
     def execute(self, data):
         subscription_services.create_subscription(
-            plan_id=data.get('plan_id'),
-            user_id=data.get('user_id'),
+            plan_id=data.get("plan_id"),
+            user_id=data.get("user_id"),
         )
 
 
@@ -34,7 +38,8 @@ def create_checkout(request):
     try:
         checkout_session = stripe.checkout.Session.create(
             customer=request.user.customer.id,
-            success_url=settings.STRIPE_SUCCESS_URL + "/?session_id={CHECKOUT_SESSION_ID}",
+            success_url=settings.STRIPE_SUCCESS_URL
+            + "/?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=settings.STRIPE_CANCEL_URL,
             payment_method_types=["card"],
             mode="subscription",
@@ -56,10 +61,11 @@ class SessionView(ResourceView):
     owner_check = True
 
     def execute(self, data):
-        u = User.objects.get(id=data.get('user_id'))
+        u = User.objects.get(id=data.get("user_id"))
         checkout_session = stripe.checkout.Session.create(
             customer=u.customer.id,
-            success_url=settings.STRIPE_SUCCESS_URL + "/?session_id={CHECKOUT_SESSION_ID}",
+            success_url=settings.STRIPE_SUCCESS_URL
+            + "/?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=settings.STRIPE_CANCEL_URL,
             payment_method_types=["card"],
             mode="subscription",

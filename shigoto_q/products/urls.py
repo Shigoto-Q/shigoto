@@ -20,5 +20,5 @@ urlpatterns = [
         "subscription/webhook/",
         webhooks.subscription,
         name="webhook",
-    )
+    ),
 ]
