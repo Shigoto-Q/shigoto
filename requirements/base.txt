@@ -34,7 +34,6 @@ django-post-office==3.6.0
 django-environ==0.4.5  # https://github.com/joke2k/django-environ
 django-model-utils==4.1.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.44.0  # https://github.com/pennersr/django-allauth
-django-crispy-forms==1.11.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.12.1  # https://github.com/jazzband/django-redis
 # Django REST Framework
 djangorestframework_simplejwt
@@ -51,3 +50,4 @@ chardet~=4.0.0
 idna~=2.10
 django-anymail[mailgun]==8.2  # https://github.com/anymail/django-anymail
 
+statsd==3.3.0

@@ -146,9 +146,11 @@ class KubernetesService:
         apps_v1_api: client.AppsV1Api,
         name: str,
         image: str,
+        port: int,
         pull_policy: str = KubernetesImagePullPolicy.ALWAYS.value,
         replicas: int = 1,
         label_selector: dict = LABELS,
+        namespace: str = 'default',
     ):
         logger.info(
             f"{_LOG_PREFIX} Creating kubernetes deployment with name={name} and image={image}"
@@ -157,7 +159,7 @@ class KubernetesService:
             name=name,
             image=image,
             image_pull_policy=pull_policy,
-            ports=[client.V1ContainerPort(container_port=DEFAULT_PORT)],
+            ports=[client.V1ContainerPort(container_port=port)],
         )
         template = client.V1PodTemplateSpec(
             metadata=cls._create_kubernetes_object_meta(**dict(labels=label_selector)),
@@ -175,7 +177,7 @@ class KubernetesService:
             spec=spec,
         )
         resp = apps_v1_api.create_namespaced_deployment(
-            namespace=NAMESPACE,
+            namespace=namespace,
             body=deployment,
         )
         return resp
@@ -208,23 +210,21 @@ class KubernetesService:
         )
         return service
 
-    @classmethod
     def _create_service(
-        cls,
+        self,
         service_name: str,
-        namespace: str = NAMESPACE,
-        port: int = DEFAULT_PORT,
-        target_port: int = DEFAULT_PORT,
+        port: int,
+        target_port: int,
+        namespace,
         label_selector: dict = LABELS,
     ):
         logger.info(
             f"{_LOG_PREFIX} Creating kubernetes service(name={service_name}, namespace={NAMESPACE})."
         )
-        core_v1_api = client.CoreV1Api()
         body = client.V1Service(
             api_version=KubernetesApiVersions.API_VERSION.value,
             kind=KubernetesKindTypes.SERVICE.value,
-            metadata=cls._create_kubernetes_object_meta(service_name),
+            metadata=self._create_kubernetes_object_meta(service_name),
             spec=client.V1ServiceSpec(
                 selector=label_selector,
                 ports=[
@@ -235,7 +235,7 @@ class KubernetesService:
                 ],
             ),
         )
-        core_v1_api.create_namespaced_service(
+        return self.core_v1_api.create_namespaced_service(
             namespace=namespace,
             body=body,
         )
@@ -290,35 +290,19 @@ class KubernetesService:
             body=body,
         )
 
-    @classmethod
-    def create_deployment_and_ingress(
-        cls,
-        name: str,
-        image: str,
-        service_name: str,
-        host: str,
-        user_id: int,
-    ):
+    def create_service(self, service_name, port, target_port, namespace, user_id):
         logger.info(
-            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes deployment."
+            f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes service."
         )
-        apps_v1_api = client.AppsV1Api()
-        networking_v1_api = client.NetworkingV1Api()
-
-        cls._create_deployment(
-            apps_v1_api=apps_v1_api,
-            name=name,
-            image=image,
-        )
-        cls._create_service(service_name=service_name)
-        cls._create_ingress(
-            networking_v1_api=networking_v1_api,
-            name=name,
-            host=host,
+        return self._create_service(
+            service_name=service_name,
+            port=port,
+            target_port=target_port,
+            namespace=namespace,
         )
 
     @classmethod
-    def create_deployment(cls, user_id, name, image):
+    def create_deployment(cls, user_id, name, image, namespace, port):
         config.load_kube_config()
         logger.info(
             f"{_LOG_PREFIX} User(id={user_id}) is creating new kubernetes deployment."
@@ -329,6 +313,8 @@ class KubernetesService:
                 apps_v1_api=apps_v1_api,
                 name=name,
                 image=image,
+                namespace=namespace,
+                port=port,
             )
         except Exception as e:
             raise KubernetesServiceError(f"{_LOG_PREFIX} {str(e)}")

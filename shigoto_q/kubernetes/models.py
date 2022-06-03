@@ -21,6 +21,7 @@ class Deployment(models.Model):
     image = models.ForeignKey("docker.DockerImage", on_delete=models.CASCADE)
     name = models.CharField(max_length=512)
     metadata = models.TextField(null=True)
+    port = models.IntegerField(default=0)
     yaml = models.TextField(null=True)  # TODO: Implement YamlField
     user = models.ForeignKey(
         User,

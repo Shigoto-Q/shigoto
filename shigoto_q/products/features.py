@@ -10,6 +10,7 @@ class DockerFeatureEnum(enum.Enum):
 
 class KubernetesFeatureEnum(enum.Enum):
     DEPLOYMENT = "Kubernetes deployments"
+    SERVICE = "Service"
     INGRESS = "Kubernetes Ingress"
     NAMESPACE = "Namespace"
 
@@ -25,15 +26,19 @@ PERSONAL_PLAN_DEPLOYMENT_LIMITS = 1
 PROFESSIONAL_PLAN_DEPLOYMENT_LIMITS = 5
 BUSINESS_PLAN_DEPLOYMENT_LIMITS = 100
 
+PERSONAL_PLAN_SERVICE_LIMITS = 1
+PROFESSIONAL_PLAN_SERVICE_LIMITS = 5
+BUSINESS_PLAN_SERVICE_LIMITS = 20
 
 PERSONAL_PLAN_NAMESPACES = 1
 PROFESSIONAL_PLAN_NAMESPACES = 5
-BUSINESS_PLAN_NAMESPACES = 1
+BUSINESS_PLAN_NAMESPACES = 10
 
 
 PERSONAL_PLAN_LIMITS = (
     (KubernetesFeatureEnum.DEPLOYMENT.value, PERSONAL_PLAN_DEPLOYMENT_LIMITS),
     (KubernetesFeatureEnum.NAMESPACE.value, PERSONAL_PLAN_NAMESPACES),
+    (KubernetesFeatureEnum.SERVICE.value, PERSONAL_PLAN_SERVICE_LIMITS),
     (DockerFeatureEnum.IMAGE_PUSH.value, None),
     (DockerFeatureEnum.IMAGE_BUILD.value, None),
     (TaskFeatureEnum.SIMPLE_HTTP_OPERATOR, None),
@@ -43,6 +48,7 @@ PERSONAL_PLAN_LIMITS = (
 
 PROFESSIONAL_PLAN_LIMITS = (
     (KubernetesFeatureEnum.DEPLOYMENT.value, PROFESSIONAL_PLAN_DEPLOYMENT_LIMITS),
+    (KubernetesFeatureEnum.SERVICE.value, PROFESSIONAL_PLAN_SERVICE_LIMITS),
     (KubernetesFeatureEnum.NAMESPACE.value, PROFESSIONAL_PLAN_NAMESPACES),
     (DockerFeatureEnum.IMAGE_PUSH.value, None),
     (DockerFeatureEnum.IMAGE_BUILD.value, None),
@@ -54,6 +60,7 @@ PROFESSIONAL_PLAN_LIMITS = (
 BUSINESS_PLAN_LIMITS = (
     (KubernetesFeatureEnum.DEPLOYMENT.value, BUSINESS_PLAN_DEPLOYMENT_LIMITS),
     (KubernetesFeatureEnum.NAMESPACE.value, BUSINESS_PLAN_NAMESPACES),
+    (KubernetesFeatureEnum.SERVICE.value, BUSINESS_PLAN_SERVICE_LIMITS),
     (DockerFeatureEnum.IMAGE_PUSH.value, None),
     (DockerFeatureEnum.IMAGE_BUILD.value, None),
     (TaskFeatureEnum.SIMPLE_HTTP_OPERATOR, None),

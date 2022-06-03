@@ -20,4 +20,14 @@ urlpatterns = [
         views.KubernetesNamespaceDeleteView.as_view(),
         name="kubernetes.namespace.delete",
     ),
+    path(
+        "kubernetes/namespace/list/",
+        views.KubernetesNamespaceList.as_view(),
+        name="kubernetes.namespace.list",
+    ),
+    path(
+        "kubernetes/service/create/",
+        views.KubernetesServiceCreateView.as_view(),
+        name="kubernetes.service.create",
+    ),
 ]

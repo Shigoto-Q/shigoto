@@ -11,6 +11,7 @@ class DeploymentAdmin(admin.ModelAdmin):
         "kind",
         "image",
         "name",
+        "port",
         "metadata",
         "yaml",
     )
@@ -25,7 +26,6 @@ class ServiceAdmin(admin.ModelAdmin):
         "external_id",
         "type",
         "name",
-        "namespace",
         "metadata",
         "port",
         "target_port",
