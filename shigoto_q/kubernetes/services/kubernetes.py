@@ -47,8 +47,8 @@ def create_kubernetes_deployment(data: dict):
                 user_id=data.get("user_id"),
                 event=integration_constants.Event.DEPLOYMENT.value,
             )
-            data['namespace'] = namespace.name
-            data['image'] = image.image_name
+            data["namespace"] = namespace.name
+            data["image"] = image.image_name
             resp = kubernetes_client.KubernetesService.create_deployment(**data)
             deployment.metadata = resp.metadata
             deployment.yaml = resp
@@ -108,11 +108,7 @@ def list_user_namespaces(
     filters: dict = None,
     ordering: str = None,
 ) -> list:
-    return (
-        Namespace.objects
-            .filter(**filters)
-            .order_by(ordering if ordering else "id")
-    )
+    return Namespace.objects.filter(**filters).order_by(ordering if ordering else "id")
 
 
 @subscription_check(
@@ -124,21 +120,23 @@ def create_kubernetes_service(data):
     try:
         namespace = Namespace.objects.get(name=namespace)
     except Namespace.DoesNotExist:
-        raise kubernetes_exceptions.KubernetesNamespaceDoesNotExist("Namespace not found.")
+        raise kubernetes_exceptions.KubernetesNamespaceDoesNotExist(
+            "Namespace not found."
+        )
     observer = integration_services.get_observer_for_event(
         user_id=data.get("user_id"),
         event=integration_constants.Event.SERVICE.value,
     )
     copied_data = data.copy()
     with transaction.atomic():
-        copied_data['type'] = kubernetes_enums.KubernetesServiceTypes.CLUSTER_IP.value
+        copied_data["type"] = kubernetes_enums.KubernetesServiceTypes.CLUSTER_IP.value
         service = Service.objects.create(**copied_data)
         created_service = client.create_service(
-            service_name=data.get('name'),
-            port=data.get('port'),
-            target_port=data.get('target_port'),
+            service_name=data.get("name"),
+            port=data.get("port"),
+            target_port=data.get("target_port"),
             namespace=namespace.name,
-            user_id=data.get('user_id'),
+            user_id=data.get("user_id"),
         )
         service.metadata = created_service.metadata
         service.yaml = created_service

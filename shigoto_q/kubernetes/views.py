@@ -21,7 +21,9 @@ from shigoto_q.users.permissions import (
 class KubernetesDeployView(ResourceView):
     serializer_load_class = KubernetesDeploymentLoadSerializer
     serializer_dump_class = KubernetesDeployment
-    permission_classes = [ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission]
+    permission_classes = [
+        ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission
+    ]
     owner_check = True
 
     def execute(self, data):
@@ -72,7 +74,9 @@ class KubernetesNamespaceList(ResourceListView):
 class KubernetesServiceCreateView(ResourceView):
     serializer_load_class = KubernetesServiceLoadSerializer
     serializer_dump_class = KubernetesServiceDumpSerializer
-    permission_classes = [ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission]
+    permission_classes = [
+        ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission
+    ]
     owner_check = True
 
     def execute(self, data):

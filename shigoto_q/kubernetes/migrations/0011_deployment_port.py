@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kubernetes', '0010_auto_20220521_2102'),
+        ("kubernetes", "0010_auto_20220521_2102"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='deployment',
-            name='port',
+            model_name="deployment",
+            name="port",
             field=models.IntegerField(default=0),
         ),
     ]

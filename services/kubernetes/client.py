@@ -150,7 +150,7 @@ class KubernetesService:
         pull_policy: str = KubernetesImagePullPolicy.ALWAYS.value,
         replicas: int = 1,
         label_selector: dict = LABELS,
-        namespace: str = 'default',
+        namespace: str = "default",
     ):
         logger.info(
             f"{_LOG_PREFIX} Creating kubernetes deployment with name={name} and image={image}"

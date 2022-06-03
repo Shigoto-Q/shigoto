@@ -20,7 +20,7 @@ class Deployment(
             name=deployment.name,
             image=deployment.image.name,
             external_id=deployment.external_id,
-            kind=deployment.kind
+            kind=deployment.kind,
         )
 
 
