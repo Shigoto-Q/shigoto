@@ -49,3 +49,8 @@ class KubernetesServiceDumpSerializer(CamelCaseSerializer):
     port = serializers.IntegerField(required=False)
     target_port = serializers.IntegerField(required=False)
     namespace = serializers.CharField(required=False)
+
+
+class KubernetesServiceDeleteSerializer(CamelCaseSerializer):
+    id = serializers.CharField(required=False)
+    namespace_id = serializers.IntegerField(required=False)

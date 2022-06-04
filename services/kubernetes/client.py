@@ -29,6 +29,8 @@ class KubernetesService:
     def __init__(self):
         config.load_kube_config()
         self.core_v1_api = client.CoreV1Api()
+        self.apps_v1_api = client.AppsV1Api()
+        self.networking_v1_api = client.NetworkingV1Api()
 
     @classmethod
     def create_job(cls, task_name: str, image_name: str, command: str):
@@ -240,19 +242,18 @@ class KubernetesService:
             body=body,
         )
 
-    @classmethod
     def _create_ingress(
-        cls,
-        networking_v1_api: client.NetworkingV1Api,
+        self,
         name: str,
-        host: str = DEFAULT_HOST,
-        namespace: str = NAMESPACE,
+        namespace: str,
+        host: str,
+        port: int,
     ):
         logger.info(f"{_LOG_PREFIX} Creating Ingress for host={host}")
         body = client.V1Ingress(
             api_version=KubernetesApiVersions.INGRESS_API_VERSION.value,
             kind=KubernetesKindTypes.INGRESS.value,
-            metadata=cls._create_kubernetes_object_meta(
+            metadata=self._create_kubernetes_object_meta(
                 service_name=name,
                 **{
                     "annotations": {
@@ -272,7 +273,7 @@ class KubernetesService:
                                     backend=client.V1IngressBackend(
                                         service=client.V1IngressServiceBackend(
                                             port=client.V1ServiceBackendPort(
-                                                number=DEFAULT_PORT,
+                                                number=port,
                                             ),
                                             name=name,
                                         )
@@ -285,7 +286,7 @@ class KubernetesService:
             ),
         )
 
-        networking_v1_api.create_namespaced_ingress(
+        self.networking_v1_api.create_namespaced_ingress(
             namespace=namespace,
             body=body,
         )
@@ -298,6 +299,18 @@ class KubernetesService:
             service_name=service_name,
             port=port,
             target_port=target_port,
+            namespace=namespace,
+        )
+
+    def delete_deployment(self, name: str, namespace: str):
+        return self.apps_v1_api.delete_namespaced_deployment(
+            name=name,
+            namespace=namespace,
+        )
+
+    def delete_service(self, name: str, namespace: str):
+        return self.core_v1_api.delete_namespaced_service(
+            name=name,
             namespace=namespace,
         )
 
@@ -321,3 +334,11 @@ class KubernetesService:
 
     def delete_namespace(self, name: str):
         self.core_v1_api.delete_namespace(name=name)
+
+    def create_ingress(self, name: str, host: str, namespace: str, port: int):
+        return self._create_ingress(
+            name=name,
+            host=host,
+            namespace=namespace,
+            port=port,
+        )

@@ -1,5 +1,4 @@
 import logging
-import json
 
 from django.db import transaction
 from django.contrib.auth import get_user_model
@@ -59,9 +58,7 @@ def create_kubernetes_deployment(data: dict):
                     description=f"Deploying image {data['image'].name}",
                 )
         except kubernetes_exceptions.KubernetesServiceError as e:
-            # keyword = "HTTP response body:"
-            # _, _, parsed_exception = str(e).partition(keyword)
-            # msg = json.loads(parsed_exception)["details"]["causes"][0]["message"]
+            # TODO: Create kubernetes client exception handler
             logger.exception(
                 f"{_LOG_PREFIX} Caught an error while trying to deploy to kubernetes: {e}."
             )
@@ -111,9 +108,6 @@ def list_user_namespaces(
     return Namespace.objects.filter(**filters).order_by(ordering if ordering else "id")
 
 
-@subscription_check(
-    prerequisites=[product_features.KubernetesFeatureEnum.SERVICE.value]
-)
 def create_kubernetes_service(data):
     client = kubernetes_client.KubernetesService()
     namespace = data.pop("namespace")
@@ -148,3 +142,32 @@ def create_kubernetes_service(data):
                 event_type=integration_constants.Event.DEPLOYMENT,
                 description=f"Create service",
             )
+
+
+def delete_deployment(data: dict):
+    client = kubernetes_client.KubernetesService()
+    deployment = Deployment.objects.get(id=data.get("id"), user_id=data.get("user_id"))
+    namespace = deployment.namespace_set.filter(id=data.get("namespace_id"))
+    with transaction.atomic():
+        client.delete_deployment(
+            name=deployment.name,
+            namespace=namespace.name,
+        )
+        namespace.deployments.remove(deployment)
+        deployment.delete()
+        logger.info(
+            f'{_LOG_PREFIX} User(id={data.get("user_id")}) is deleting kubernetes deployment(id={deployment.id}).'
+        )
+
+
+def delete_service(data: dict):
+    client = kubernetes_client.KubernetesService()
+    service = Service.objects.get(id=data.get("id"), user_id=data.get("user_id"))
+    namespace = service.namespace_set.filter(id=data.get("namespace_id")).first()
+    with transaction.atomic():
+        client.delete_service(service.name, namespace.name)
+        namespace.services.remove(service)
+        service.delete()
+        logger.info(
+            f'{_LOG_PREFIX} User(id={data.get("user_id")}) is deleting kubernetes service(id={service.id}).'
+        )

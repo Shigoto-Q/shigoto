@@ -30,4 +30,9 @@ urlpatterns = [
         views.KubernetesServiceCreateView.as_view(),
         name="kubernetes.service.create",
     ),
+    path(
+        "kubernetes/service/delete/",
+        views.KubernetesServiceDeleteView.as_view(),
+        name="kubernetes.service.delete",
+    ),
 ]

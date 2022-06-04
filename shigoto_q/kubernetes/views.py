@@ -8,6 +8,7 @@ from shigoto_q.kubernetes.api.serializers import (
     KubernetesDeploymentLoadSerializer,
     KubernetesServiceDumpSerializer,
     KubernetesServiceLoadSerializer,
+    KubernetesServiceDeleteSerializer,
 )
 from shigoto_q.kubernetes.services import kubernetes
 from shigoto_q.kubernetes.services import messages as kubernetes_messages
@@ -81,3 +82,15 @@ class KubernetesServiceCreateView(ResourceView):
 
     def execute(self, data):
         return kubernetes.create_kubernetes_service(data=data)
+
+
+class KubernetesServiceDeleteView(ResourceView):
+    serializer_load_class = KubernetesServiceDeleteSerializer
+    serializer_dump_class = KubernetesServiceDeleteSerializer
+    permission_classes = [
+        ProfessionalPlanPermission | PersonalPlanPermission | BusinessPlanPermission
+    ]
+    owner_check = True
+
+    def execute(self, data):
+        return kubernetes.delete_service(data=data)

@@ -14,7 +14,7 @@ User = get_user_model()
 def subscription_check(func=None, /, *, prerequisites: typing.List):
     def out_wrapper(func):
         def wrapper(*args, **kwargs):
-            user = User.objects.get(id=kwargs.get("user_id"))
+            user = User.objects.get(id=kwargs.get("data", {}).get("user_id"))
             user_plan_id = user.customer.active_subscriptions.last().plan.product.id
             limits = products_features.get_limits_by_plan(user_plan_id)
             for prerequisite in prerequisites:
