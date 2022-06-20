@@ -1,4 +1,4 @@
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
+from django.core.exceptions import ValidationError
 from django.db import models
 
 

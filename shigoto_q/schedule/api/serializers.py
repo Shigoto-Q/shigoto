@@ -27,3 +27,13 @@ class SolarScheduleSerializer(CamelCaseSerializer):
     event = serializers.CharField(required=False)
     latitude = serializers.CharField(required=False)
     longitude = serializers.CharField(required=False)
+
+
+
+class FavoriteScheduleLoadSerializer(CamelCaseSerializer):
+    name = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
+    interval_id = serializers.IntegerField(required=False)
+    crontab_id = serializers.IntegerField(required=False)
+    clocked_id = serializers.IntegerField(required=False)
+    solar_id = serializers.IntegerField(required=False)

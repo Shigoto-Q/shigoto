@@ -5,6 +5,7 @@ from shigoto_q.schedule.api.serializers import (
     CrontabScheduleSerializer,
     IntervalScheduleSerializer,
     SolarScheduleSerializer,
+    FavoriteScheduleLoadSerializer
 )
 from shigoto_q.schedule.services import schedule as schedule_services
 
@@ -39,3 +40,11 @@ class SolarScheduleCreateView(ResourceView):
 
     def execute(self, data):
         return schedule_services.create_solar_schedule(data)
+
+
+class FavoriteScheduleView(ResourceView):
+    serializer_load_class = FavoriteScheduleLoadSerializer
+    serializer_dump_class = FavoriteScheduleLoadSerializer
+
+    def execute(self, data):
+        return schedule_services.create_favorite_schedule(data)

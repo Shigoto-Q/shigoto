@@ -25,4 +25,9 @@ urlpatterns = [
         views.ClockedScheduleCreateView.as_view(),
         name="schedule.clocked.create",
     ),
+    path(
+        "schedule/favorite/create/",
+        views.FavoriteScheduleView.as_view(),
+        name="schedule.favorite.create",
+    ),
 ]
