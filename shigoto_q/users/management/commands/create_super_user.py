@@ -31,6 +31,7 @@ class Command(BaseCommand):
                 last_name=last_name,
                 email=email,
                 is_staff=True,
+                is_superuser=True,
             )
             user.set_password("123")
             user.save()

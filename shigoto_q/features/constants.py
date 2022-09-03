@@ -1,0 +1,2 @@
+FEATURE_FLAG_CACHE_KEY = 'feature-flags'
+FEATURE_FLAG_TTL = 10000
