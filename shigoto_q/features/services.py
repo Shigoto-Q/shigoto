@@ -1,11 +1,14 @@
+import json
 import logging
 
 from django.db import transaction
 from django.core.cache import cache
+from django.core.management import call_command
+from django_extensions.management.commands import show_urls
 
 from shigoto_q.features.models import FeatureFlag
 from shigoto_q.features.definitions import FEATURE_FLAGS
-from shigoto_q.features.constants import FEATURE_FLAG_CACHE_KEY, FEATURE_FLAG_TTL
+from shigoto_q.features.constants import FEATURE_FLAG_CACHE_KEY, FEATURE_FLAG_TTL, URLS_CACHE_KEY, URLS_CACHE_TTL
 
 
 _LOG_PREFIX = '[FEATURE-FLAG-SERVICE]'
@@ -65,7 +68,7 @@ class FeatureFlagService:
         if cached_flags:
             return cached_flags
 
-        definitions = [flag['definition'] for flag in FEATURE_FLAGS]
+        definitions = cls._get_local_definitions()
         flags = cls.get_flag_by_definition(
             definition__in=definitions,
         )
@@ -83,3 +86,21 @@ class FeatureFlagService:
     @classmethod
     def _invalidate_cache(cls):
         cache.delete(FEATURE_FLAG_CACHE_KEY)
+
+    @classmethod
+    def is_flag_defined(cls, definition):
+        definitions = cls._get_local_definitions()
+        return definition in definitions
+
+    @classmethod
+    def _get_local_definitions(cls):
+        return [flag['definition'] for flag in FEATURE_FLAGS]
+
+
+def get_urls():
+    cached_urls = cache.get(URLS_CACHE_KEY)
+    if cached_urls is not None:
+        return json.loads(cached_urls)
+    urls = call_command(show_urls.Command(), format='json')
+    cache.set(URLS_CACHE_KEY, urls, URLS_CACHE_TTL)
+    return json.loads(urls)

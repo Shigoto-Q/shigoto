@@ -82,8 +82,18 @@ services:
     command: /start-celerybeat
     networks:
       - shigoto
+  shigoto_docker: &shigoto_docker
+    container_name: shigoto_dind
+    image: docker:dind
+    privileged: true
+    volumes:
+      - dind-certs-ca:/certs/ca
+      - dind-certs-client:/certs/client
+    expose:
+      - 2375
+    environment:
+      - DOCKER_TLS_CERTDIR=
 
 networks:
   shigoto:
-    name: shigoto
     driver: bridge

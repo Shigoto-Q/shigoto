@@ -26,7 +26,6 @@ class KubernetesConfig:
         return client.CoreV1Api()
 
 
-# # Instantiate your kubernetes class and pass in config
 # kube_one = K8s(configuration_yaml='~/.kube/config1')
 # kube_one.client.list_pod_for_all_namespaces(watch=False)
 #

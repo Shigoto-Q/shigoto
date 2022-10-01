@@ -45,5 +45,6 @@ def create_user(data):
     return user.__dict__
 
 
-def list_users(filters):
-    return list(User.objects.filter(**filters).values())
+def list_users(filters=None):
+    filters = filters or {}
+    return User.objects.filter(**filters)

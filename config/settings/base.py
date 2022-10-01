@@ -85,6 +85,7 @@ LOCAL_APPS = [
     "shigoto_q.integrations.apps.IntegrationsConfig",
     "shigoto_q.products.apps.ProductsConfig",
     "shigoto_q.features.apps.FeatureConfig",
+    "shigoto_q.horizon.apps.HorizonConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIGRATION_MODULES = {"sites": "shigoto_q.contrib.sites.migrations"}
@@ -344,3 +345,5 @@ STATSD_MAXUDPSIZE = 512
 STATSD_IPV6 = False
 
 STRIPE_API_KEY = ""
+
+FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")

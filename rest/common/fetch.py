@@ -14,7 +14,10 @@ def fetch_and_paginate(
     serializer_func: typing.Union[dataclass, typing.Callable],
     is_serializer_dataclass=False,
 ):
-    qs = func(filters)
+    if filters:
+        qs = func(filters)
+    else:
+        qs = func()
     if isinstance(qs, QuerySet):
         count = qs.count()
     else:

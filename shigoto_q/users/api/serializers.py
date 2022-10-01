@@ -1,12 +1,7 @@
 from django.contrib.auth import get_user_model
-from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
-from djoser.serializers import UserSerializer as DjoserUserSerializer
-from djstripe.models import Plan, Product
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 
 from rest.serializers import CamelCaseSerializer
-from shigoto_q.github.api.serializers import GitHubProfileSerializer
 
 User = get_user_model()
 
@@ -22,8 +17,8 @@ class UserListSerializer(CamelCaseSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    company = serializers.CharField(required=False)
-    country = serializers.CharField(required=False)
+    company = serializers.CharField(required=False, allow_blank=True)
+    country = serializers.CharField(required=False, allow_blank=True)
 
 
 class UserLoadSerializer(UserListSerializer):

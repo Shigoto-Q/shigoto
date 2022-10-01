@@ -1,14 +1,11 @@
 from __future__ import absolute_import
 
 from django.contrib.auth import get_user_model
-from django.http import Http404
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 
+from rest.common.fetch import fetch_and_paginate
 from rest.views import ResourceListView, ResourceView
 from shigoto_q.users.api.serializers import (
-    ProductSerializer,
     UserDumpSerializer,
     UserListSerializer,
     UserLoadSerializer,
@@ -17,6 +14,7 @@ from shigoto_q.users.api.serializers import (
 )
 from shigoto_q.users.services import users as user_services
 from shigoto_q.users.services import subscribers as subscriber_services
+from shigoto_q.users.api import messages as user_messages
 
 User = get_user_model()
 
@@ -25,8 +23,14 @@ class UsersListView(ResourceListView):
     serializer_dump_class = UserListSerializer
     serializer_load_class = UserListSerializer
 
-    def fetch(self, filters):
-        return user_services.list_users(filters=filters)
+    def fetch(self, filters, pagination):
+        return fetch_and_paginate(
+            func=user_services.list_users,
+            filters=filters,
+            pagination=pagination,
+            serializer_func=user_messages.User.from_model,
+            is_serializer_dataclass=True,
+        )
 
 
 class UserView(ResourceView):

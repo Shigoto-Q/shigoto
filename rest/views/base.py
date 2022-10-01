@@ -2,11 +2,14 @@ import collections
 import json
 import logging
 
+
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest.common.types import Page
 from rest.serializers import BadResponseSerializer
+from shigoto_q.features import services as features_services
 
 logger = logging.getLogger(__name__)
 _LOG_PREFIX = "[REST]"
@@ -40,6 +43,7 @@ class BaseView(APIView):
         "options",
         "trace",
     ]
+    feature_flag = None
 
     def __init__(self, *args, **kwargs):
         self._request_param = None
@@ -47,6 +51,7 @@ class BaseView(APIView):
         super().__init__(**kwargs)
 
     def dispatch(self, request, *args, **kwargs):
+        self._check_feature_flag()
         self._process_request_pk_param(kwargs)
         self._process_post_params()
         return super().dispatch(request, *args, **kwargs)
@@ -129,3 +134,17 @@ class BaseView(APIView):
         response = self.get_exception_serializer(data=exception_message)
         response.is_valid()
         return response.data
+
+    def _check_feature_flag(self):
+        is_enabled = True
+        if (
+            self.feature_flag is not None
+            and features_services.FeatureFlagService.is_flag_defined(
+                definition=self.feature_flag,
+            )
+        ):
+            is_enabled = features_services.FeatureFlagService.is_flag_enabled(
+                definition=self.feature_flag,
+            )
+        if not is_enabled:
+            raise Http404

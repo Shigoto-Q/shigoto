@@ -2,7 +2,6 @@ import datetime
 import logging
 
 from django.db import transaction
-from services.docker.client import DockerClient
 
 from shigoto_q.docker import models as docker_models
 
@@ -14,7 +13,12 @@ def list_docker_images(filters: dict = None):
     data = []
     docker_images = docker_models.DockerImage.objects.filter(**filters)
     for image in docker_images:
-        image_details = DockerClient.get_image_details(image.image_name)
+        # image_details = DockerClient.get_image_details(image.image_name)
+        # TODO Docker in docker to properly work.
+        image_details = {
+            'last_update': datetime.datetime.now(),
+            'created_at': datetime.datetime.now()
+        }
         last_pushed_at = (
             datetime.datetime.now().astimezone() - image_details["last_update"]
         )
