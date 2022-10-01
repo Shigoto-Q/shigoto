@@ -23,7 +23,6 @@ class VirtualMachineAdmin(admin.ModelAdmin):
         'instance_id',
         'name',
         'description',
-        'operating_system',
         'type',
         'state',
         'launch_time',

@@ -12,8 +12,12 @@ class Instance(models.IntegerChoices):
 
 
 class InstanceState(models.IntegerChoices):
-    STARTING = 0
+    PENDING = 0
     RUNNING = 1
+
+    @classmethod
+    def from_response(cls, state: str):
+        return cls(state.upper())
 
 
 class VolumeAttachmentStatus(models.IntegerChoices):

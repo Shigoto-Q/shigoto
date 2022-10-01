@@ -10,8 +10,8 @@ _LOG_PREFIX = "[EC2-CLIENT]"
 
 
 class EC2Client:
-    def __init__(self, dry_run=False):
-        self.client = boto3.client('ec2', region_name='us-east-1')
+    def __init__(self, dry_run=False, region_name: str = 'us-east-1'):
+        self.client = boto3.client('ec2', region_name=region_name)
         self.dry_run = dry_run
 
     def launch(self, instance_desc: EC2InstanceDesc):

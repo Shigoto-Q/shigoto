@@ -21,7 +21,7 @@ class VirtualMachine(models.Model):
     instance_id = models.CharField(max_length=512, primary_key=True, unique=True)
     name = models.CharField(max_length=512)
     description = models.CharField(max_length=512)
-    operating_system = models.PositiveSmallIntegerField(choices=OperatingSystem.choices)
+    image_id = models.CharField(max_length=512, null=True)
     type = models.PositiveIntegerField(choices=Instance.choices)
     state = models.PositiveSmallIntegerField(choices=InstanceState.choices)
 
@@ -34,6 +34,7 @@ class VirtualMachine(models.Model):
 
     volume = models.ForeignKey('Volume', on_delete=models.PROTECT)
     network = models.ForeignKey('Network', on_delete=models.PROTECT)
+    key = models.ForeignKey('key', on_delete=models.PROTECT, null=True)
 
 
 class Volume(models.Model):
@@ -68,3 +69,12 @@ class Network(models.Model):
     subnet_id = common_fields.EncryptedCharField(max_length=512)
 
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
+
+
+class Key(models.Model):
+    pair_id = common_fields.EncryptedCharField(max_length=512, unique=True, primary_key=True)
+    name = common_fields.EncryptedCharField(max_length=512)
+    fingerprint = common_fields.EncryptedTextField()
+
+    owner = models.OneToOneField(User, on_delete=models.PROTECT)
+
