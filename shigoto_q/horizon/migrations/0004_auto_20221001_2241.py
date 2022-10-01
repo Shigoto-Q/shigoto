@@ -10,36 +10,51 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('horizon', '0003_network_virtualmachine_volume'),
+        ("horizon", "0003_network_virtualmachine_volume"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='virtualmachine',
-            name='operating_system',
+            model_name="virtualmachine",
+            name="operating_system",
         ),
         migrations.AddField(
-            model_name='virtualmachine',
-            name='image_id',
+            model_name="virtualmachine",
+            name="image_id",
             field=models.CharField(max_length=512, null=True),
         ),
         migrations.AlterField(
-            model_name='virtualmachine',
-            name='state',
-            field=models.PositiveSmallIntegerField(choices=[(0, 'Pending'), (1, 'Running')]),
+            model_name="virtualmachine",
+            name="state",
+            field=models.PositiveSmallIntegerField(
+                choices=[(0, "Pending"), (1, "Running")]
+            ),
         ),
         migrations.CreateModel(
-            name='Key',
+            name="Key",
             fields=[
-                ('pair_id', common.db.fields.EncryptedCharField(primary_key=True, serialize=False, unique=True)),
-                ('name', common.db.fields.EncryptedCharField()),
-                ('fingerprint', common.db.fields.EncryptedTextField()),
-                ('owner', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
+                (
+                    "pair_id",
+                    common.db.fields.EncryptedCharField(
+                        primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("name", common.db.fields.EncryptedCharField()),
+                ("fingerprint", common.db.fields.EncryptedTextField()),
+                (
+                    "owner",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='virtualmachine',
-            name='key',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='horizon.key'),
+            model_name="virtualmachine",
+            name="key",
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.PROTECT, to="horizon.key"
+            ),
         ),
     ]

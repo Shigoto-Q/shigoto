@@ -14,15 +14,23 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='FeatureFlag',
+            name="FeatureFlag",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('definition', models.CharField(max_length=512)),
-                ('description', models.TextField(max_length=1024)),
-                ('enabled', models.BooleanField(default=False)),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("definition", models.CharField(max_length=512)),
+                ("description", models.TextField(max_length=1024)),
+                ("enabled", models.BooleanField(default=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                ("users", models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

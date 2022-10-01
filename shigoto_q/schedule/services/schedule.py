@@ -8,7 +8,10 @@ from django_celery_beat.models import (
 )
 
 from shigoto_q.schedule.models import FavoriteSchedule
-from shigoto_q.schedule.exceptions import AtleastOneScheduleError, MultipleSchedulesSetError
+from shigoto_q.schedule.exceptions import (
+    AtleastOneScheduleError,
+    MultipleSchedulesSetError,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -39,7 +42,6 @@ def create_favorite_schedule(data: dict) -> dict:
     logger.info(f"{_LOG_PREFIX} Creating new favorite schedule(data={data}).")
     _validate_set_schedule(data=data)
     return FavoriteSchedule.objects.create(**data).__dict__
-
 
 
 def _validate_set_schedule(data: dict) -> None:

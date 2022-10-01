@@ -18,23 +18,23 @@ def create_and_launch_instance(data: dict, user_id: int):
     )
 
     response = ec_client.launch(instance_desc=instance_desc)
-    instances = response['Instances']
+    instances = response["Instances"]
     if instances:
         instance = instances[0]
         network = horizon_models.Network(
-            private_ipv4_dns=instance['PrivateDnsName'],
-            private_ipv4_address=instance['PrivateIpAddress'],
-            public_ipv4_dns=instance['PublicDnsName'],
-            subnet_id=instance['SubnetId'],
-            vpc_id=instance['VpcId'],
+            private_ipv4_dns=instance["PrivateDnsName"],
+            private_ipv4_address=instance["PrivateIpAddress"],
+            public_ipv4_dns=instance["PublicDnsName"],
+            subnet_id=instance["SubnetId"],
+            vpc_id=instance["VpcId"],
             owner_id=user_id,
         )
         network.save()
         virtual_machine = horizon_models.VirtualMachine(
-            instance_id=instance['InstanceId'],
-            launch_time=instance['LaunchTime'],
-            image_id=instance['InstanceId'],
-            state=horizon_enums.InstanceState.from_response(instance['State']['Name']),
+            instance_id=instance["InstanceId"],
+            launch_time=instance["LaunchTime"],
+            image_id=instance["InstanceId"],
+            state=horizon_enums.InstanceState.from_response(instance["State"]["Name"]),
             owner_id=user_id,
         )
         virtual_machine.save()

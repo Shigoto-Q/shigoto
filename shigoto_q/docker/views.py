@@ -8,7 +8,7 @@ from shigoto_q.docker.api.messages import DockerImage
 class DockerImageListView(ResourceListView):
     serializer_dump_class = serializers.DockerImageSerializer
     serializer_load_class = serializers.DockerImageSerializer
-    feature_flag = 'ff02_docker'
+    feature_flag = "ff02_docker"
     owner_check = True
 
     def fetch(self, filters, pagination):

@@ -36,35 +36,40 @@ class EncryptedEmailField(EncryptedMixin, django.db.models.EmailField):
 
 
 class EncryptedBooleanField(EncryptedMixin, django.db.models.BooleanField):
-
     def get_db_prep_save(self, value, connection):
         if value is None:
             return value
         if value is True:
-            value = '1'
+            value = "1"
         elif value is False:
-            value = '0'
+            value = "0"
         # decode the encrypted value to a unicode string, else this breaks in pgsql
-        return encrypt_str(str(value)).decode('utf-8')
+        return encrypt_str(str(value)).decode("utf-8")
 
 
 class EncryptedIntegerField(EncryptedNumberMixin, django.db.models.IntegerField):
-    description = "An IntegerField that is encrypted before " \
-                  "inserting into a database using the python cryptography " \
-                  "library"
+    description = (
+        "An IntegerField that is encrypted before "
+        "inserting into a database using the python cryptography "
+        "library"
+    )
     pass
 
 
-class EncryptedPositiveIntegerField(EncryptedNumberMixin, django.db.models.PositiveIntegerField):
+class EncryptedPositiveIntegerField(
+    EncryptedNumberMixin, django.db.models.PositiveIntegerField
+):
     pass
 
 
-class EncryptedSmallIntegerField(EncryptedNumberMixin, django.db.models.SmallIntegerField):
+class EncryptedSmallIntegerField(
+    EncryptedNumberMixin, django.db.models.SmallIntegerField
+):
     pass
 
 
 class EncryptedPositiveSmallIntegerField(
-        EncryptedNumberMixin, django.db.models.PositiveSmallIntegerField
+    EncryptedNumberMixin, django.db.models.PositiveSmallIntegerField
 ):
     pass
 

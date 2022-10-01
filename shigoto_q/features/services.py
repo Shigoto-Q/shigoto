@@ -8,15 +8,19 @@ from django_extensions.management.commands import show_urls
 
 from shigoto_q.features.models import FeatureFlag
 from shigoto_q.features.definitions import FEATURE_FLAGS
-from shigoto_q.features.constants import FEATURE_FLAG_CACHE_KEY, FEATURE_FLAG_TTL, URLS_CACHE_KEY, URLS_CACHE_TTL
+from shigoto_q.features.constants import (
+    FEATURE_FLAG_CACHE_KEY,
+    FEATURE_FLAG_TTL,
+    URLS_CACHE_KEY,
+    URLS_CACHE_TTL,
+)
 
 
-_LOG_PREFIX = '[FEATURE-FLAG-SERVICE]'
+_LOG_PREFIX = "[FEATURE-FLAG-SERVICE]"
 logger = logging.getLogger(__name__)
 
 
 class FeatureFlagService:
-
     @classmethod
     def create_feature_flag(
         cls,
@@ -32,15 +36,19 @@ class FeatureFlagService:
         )
         if users:
             obj.users.add(*users)
-        logger.info(f'{_LOG_PREFIX} Creating feature flag with definition: {definition}.')
+        logger.info(
+            f"{_LOG_PREFIX} Creating feature flag with definition: {definition}."
+        )
         cls._invalidate_cache()
         return obj
 
     @classmethod
     def create_feature_flags_from_definitions(cls):
-        logger.info(f'{_LOG_PREFIX} Creating all feature flags from definitions.')
+        logger.info(f"{_LOG_PREFIX} Creating all feature flags from definitions.")
         for feature_flag in FEATURE_FLAGS:
-            cls.create_feature_flag(**feature_flag,)
+            cls.create_feature_flag(
+                **feature_flag,
+            )
 
     @classmethod
     def is_flag_enabled(cls, definition: str):
@@ -48,13 +56,17 @@ class FeatureFlagService:
         return flag.enabled
 
     @classmethod
-    def toggle_flag(cls, definition:str, enabled: bool):
-        status = 'enabled' if enabled else 'disabled'
-        logger.info(f'{_LOG_PREFIX} Setting feature flag {definition} to {status}.')
+    def toggle_flag(cls, definition: str, enabled: bool):
+        status = "enabled" if enabled else "disabled"
+        logger.info(f"{_LOG_PREFIX} Setting feature flag {definition} to {status}.")
         with transaction.atomic():
-            flag = FeatureFlag.objects.filter(definition=definition).select_for_update().first()
+            flag = (
+                FeatureFlag.objects.filter(definition=definition)
+                .select_for_update()
+                .first()
+            )
             flag.enabled = enabled
-            flag.save(update_fields=['enabled'])
+            flag.save(update_fields=["enabled"])
             cls._invalidate_cache()
 
     @classmethod
@@ -94,13 +106,13 @@ class FeatureFlagService:
 
     @classmethod
     def _get_local_definitions(cls):
-        return [flag['definition'] for flag in FEATURE_FLAGS]
+        return [flag["definition"] for flag in FEATURE_FLAGS]
 
 
 def get_urls():
     cached_urls = cache.get(URLS_CACHE_KEY)
     if cached_urls is not None:
         return json.loads(cached_urls)
-    urls = call_command(show_urls.Command(), format='json')
+    urls = call_command(show_urls.Command(), format="json")
     cache.set(URLS_CACHE_KEY, urls, URLS_CACHE_TTL)
     return json.loads(urls)

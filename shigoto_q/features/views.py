@@ -9,7 +9,7 @@ from shigoto_q.features import services
 class URLListView(ResourceListView):
     serializer_dump_class = serializers.URLListSerializer
     serializer_load_class = serializers.URLListSerializer
-    feature_flag = 'ff01_features'
+    feature_flag = "ff01_features"
 
     def fetch(self, filters, pagination):
 

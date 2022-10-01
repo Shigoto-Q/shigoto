@@ -25,5 +25,5 @@ class VolumeAttachmentStatus(models.IntegerChoices):
 
 
 class AvailabilityZone(models.TextChoices):
-    EU_CENTRAL_1A = 'eu-central-1a'
-    EU_CENTRAL_1B = 'eu-central-1b'
+    EU_CENTRAL_1A = "eu-central-1a"
+    EU_CENTRAL_1B = "eu-central-1b"

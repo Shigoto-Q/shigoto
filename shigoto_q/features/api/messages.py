@@ -13,6 +13,6 @@ class URL(
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
-            name=data['name'],
-            url=data['url'],
+            name=data["name"],
+            url=data["url"],
         )

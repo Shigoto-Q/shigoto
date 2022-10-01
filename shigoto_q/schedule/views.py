@@ -5,7 +5,7 @@ from shigoto_q.schedule.api.serializers import (
     CrontabScheduleSerializer,
     IntervalScheduleSerializer,
     SolarScheduleSerializer,
-    FavoriteScheduleLoadSerializer
+    FavoriteScheduleLoadSerializer,
 )
 from shigoto_q.schedule.services import schedule as schedule_services
 

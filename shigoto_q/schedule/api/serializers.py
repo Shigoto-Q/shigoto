@@ -29,7 +29,6 @@ class SolarScheduleSerializer(CamelCaseSerializer):
     longitude = serializers.CharField(required=False)
 
 
-
 class FavoriteScheduleLoadSerializer(CamelCaseSerializer):
     name = serializers.CharField(required=False)
     description = serializers.CharField(required=False)

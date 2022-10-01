@@ -7,33 +7,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('horizon', '0001_initial'),
+        ("horizon", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='database',
-            name='host',
+            model_name="database",
+            name="host",
             field=common.db.fields.EncryptedCharField(null=True),
         ),
         migrations.AddField(
-            model_name='database',
-            name='name',
+            model_name="database",
+            name="name",
             field=common.db.fields.EncryptedCharField(null=True),
         ),
         migrations.AddField(
-            model_name='database',
-            name='password',
+            model_name="database",
+            name="password",
             field=models.CharField(max_length=512, null=True),
         ),
         migrations.AddField(
-            model_name='database',
-            name='port',
+            model_name="database",
+            name="port",
             field=common.db.fields.EncryptedPositiveSmallIntegerField(null=True),
         ),
         migrations.AddField(
-            model_name='database',
-            name='username',
+            model_name="database",
+            name="username",
             field=common.db.fields.EncryptedCharField(null=True),
         ),
     ]
