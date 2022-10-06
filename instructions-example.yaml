@@ -1,0 +1,10 @@
+summary:
+  language: python
+  framework: flask
+
+project:
+  name: shigoto
+  source: https://github.com/Shigoto/test_project
+
+deployment:
+  entrypoint: app.py
